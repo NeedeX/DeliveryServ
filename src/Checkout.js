@@ -32,9 +32,6 @@ class Checkout extends React.Component {
             chConfirm: 2, // метод подътверждения  1- sms (по умолчанию)
             chConfirmText: 'SMS Сообщение',
             chComments: '',
-            
-            
-            
             isChildVisible: false,
             isChildVisibleSumma: true,
             isViewInputAdressVisible: true,
@@ -42,20 +39,25 @@ class Checkout extends React.Component {
             selectStyleMetodPay: styles.viewCardStyle,
             selectStyleDeliveryAdress: styles.viewCardStyle,
             selectStyleArrowAddress: styles.arrowRightSelectAddress,
-            error: false,
 
             addressView: 'Выбрать из моих адресов',
             didFinishInitialAnimation: false,
+            height: 80,
         
         }
         //this.props.options.addressSelect = "";
         this.onSelectDeliveryAddress = this.onSelectDeliveryAddress.bind(this);
         this.onSelectTimeDelivery = this.onSelectTimeDelivery.bind(this);
-        
         this.focusNextField = this.focusNextField.bind(this);
         this.inputs = {};
 
-
+        console.log("customers = ", this.props.customers);
+        /// если только самовывоз 
+        if(this.props.customers.blPickup == 1 && this.props.customers.blDelivery == 0)
+        {
+            this.state.isViewInputAdressVisible = false;
+            this.state.selectStyleDeliveryAdress = styles.viewCardStyleDeliveryOnlyPickup;
+        }
     }
     // Lifecycle methods
     componentDidMount() {
@@ -96,8 +98,7 @@ class Checkout extends React.Component {
             this.state.chDeliveryAddress = addressText;
             var lengthaddress = addressText.length;
 
-            if(lengthaddress > 37)
-            {
+            if(lengthaddress > 37) {
                 var length = addressText.length - 37;
                 addressText = addressText.substr(0, addressText.length - length)+"...";
             }
@@ -105,25 +106,19 @@ class Checkout extends React.Component {
             this.state.addressView = addressText;
             
             this.state.selectStyleArrowAddress = styles.arrowRightSelectAddress;
-            if(this.state.isViewInputAdressVisible === true)
-            {
+            if(this.state.isViewInputAdressVisible === true) {
                 this.state.addressView = "Выбрать из моих адресов";
                 this.state.selectStyleArrowAddress = styles.arrowRightNoSelectAddress;
                 this.state.chDeliveryAddress = '';
             }
         }
-        else
-        {
+        else {
             this.state.addressView = "Выбрать из моих адресов";
             this.state.selectStyleArrowAddress = styles.arrowRightNoSelectAddress;
             this.state.chDeliveryAddress = '';
         }
-        return (
-            <Text style={{color:'#4E4E4E'}}>{this.state.addressView}</Text>
-        )
+        return ( <Text style={{color:'#4E4E4E'}}>{this.state.addressView}</Text> )
     }
-
-
     focusNextField(id) {
         this.inputs[id].focus();
     }
@@ -131,23 +126,41 @@ class Checkout extends React.Component {
         return `${ new Date().getTime() }`;
     }
 
+    /// срабатывает по нажатию на радобатон выбора доставки
     onSelectDeliveryAddress(index, value){
+        // ввод вручную адреса доставки
         if(value === 2){
             this.setState({ isViewInputAdressVisible: true, });
             this.setState({ selectStyleDeliveryAdress: styles.viewCardStyle, });
             this.state.chDeliveryAddress = '';
         }
+        /// выбор адреса доставки
         if(value ===  1){
-            this.setState({ selectStyleDeliveryAdress: styles.viewCardStyleDeliveryNoAdress, });
+            this.setState({ selectStyleDeliveryAdress: this.props.customers.blPickup == 1 ? styles.viewCardStyleDeliveryNoAdressAndPickup : styles.viewCardStyleDeliveryNoAdress, });
             this.setState({ isViewInputAdressVisible: false, });
             this.props.navigation.navigate('Addresses', {routeGoBack: 'Checkout',})                 
         }
+        /// viewCardStyleDeliveryNoAdressAndPickup
+        /// выбор замовывоза
         if(value ===  3)
         {
-            this.setState({ selectStyleDeliveryAdress: styles.viewCardStyleDeliveryNoAdress, });
-            this.setState({ isViewInputAdressVisible: false, });
-            this.props.navigation.navigate('Addresses', {routeGoBack: 'Checkout',}) 
+            // если только самовывоз
+            if(this.props.customers.blPickup == 1 && this.props.customers.blDelivery == 0)
+            {
+                
+                this.state.isViewInputAdressVisible = false; /// скрываем поля ввода адреса доставки
+                this.state.selectStyleDeliveryAdress = styles.viewCardStyleDeliveryOnlyPickup;
+            }
+            // если и самовывоз и доставка
+            else 
+            { 
+                // 
+                this.setState({ selectStyleDeliveryAdress: this.props.customers.blPickup == 1 ? styles.viewCardStyleDeliveryNoAdressAndPickup : styles.viewCardStyleDeliveryNoAdress, });
+                this.setState({ isViewInputAdressVisible: false, });
+                this.props.navigation.navigate('Addresses', {routeGoBack: 'Checkout',})
+            }
         }
+        
         this.setState({ chDeliveryAddress: index,});
     }
 
@@ -160,7 +173,6 @@ class Checkout extends React.Component {
         if(value === 2)
         {
             this.setState({ isChildVisible: true, });
-            
             this.setState({ selectStyleDeliveryTime: styles.viewCardStyle, });
         }
         else
@@ -192,24 +204,14 @@ class Checkout extends React.Component {
             this.setState({ selectStyleMetodPay: styles.viewCardStyleNoSumma, });
             this.setState({ chSumma: ''});
         }
+        
     }
     onSelectConfirm(index, value){
-        this.setState({
-            //chConfirmText: `Selected index: ${index} , value: ${value}`,
-            chConfirm: value,
-        });
+        this.setState({ chConfirm: value,  });
         if(value === 1)
-        {
-            this.setState({
-                chConfirmText: 'Звонок оператора',
-            }); 
-        }
+            this.setState({ chConfirmText: 'Звонок оператора', }); 
         if(value === 2)
-        {
-            this.setState({
-                chConfirmText: 'SMS cообщение',
-            }); 
-        }
+            this.setState({ chConfirmText: 'SMS cообщение', }); 
 
     }
     validePurchase()
@@ -274,40 +276,7 @@ class Checkout extends React.Component {
                 });
       /*      }
         }*/
-            // Отображение ответного сообщения, поступающего с сервера после вставки записей.
-            /*
-            val = {
-                key: this.generateKey(), 
-                //idOrder: responseJson.toString(),
-                chFIO: this.state.chFIO,
-                chPhone: this.state.chPhone,
-                    chCity: this.state.chCity,
-                    chStreet: this.state.chStreet,
-                    chNumHome: this.state.chNumHome,
-                    chHousing: this.state.chHousing,
-                    chEntrance: this.state.chEntrance,
-                    chApartment: this.state.chApartment,
-                    chDeliveryAddress: this.state.chDeliveryAddress,
-                    chTypeDeliveryTime: this.state.chTypeDeliveryTime, //  время доставки
-                    chDeliveryTime: this.state.chDeliveryTime,
-                    chSumma: this.state.chSumma,
-                    chPay: this.state.chPay, // метод оплаты
-                    chPayDescription: this.state.chPayDescription, // текст метода доставки
-                    chConfirm: this.state.chConfirm, // метод подътверждения
-                    chComments: this.state.chComments,
-                    cart: this.props.cart,
-            };
-            console.log(val);
-            */
-            //this.props.clearOrder();
-            
-            //this.props.onAddOrder(val);
-            //console.log(this.props.order);
-            // очистка корзины
-            //this.props.clearCart();
-   
-            //this.props.navigation.navigate('CompletedOrder', {animation: 'SlideFromLeft', animationDuration: 500 } );
-        
+
     }
 
     validateName(text)
@@ -356,6 +325,86 @@ class Checkout extends React.Component {
             alignItems: 'center',
         }} />)
     }
+    radioDelivery()
+    {
+        if(this.props.customers.blPickup == 1)
+        {
+            if(this.props.customers.blDelivery == 1)
+            {
+                return(
+                    <RadioGroup selectedIndex={2} color='#6A3DA1'
+                    onSelect = {(index, value) => this.onSelectDeliveryAddress(index, value)} >
+                    <RadioButton value={3}>
+                        <View style={styles.arrowRightView}>
+                            <Text style={{color:'#4E4E4E'}}>Самовывоз</Text>
+                            <Image style={this.state.selectStyleArrowAddress} 
+                                source={require('../assets/arrowRight.png')} />
+                        </View>
+                    </RadioButton>
+                    <RadioButton value={1}>
+                        <View style={styles.arrowRightView}>
+                            {this.getSelectAddress()}
+                            <Image
+                            style={this.state.selectStyleArrowAddress} 
+                            source={require('../assets/arrowRight.png')} />
+                        </View>
+                    </RadioButton>
+                    <RadioButton value={2} style={{  marginBottom: 15, }}>
+                    <View style={styles.arrowRightView}>
+                        <Text style={{color:'#4E4E4E'}}>Ввести адрес вручную</Text>
+                        <Image
+                        style={styles.arrowBottom} 
+                        source={ !this.state.isViewInputAdressVisible ? require('../assets/arrowBottom.png') : require('../assets/arrowTop.png')} 
+                        />
+                    </View>
+                    </RadioButton>
+                </RadioGroup>
+                )
+            }
+            else
+            {
+                // только самовывоз
+                return(
+                <RadioGroup color='#6A3DA1'
+                    onSelect = {(index, value) => this.onSelectDeliveryAddress(index, value)} >
+                    <RadioButton value={3}>
+                        <View style={styles.arrowRightView}>
+                            <Text style={{color:'#4E4E4E'}}>Самовывоз</Text>
+                            <Image style={this.state.selectStyleArrowAddress} 
+                                source={require('../assets/arrowRight.png')} />
+                        </View>
+                    </RadioButton>
+   
+                </RadioGroup>
+                )
+            }
+        }
+        else
+        {
+            return(
+                <RadioGroup selectedIndex={1} color='#6A3DA1'
+                onSelect = {(index, value) => this.onSelectDeliveryAddress(index, value)} >
+                <RadioButton value={1}>
+                    <View style={styles.arrowRightView}>
+                        {this.getSelectAddress()}
+                        <Image
+                        style={this.state.selectStyleArrowAddress} 
+                        source={require('../assets/arrowRight.png')} />
+                    </View>
+                </RadioButton>
+                <RadioButton value={2} style={{  marginBottom: 15, }}>
+                <View style={styles.arrowRightView}>
+                    <Text style={{color:'#4E4E4E'}}>Ввести адрес вручную</Text>
+                    <Image
+                    style={styles.arrowBottom} 
+                    source={ !this.state.isViewInputAdressVisible ? require('../assets/arrowBottom.png') : require('../assets/arrowTop.png')} 
+                    />
+                </View>
+                </RadioButton>
+            </RadioGroup>
+            )
+        }
+    }
 
 
     render() {
@@ -365,7 +414,6 @@ class Checkout extends React.Component {
         }
         var {navigate} = this.props.navigation;
         var {params} = this.props.navigation.state;
-        
         return (
         <View style={{backgroundColor: '#F3F3F3'}}> 
         {      
@@ -384,12 +432,8 @@ class Checkout extends React.Component {
                             autoCapitalize={'none'}
                             autoCorrect={false}
                             blurOnSubmit={ false }
-                            onSubmitEditing={() => {
-                                this.focusNextField('Телефон');
-                              }}
-                            ref={ input => {
-                                this.inputs['Имя'] = input;
-                              }}
+                            onSubmitEditing={() => { this.focusNextField('Телефон'); }}
+                            ref={ input => { this.inputs['Имя'] = input; }}
                             style={styles.textInputStyleNew}
                             onChangeText={(chFIO) => this.setState({chFIO: chFIO}) }
                         />
@@ -401,18 +445,10 @@ class Checkout extends React.Component {
                             autoCapitalize={'none'}
                             autoCorrect={false}
                             blurOnSubmit={ false }
-                            onSubmitEditing={() => {
-                                this.focusNextField('Город');
-                              }}
-                            ref={ input => {
-                                this.inputs['Телефон'] = input;
-                              }}
+                            onSubmitEditing={() => { this.focusNextField('Город'); }}
+                            ref={ input => { this.inputs['Телефон'] = input; }}
                             onChangeText={ (chPhone) => this.validatePhone(chPhone) }
-                          
                         />
-
-
-                        
                     </View>
                     
                 </View>
@@ -420,140 +456,89 @@ class Checkout extends React.Component {
                 <View style={this.state.selectStyleDeliveryAdress}>
                     
                     {/*Адрес доставки*/}
-                    <RadioGroup 
-                        selectedIndex={1}
-                        color='#6A3DA1'
- 
-                        onSelect = {(index, value) => this.onSelectDeliveryAddress(index, value)} >
-                        <RadioButton value={3}>
-                            <View>
-                                <Text style={{color:'#4E4E4E'}}>Самовывоз</Text>
-                            </View>
-                        </RadioButton>
-                        <RadioButton value={1}>
-                            <View style={styles.arrowRightView}>
-                                {this.getSelectAddress()}
-                                <Image
-                                style={this.state.selectStyleArrowAddress} 
-                                source={require('../assets/arrowRight.png')} />
-                            </View>
-                        </RadioButton>
-                        <RadioButton value={2} style={{  marginBottom: 15, }}>
-                            <View style={styles.arrowRightView}>
-                                <Text style={{color:'#4E4E4E'}}>Ввести адрес вручную</Text>
-                                <Image
-                                style={styles.arrowBottom} 
-                                source={ !this.state.isViewInputAdressVisible ? require('../assets/arrowBottom.png') : require('../assets/arrowTop.png')} 
-                                />
-                            </View>
-                        </RadioButton>
-
-                    </RadioGroup>
+                   
+                    { this.radioDelivery() }
                     <AnimatedHideView
                         visible={this.state.isViewInputAdressVisible}
                         style={{ padding: 0, }}
                         duration={200}
                         >
-                        <View style={{ flex: 1 }}>
-                            <TextInput style={styles.textInputStyle}
-                                underlineColorAndroid = "transparent"
-                                placeholder = "Город"
-                                placeholderTextColor = "#828282"
-                                autoCapitalize = "none"
+                        <View style={{ flex: 1, marginTop: -15,}}>
+                            <Sae
+                                label={'Город'}
+                                style={styles.textInputStyleNew}
+                                autoCapitalize={'none'}
+                                value={this.state.chCity}
+                                autoCorrect={false}
                                 blurOnSubmit={ false }
-                                onSubmitEditing={() => {
-                                    this.focusNextField('Улица');
-                                  }}
-                                ref={ input => {
-                                    this.inputs['Город'] = input;
-                                  }}
-                                onChangeText={(chCity) => this.setState({chCity})}
-                                value={this.state.chCity}/>
+                                onSubmitEditing={() => { this.focusNextField('Улица'); }}
+                                ref={ input => { this.inputs['Город'] = input; }}
+                                onChangeText={ (chCity) => this.validatePhone(chCity) }
+                            /> 
                             {this.divider()}
-                            <TextInput style={styles.textInputStyle}
-                                underlineColorAndroid = "transparent"
-                                placeholder = "Улица"
-                                placeholderTextColor = "#828282"
-                                autoCapitalize = "none"
+                            <Sae
+                                label={'Улица'}
+                                style={styles.textInputStyleNew}
+                                autoCapitalize={'none'}
+                                autoCorrect={false}
                                 blurOnSubmit={ false }
-                                onSubmitEditing={() => {
-                                    this.focusNextField('Дом');
-                                  }}
-                                ref={ input => {
-                                    this.inputs['Улица'] = input;
-                                  }}
-                                onChangeText={(chStreet) => this.setState({chStreet})}
-                                value={this.state.chStreet}/>
+                                onSubmitEditing={() => { this.focusNextField('Дом'); }}
+                                ref={ input => { this.inputs['Улица'] = input; }}
+                                onChangeText={ (chStreet) => this.validatePhone(chStreet) }
+                            /> 
                             {this.divider()}
-                            <TextInput style={styles.textInputStyle}
-                                underlineColorAndroid = "transparent"
-                                placeholder = "Дом"
-                                placeholderTextColor = "#828282"
-                                autoCapitalize = "none"
+                            <Sae
+                                label={'Дом'}
+                                style={styles.textInputStyleNew}
+                                autoCapitalize={'none'}
+                                autoCorrect={false}
                                 blurOnSubmit={ false }
-                                onSubmitEditing={() => {
-                                    this.focusNextField('Корпус');
-                                  }}
-                                ref={ input => {
-                                    this.inputs['Дом'] = input;
-                                  }}
-                                onChangeText={(chNumHome) => this.setState({chNumHome})}
-                                value={this.state.chNumHome}/>
+                                onSubmitEditing={() => { this.focusNextField('Корпус'); }}
+                                ref={ input => { this.inputs['Дом'] = input; }}
+                                onChangeText={ (chNumHome) => this.validatePhone(chNumHome) }
+                            /> 
                             {this.divider()}
-                            <TextInput style={styles.textInputStyle}
-                                underlineColorAndroid = "transparent"
-                                placeholder = "Корпус"
-                                placeholderTextColor = "#828282"
-                                autoCapitalize = "none"
+                            <Sae
+                                label={'Корпус'}
+                                style={styles.textInputStyleNew}
+                                autoCapitalize={'none'}
+                                autoCorrect={false}
                                 blurOnSubmit={ false }
-                                onSubmitEditing={() => {
-                                    this.focusNextField('Подъезд');
-                                  }}
-                                ref={ input => {
-                                    this.inputs['Корпус'] = input;
-                                  }}
-                                onChangeText={(chHousing) => this.setState({chHousing})}
-                                value={this.state.chHousing}/>
+                                onSubmitEditing={() => { this.focusNextField('Подъезд'); }}
+                                ref={ input => { this.inputs['Корпус'] = input; }}
+                                onChangeText={ (chHousing) => this.validatePhone(chHousing) }
+                            /> 
                             {this.divider()}
-                            <TextInput style={styles.textInputStyle}
-                                underlineColorAndroid = "transparent"
-                                placeholder = "Подъезд"
-                                placeholderTextColor = "#828282"
-                                autoCapitalize = "none"
+                            <Sae
+                                label={'Подъезд'}
+                                style={styles.textInputStyleNew}
+                                autoCapitalize={'none'}
+                                autoCorrect={false}
                                 blurOnSubmit={ false }
-                                onSubmitEditing={() => {
-                                    this.focusNextField('Этаж');
-                                  }}
-                                ref={ input => {
-                                    this.inputs['Подъезд'] = input;
-                                  }}
-                                onChangeText={(chEntrance) => this.setState({chEntrance})}
-                                value={this.state.chEntrance}/>
+                                onSubmitEditing={() => { this.focusNextField('Этаж'); }}
+                                ref={ input => { this.inputs['Подъезд'] = input; }}
+                                onChangeText={ (chEntrance) => this.validatePhone(chEntrance) }
+                            /> 
                             {this.divider()}
-                            <TextInput style={styles.textInputStyle}
-                                underlineColorAndroid = "transparent"
-                                placeholder = "Этаж"
-                                placeholderTextColor = "#828282"
-                                autoCapitalize = "none"
+                            <Sae
+                                label={'Этаж'}
+                                style={styles.textInputStyleNew}
+                                autoCapitalize={'none'}
+                                autoCorrect={false}
                                 blurOnSubmit={ false }
-                                onSubmitEditing={() => {
-                                    this.focusNextField('Квартира');
-                                  }}
-                                ref={ input => {
-                                    this.inputs['Этаж'] = input;
-                                  }}
-                                onChangeText={(chFloor) => this.setState({chFloor})}
-                                value={this.state.chFloor}/>
+                                onSubmitEditing={() => { this.focusNextField('Квартира'); }}
+                                ref={ input => { this.inputs['Этаж'] = input; }}
+                                onChangeText={ (chFloor) => this.validatePhone(chFloor) }
+                            /> 
                             {this.divider()}
-                            <TextInput style={styles.textInputStyle}
-                                underlineColorAndroid = "transparent"
-                                placeholder = "Квартира"
-                                placeholderTextColor = "#828282"
-                                autoCapitalize = "none"
+                            <Sae
+                                label={'Квартира'}
+                                style={styles.textInputStyleNew}
+                                autoCapitalize={'none'}
+                                autoCorrect={false}
                                 blurOnSubmit={ false }
-                                onChangeText={(chApartment) => this.setState({chApartment})}
-                                value={this.state.chApartment}/>                 
-        
+                                onChangeText={ (chApartment) => this.validatePhone(chApartment) }
+                            />               
                         </View>
                     </AnimatedHideView> 
                 </View>
@@ -782,7 +767,6 @@ const styles = StyleSheet.create({
         
         
     },
-
     viewCardStyleNoSumma: //ok
     {
         flex:1,
@@ -814,7 +798,29 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
         backgroundColor: '#fff',
+        height: 80,
+    },
+    viewCardStyleDeliveryNoAdressAndPickup: // ok
+    {
+        flex:1,
+        elevation: 3,  
+        borderRadius: 10, 
+        flexDirection: 'column',
+        marginLeft: 20,
+        marginRight: 20,
+        backgroundColor: '#fff',
         height: 120,
+    },
+    viewCardStyleDeliveryOnlyPickup: // ok
+    {
+        flex:1,
+        elevation: 3,  
+        borderRadius: 10, 
+        flexDirection: 'column',
+        marginLeft: 20,
+        marginRight: 20,
+        backgroundColor: '#fff',
+        height: 40,
     },
     buttonText:{
         borderWidth: 0,
@@ -870,7 +876,8 @@ export default connect (
     products: state.ProductsReducer,
     order: state.OrderReducer,
     user: state.UserReducer,
-    options: state.OptionReducer,
+    options: state.OptionReducer, /// <= удалить
+    customers: state.CustomersReducer,
   }),
   dispatch => ({
     addCart: (index) => {

@@ -17,9 +17,6 @@ class Main extends Component {
   }
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-
-      console.log("main");
-      
       this.setState({
         didFinishInitialAnimation: true,
       });

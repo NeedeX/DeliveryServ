@@ -48,16 +48,6 @@ class Loading extends Component {
       null
     });
   }
-  goMain()
-  {
-    setTimeout(() => {
-      const resetAction = StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'Main' })],
-      });
-      this.props.navigation.dispatch(resetAction);
-    }, 1500);
-  }
   loadingCustomers()
   {
     return fetch(URL+'LoadingCustomers.php')
@@ -65,6 +55,8 @@ class Loading extends Component {
     .then((responseJson) => {
 
         this.props.loadCustomers(responseJson);
+        console.log("customers = ", this.props.customers);
+        
         this.setState(state => {
           return {
             progress: state.progress + loagIndex,
@@ -83,7 +75,6 @@ class Loading extends Component {
     .then((responseJson) => {
 
         this.props.loadBanners(responseJson.banners);
-        console.log(this.props.banners);
         this.setState(state => {
           return {
             progress: state.progress + loagIndex,
@@ -220,7 +211,7 @@ export default connect (
     user: state.UserReducer,
     addresses: state.AddressReducer,
     favorite: state.FavoriteReducer,
-    customers: state.Customers,
+    customers: state.CustomersReducer,
   }),
   dispatch => ({
     loadBanners: (bannersData) => {

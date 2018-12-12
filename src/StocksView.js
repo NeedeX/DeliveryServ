@@ -22,7 +22,6 @@ class Stocks extends React.Component {
     };
   };
   render() {
-    console.log(this.props.banners);
     var {navigate} = this.props.navigation;
     var {params} = this.props.navigation.state;
     return (
