@@ -390,13 +390,13 @@ class Checkout extends React.Component {
                             ref={ input => {
                                 this.inputs['Имя'] = input;
                               }}
-                            style={styles.textInputStyle}
+                            style={styles.textInputStyleNew}
                             onChangeText={(chFIO) => this.setState({chFIO: chFIO}) }
                         />
                         {this.divider()}
                         <Sae
                             label={'Телефон'}
-                            style={styles.textInputStyle}
+                            style={styles.textInputStyleNew}
                             // TextInput props
                             autoCapitalize={'none'}
                             autoCorrect={false}
@@ -743,19 +743,27 @@ const styles = StyleSheet.create({
         marginRight: 20,
         backgroundColor: '#fff'
     },
-    textInputStyle: {
+
+    textInputStyleNew: {
         height: 45, 
         borderWidth: 0, 
-        color: '#4E4E4E',
-        fontFamily: 'Roboto',
-        fontWeight: "400",
         flex: 1, 
         marginLeft: 10, 
         paddingBottom: 0, 
         paddingTop: 0, 
         marginRight: 10,
         marginBottom: 0,
-        fontSize: 20,
+    },
+
+    textInputStyle: {
+        height: 45, 
+        borderWidth: 0, 
+        flex: 1, 
+        marginLeft: 10, 
+        paddingBottom: 0, 
+        paddingTop: 0, 
+        marginRight: 10,
+        marginBottom: 0,
     },
     textInputStyleMultiline:
     {
