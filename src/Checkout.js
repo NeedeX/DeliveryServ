@@ -6,7 +6,7 @@ import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button';
 import AnimatedHideView from 'react-native-animated-hide-view';
 import Header from './components/Header';
 import { Sae } from 'react-native-textinput-effects';
-
+import moment  from 'moment';
 
 const { width } = Dimensions.get('window');
 class Checkout extends React.Component {
@@ -42,9 +42,14 @@ class Checkout extends React.Component {
 
             addressView: 'Выбрать из моих адресов',
             didFinishInitialAnimation: false,
-            height: 80,
+
+            /// минимальная и максимальная дата для заказа
+            minDate: moment().format("DD-MM-YYYY"),
+            maxDate: moment(Number(this.props.customers.iDaysAhead)*86400000 + new Date().getTime()).format("DD-MM-YYYY"),
+            //this.props.iDaysAhead+"-05-2018",
         
         }
+        
         //this.props.options.addressSelect = "";
         this.onSelectDeliveryAddress = this.onSelectDeliveryAddress.bind(this);
         this.onSelectTimeDelivery = this.onSelectTimeDelivery.bind(this);
@@ -57,6 +62,13 @@ class Checkout extends React.Component {
         {
             this.state.isViewInputAdressVisible = false;
             this.state.selectStyleDeliveryAdress = styles.viewCardStyleDeliveryOnlyPickup;
+        }
+        /// если нельзя выбрать к какому времени доставить
+        if(this.props.customers.blLater == 0)
+        {
+            this.state.isChildVisible = false;
+            this.state.chDeliveryTime = '';
+            this.state.selectStyleDeliveryTime = styles.viewCardStyleNoTimeNoSelectTime;
         }
     }
     // Lifecycle methods
@@ -150,6 +162,7 @@ class Checkout extends React.Component {
                 
                 this.state.isViewInputAdressVisible = false; /// скрываем поля ввода адреса доставки
                 this.state.selectStyleDeliveryAdress = styles.viewCardStyleDeliveryOnlyPickup;
+                this.props.navigation.navigate('Pickups', {routeGoBack: 'Checkout',})
             }
             // если и самовывоз и доставка
             else 
@@ -157,7 +170,7 @@ class Checkout extends React.Component {
                 // 
                 this.setState({ selectStyleDeliveryAdress: this.props.customers.blPickup == 1 ? styles.viewCardStyleDeliveryNoAdressAndPickup : styles.viewCardStyleDeliveryNoAdress, });
                 this.setState({ isViewInputAdressVisible: false, });
-                this.props.navigation.navigate('Addresses', {routeGoBack: 'Checkout',})
+                this.props.navigation.navigate('Pickups', {routeGoBack: 'Checkout',})
             }
         }
         
@@ -167,20 +180,30 @@ class Checkout extends React.Component {
     // время доставки
     onSelectTimeDelivery(index, value)
     {
-        this.setState({
-            chTypeDeliveryTime: value,
-        });
-        if(value === 2)
+        this.setState({ chTypeDeliveryTime: value, });
+        /// если разрешен выбор времени доставки.
+        if(this.props.customers.blLater == 1)
         {
-            this.setState({ isChildVisible: true, });
-            this.setState({ selectStyleDeliveryTime: styles.viewCardStyle, });
+            if(value === 2)
+            {
+                this.setState({ isChildVisible: true, });
+                this.setState({ selectStyleDeliveryTime: styles.viewCardStyle, });
+            }
+            else
+            {
+                this.setState({ isChildVisible: false, });
+                this.setState({chDeliveryTime: ''});
+                this.setState({ selectStyleDeliveryTime: styles.viewCardStyleNoTime, });
+            }
         }
-        else
+        /// нельзя выбрать время доставки
+        else 
         {
             this.setState({ isChildVisible: false, });
             this.setState({chDeliveryTime: ''});
-            this.setState({ selectStyleDeliveryTime: styles.viewCardStyleNoTime, });
+            this.setState({ selectStyleDeliveryTime: styles.viewCardStyleNoTimeNoSelectTime, });
         }
+        
     }
     onSelectPay(index, value){
         this.setState({chPay: value,});
@@ -405,6 +428,41 @@ class Checkout extends React.Component {
             )
         }
     }
+    radioDeliveryTime()
+    {
+        console.log("this.props.customers.blLater = ", this.props.customers.blLater);
+        
+        if(this.props.customers.blLater == 1) {
+            return(
+                <RadioGroup selectedIndex={0} color='#6A3DA1'
+                    onSelect = {(index, value) => this.onSelectTimeDelivery(index, value)} >
+                    {/* как можно скорее */}
+                    <RadioButton value={1}>
+                        <Text style={styles.textStyle}>Как можно скорее</Text>
+                    </RadioButton>
+                    {/* указать время */}
+                    <RadioButton value={2}>
+                        <View style={styles.arrowRightView}>
+                            <Text style={styles.textStyle}>Ко времени</Text>
+                            <Image style={styles.arrowBottom}  source={require('../assets/arrowBottom.png')} />
+                        </View>
+                    </RadioButton>
+                </RadioGroup>
+            )
+        }
+        else
+        {
+            return(
+                <RadioGroup selectedIndex={0} color='#6A3DA1'
+                    onSelect = {(index, value) => this.onSelectTimeDelivery(index, value)} >
+                    {/* как можно скорее */}
+                    <RadioButton value={1}>
+                        <Text style={styles.textStyle}>Как можно скорее</Text>
+                    </RadioButton>
+                </RadioGroup>
+            )
+        }
+    }
 
 
     render() {
@@ -545,27 +603,8 @@ class Checkout extends React.Component {
                 <Text style={styles.textTitleStyle}>3. Время доставки </Text>
                 <View style={this.state.selectStyleDeliveryTime}>
                     {/* время доставки*/}
-                    <RadioGroup 
-                        selectedIndex={0}
-                        color='#6A3DA1'
-                        
-                        onSelect = {(index, value) => this.onSelectTimeDelivery(index, value)} >
-                        {/* как можно скорее */}
-                        <RadioButton value={1}>
-                            <Text style={styles.textStyle}>Как можно скорее</Text>
-                        </RadioButton>
-                        {/* указать время */}
-                        <RadioButton value={2}>
-                            
-                            <View style={styles.arrowRightView}>
-                                <Text style={styles.textStyle}>Ко времени</Text>
-                                <Image
-                                style={styles.arrowBottom} 
-                                source={require('../assets/arrowBottom.png')} />
-                            </View>
-                        </RadioButton>
-
-                    </RadioGroup>
+                    {this.radioDeliveryTime()}
+                    
                     <AnimatedHideView
                         visible={this.state.isChildVisible}
                         style={{ padding: 0, }}
@@ -578,9 +617,9 @@ class Checkout extends React.Component {
                             androidMode="spinner"
                             mode="datetime"
                             placeholder="Выберите время"
-                            format="YYYY-MM-DD H:mm"
-                            minDate="2018-05-01"
-                            maxDate="2020-12-31"
+                            format="DD-MM-YYYY H:mm"
+                            minDate={this.state.minDate}
+                            maxDate={this.state.maxDate}
                             showIcon={false}
                             confirmBtnText="Confirm"
                             cancelBtnText="Cancel"
@@ -778,7 +817,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         height: 80,
     },
-    viewCardStyleNoTime:
+    viewCardStyleNoTime: //ok
     {
         flex:1,
         elevation: 3,  
@@ -788,6 +827,17 @@ const styles = StyleSheet.create({
         marginRight: 20,
         backgroundColor: '#fff',
         height: 80,
+    },
+    viewCardStyleNoTimeNoSelectTime: //ok
+    {
+        flex:1,
+        elevation: 3,  
+        borderRadius: 10, 
+        flexDirection: 'column',
+        marginLeft: 20,
+        marginRight: 20,
+        backgroundColor: '#fff',
+        height: 40,
     },
     viewCardStyleDeliveryNoAdress: // ok
     {

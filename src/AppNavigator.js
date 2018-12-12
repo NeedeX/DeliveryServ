@@ -1,7 +1,6 @@
 import { Easing, Animated } from 'react-native';
 import { createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
 
-
 import Loading from './Loading';
 import Main from './Main';
 import Category from './CategoryView'; 
@@ -11,6 +10,8 @@ import StocksView from "./StocksView";
 
 import Cart from './Cart';
 import Checkout from './Checkout';
+import Pickups from './Pickups';
+import Addresses from './Addresses';
 import CheckoutConfirm from './CheckoutConfirm';
 import CompletedOrder from './CompletedOrder';
 // drawer 
@@ -50,8 +51,10 @@ const AppNavigator = createStackNavigator({
   StocksView: { screen: StocksView},
   Cart: { screen: Cart}, 
   Checkout: { screen: Checkout},
+  Pickups: { screen: Pickups},
   CheckoutConfirm: { screen: CheckoutConfirm},
   CompletedOrder: { screen: CompletedOrder},
+  Addresses: { screen: Addresses },
 },
 {
   initialRouteName: 'Loading',
