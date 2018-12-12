@@ -75,9 +75,7 @@ class Main extends Component {
           this.state.didFinishInitialAnimation === false ?
           <ActivityIndicator size="large" color="#583286" />
           :
-       
           <ScrollView>
-            
             <ImageBackground
               style={{ flex: 1, width: width, height: 190}}
               imageStyle={{ resizeMode: 'stretch' }}
@@ -92,8 +90,6 @@ class Main extends Component {
                 </Text>
                 </TouchableOpacity>
             </View>
-
-
               <Swiper
                   height={200}
                   autoplay={true}

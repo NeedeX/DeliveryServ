@@ -1,7 +1,7 @@
-const initialState = [];
+const INITIAL_STATE = [];
 
 
-export default function BannerReduces (state = initialState, action) {
+export default function BannerReduces (state = INITIAL_STATE, action) {
     switch (action.type) {
       case "LOAD_BANNERS":
         return action.payload

@@ -11,6 +11,7 @@ import UserReducer from './UserReducer';
 import AddressReducer from './AddressReducer';
 import FavoriteReducer from './FavoriteReducer';
 import TegsReducer from './TegsReducer';
+import CustomersReduces from './CustomersReduces';
 
 const allReducers = combineReducers ({
     
@@ -25,6 +26,7 @@ const allReducers = combineReducers ({
     AddressReducer: AddressReducer,
     FavoriteReducer: FavoriteReducer,
     TegsReducer: TegsReducer,
+    CustomersReduces: CustomersReduces,
 });
 
 export default allReducers;

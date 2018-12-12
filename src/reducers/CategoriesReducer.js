@@ -1,7 +1,7 @@
-const initialState = [];
+const INITIAL_STATE = [];
 
 
-export default function CategoriesReducer (state = initialState, action) {
+export default function CategoriesReducer (state = INITIAL_STATE, action) {
     switch (action.type) {
       case "LOAD_CATEGORIES":
         return action.payload

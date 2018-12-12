@@ -14,11 +14,13 @@ class Loading extends Component {
       progress: 0, // прогресс загрузки
     };
 
+    this.loadingCustomers();
     this.loadingBanners();
     this.loadingCategories();
     this.loadingProducts();
     this.loadOptions();
     this.loadTegs();
+    
     //this.loadUser();
     
     
@@ -28,17 +30,6 @@ class Loading extends Component {
     headerMode: 'none',
   };
   componentDidMount() {
-
-    /// переход наосновной экран после splash
-    /*  setTimeout(() => {
-       const resetAction = StackActions.reset({
-         index: 0,
-         actions: [NavigationActions.navigate({ routeName: 'Main' })],
-       });
-       this.props.navigation.dispatch(resetAction);
- 
-     }, 4000);
-    */
     InteractionManager.runAfterInteractions(() => {
       this.setState({
         didFinishInitialAnimation: true,
@@ -66,6 +57,24 @@ class Loading extends Component {
       });
       this.props.navigation.dispatch(resetAction);
     }, 1500);
+  }
+  loadingCustomers()
+  {
+    return fetch(URL+'LoadingCustomers.php')
+    .then((response) => response.json())
+    .then((responseJson) => {
+
+        this.props.loadCustomers(responseJson);
+        this.setState(state => {
+          return {
+            progress: state.progress + loagIndex,
+          };
+        });
+
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   }
   loadingBanners()
   {
@@ -211,10 +220,14 @@ export default connect (
     user: state.UserReducer,
     addresses: state.AddressReducer,
     favorite: state.FavoriteReducer,
+    customers: state.Customers,
   }),
   dispatch => ({
     loadBanners: (bannersData) => {
       dispatch({ type: 'LOAD_BANNERS', payload: bannersData});
+    },
+    loadCustomers: (index) => {
+      dispatch({ type: 'LOAD_CUSTOMERS', payload: index})
     },
     loadCategories: (categoriesData) => {
       dispatch({ type: 'LOAD_CATEGORIES', payload: categoriesData})
