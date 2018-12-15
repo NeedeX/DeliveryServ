@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, TouchableHighlight, Text, View, ImageBackground, TouchableOpacity, Image, ScrollView} from 'react-native';
+import { StyleSheet, Dimensions, TouchableHighlight, InteractionManager, ActivityIndicator, Text, View, ImageBackground, TouchableOpacity, Image, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 //import FAB from 'react-native-fab';
 //import firebase from 'react-native-firebase';
@@ -15,6 +15,7 @@ class Addresses extends React.Component {
             isModalVisible: false,
             AuthState: 0,
             routeGoBack: '',
+            didFinishInitialAnimation: false,
         }  
     }
     static navigationOptions = ({ navigation  }) => {
@@ -28,9 +29,16 @@ class Addresses extends React.Component {
           header: (props) => <Header title={'Мои адреса'} nav={ navigation } {...props} />,
         };
       };
-    componentDidMount()
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+          this.setState({
+            didFinishInitialAnimation: true,
+          });
+        });
+      }
+   /* componentDidMount()
     {
-        /*
+        
         var {params} = this.props.navigation.state;
         firebase.auth().onAuthStateChanged(user => {
             if (user)
@@ -39,8 +47,8 @@ class Addresses extends React.Component {
                 this.setState({ AuthState: 0 });
         });
         this.state.routeGoBack = params !== undefined ? params.routeGoBack : '';
-        */
-    }
+        
+    }*/
     loadingAddresses(uid)
     {
         return fetch('http://mircoffee.by/deliveryserv/app/LoadingAddresses.php',
@@ -138,6 +146,10 @@ class Addresses extends React.Component {
               imageStyle={{ resizeMode: 'stretch' }}
               source={require('../assets/main.png')}
             >
+            {
+            this.state.didFinishInitialAnimation === false ?
+            <ActivityIndicator size="large" color="#583286" />
+            :
             <View style={{ alignItems: 'center',  }}>
                 
             {
@@ -193,7 +205,7 @@ class Addresses extends React.Component {
                 }
                     </View>   
                </View>
-               
+            }
             </ImageBackground>
             {
                 this.state.AuthState == 0 ?
