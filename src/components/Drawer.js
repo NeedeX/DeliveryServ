@@ -75,6 +75,13 @@ class Drawer extends React.Component {
             <Text style={styles.textMenu}>Избранное</Text>
           </View>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Addresses')}>
+          <View style={{ flexDirection: 'row', marginBottom: 20, }}>
+            <Image source={require('./assets/iconFavorites.png')} 
+            style={ styles.iconsMenu }/>
+            <Text style={styles.textMenu}>Адреса</Text>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Stocks')}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconHistory.png')} 

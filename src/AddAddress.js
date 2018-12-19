@@ -54,7 +54,8 @@ class AddAddress extends React.Component {
             chEntrance: this.state.chEntrance,
             chFloor: this.state.chFloor,
             chApartment: this.state.chApartment,
-            uid: this.props.user[0]._user.uid,
+            UIDGoogleUser: this.props.user[0]._user.uid, // пользователя приложения, выданный гуглом
+            UIDClient: this.props.options.UIDClient,
         };
 
         console.log(val);
@@ -76,7 +77,8 @@ class AddAddress extends React.Component {
                 chEntrance: this.state.chEntrance,
                 chFloor: this.state.chFloor,
                 chApartment: this.state.chApartment,
-                uid: this.props.user[0]._user.uid,
+                UIDGoogleUser: this.props.user[0]._user.uid,
+                UIDClient: this.props.options.UIDClient,
             })
    
         })
@@ -95,7 +97,8 @@ class AddAddress extends React.Component {
                     chEntrance: this.state.chEntrance,
                     chApartment: this.state.chApartment,
                     chFloor: this.state.chFloor,
-                    uid: this.props.user[0]._user.uid,
+                    UIDGoogleUser: this.props.user[0]._user.uid,
+                    UIDClient: this.props.options.UIDClient,
 
                 };
                 console.log(val);
@@ -151,12 +154,9 @@ class AddAddress extends React.Component {
             <ScrollView>
             {
             this.state.didFinishInitialAnimation === false ?
-            <View style={{ alignItems: "center", justifyContent:'center'}}>
-                <Text>gferght</Text>
-            </View>
+            <ActivityIndicator size="large" color="#583286" />
             :
-            null
-            }
+            <View>
                 <Text style={styles.textTitleStyle}>Добавить новый адрес</Text>
                 <View style={styles.viewCardStyle}>
                     <Text style={styles.text}>{this.state.chDeliveryAddressText}</Text>
@@ -168,12 +168,8 @@ class AddAddress extends React.Component {
                                 autoCapitalize = "none"
                                 blurOnSubmit={ false }
                                 clearButtonMode={'while-editing'}
-                                onSubmitEditing={() => {
-                                    this.focusNextField('Улица');
-                                  }}
-                                ref={ input => {
-                                    this.inputs['Город'] = input;
-                                  }}
+                                onSubmitEditing={() => { this.focusNextField('Улица'); }}
+                                ref={ input => { this.inputs['Город'] = input;  }}
                                 onChangeText={(chCity) => this.setState({chCity})}
                                 value={this.state.chCity}/>
                             {this.divider()}
@@ -288,6 +284,9 @@ class AddAddress extends React.Component {
                       </Text>
                     </TouchableHighlight>
                 </View>
+            </View>
+            }
+                
                 
             </ScrollView>
           
@@ -310,18 +309,20 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         color: '#4E4E4E',
         fontWeight: "600",
-        paddingLeft: 30,
         lineHeight: 24,
+        
+        textAlign: 'center',
     },
     viewCardStyle:{
         flex:1,
-        elevation: 5,  
+        elevation: 2,  
         borderRadius: 10, 
         flexDirection: 'column',
-        marginLeft: 20,
-        marginRight: 20,
+        marginLeft: 10,
+        marginRight: 10,
         backgroundColor: '#fff',
         marginTop: 10,
+        width: 300,
     },
     textInputStyle: {
         height: 45, 
@@ -366,6 +367,7 @@ export default connect (
     order: state.OrderReducer,
     user: state.UserReducer,
     addresses: state.AddressReducer,
+    options: state.OptionReducer,
   }),
   dispatch => ({
       
