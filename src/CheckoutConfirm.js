@@ -29,6 +29,9 @@ class CheckoutConfirm extends React.Component {
             chComments: params.chComments,
             chDeliveryAddress: params.chDeliveryAddress,
             chPayDescription: params.chPayDescription, // текст метода доставки
+            chTypeDeliveryText: params.chTypeDeliveryText,
+            chTypeDelivery: params.chTypeDelivery,
+
             chConfirmText: params.chConfirmText,
             allPriceCart: 0,
             didFinishInitialAnimation: false,
@@ -86,9 +89,9 @@ class CheckoutConfirm extends React.Component {
         
         
         var val ={
-            UID: this.props.user.length === 0 ? null : this.props.user[0]._user.uid,
+            UID: this.props.user.length === 0 ? null : this.props.user[0]._user.uid, // UID пользователя приложения
             chFIO: this.state.chFIO,
-                chPhone: this.state.chPhone,
+            chPhone: this.state.chPhone,
                 chCity: this.state.chCity,
                 chStreet: this.state.chStreet,
                 chNumHome: this.state.chNumHome,
@@ -103,14 +106,17 @@ class CheckoutConfirm extends React.Component {
                 chPay: this.state.chPay, // метод оплаты
                 chPayDescription: this.state.chPayDescription, // текст метода доставки
                 chConfirm: this.state.chConfirm, // метод подътверждения
+                chTypeDeliveryText: this.state.chTypeDeliveryText,
+                chTypeDelivery: this.state.chTypeDelivery,
                 chConfirmText: this.state.chConfirmText,
                 chComments: this.state.chComments,
                 allPriceCart: this.state.allPriceCart,
                 cart: this.props.cart,
+                UIDClient: this.props.UIDClient,
         }
         console.log(val);
         
-        /*
+        
         //console.log(this.state);
         fetch('http://mircoffee.by/deliveryserv/app/InsertOrder.php', 
         {
@@ -121,7 +127,7 @@ class CheckoutConfirm extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                UID: this.props.user.length === 0 ? null : this.props.user[0]._user.uid,
+                UID: this.props.user.length === 0 ? null : this.props.user[0]._user.uid, // UID пользователя приложения
                 chFIO: this.state.chFIO,
                 chPhone: this.state.chPhone,
                 chCity: this.state.chCity,
@@ -138,10 +144,13 @@ class CheckoutConfirm extends React.Component {
                 chPay: this.state.chPay, // метод оплаты
                 chPayDescription: this.state.chPayDescription, // текст метода доставки
                 chConfirm: this.state.chConfirm, // метод подътверждения
+                chTypeDeliveryText: this.state.chTypeDeliveryText,
+                chTypeDelivery: this.state.chTypeDelivery,
                 chConfirmText: this.state.chConfirmText,
                 chComments: this.state.chComments,
                 allPriceCart: this.state.allPriceCart,
                 cart: this.props.cart,
+                UIDClient: this.props.UIDClient, /// UID владельца заведенияы
     
             })
    
@@ -150,27 +159,29 @@ class CheckoutConfirm extends React.Component {
         .then((responseJson) => {
             // Отображение ответного сообщения, поступающего с сервера после вставки записей.
             val = {
-                    key: this.generateKey(), 
-                    idOrder: responseJson.toString(),
-                    chFIO: this.state.chFIO,
-                    chPhone: this.state.chPhone,
-                    chCity: this.state.chCity,
-                    chStreet: this.state.chStreet,
-                    chNumHome: this.state.chNumHome,
-                    chHousing: this.state.chHousing,
-                    chEntrance: this.state.chEntrance,
-                    chFloor: this.state.chFloor,
-                    chApartment: this.state.chApartment,
-                    chDeliveryAddress: this.state.chDeliveryAddress,
-                    chTypeDeliveryTime: this.state.chTypeDeliveryTime, //  время доставки
-                    chDeliveryTime: this.state.chDeliveryTime,
-                    chSumma: this.state.chSumma,
-                    chPay: this.state.chPay, // метод оплаты
-                    chPayDescription: this.state.chPayDescription, // текст метода доставки
-                    chConfirm: this.state.chConfirm, // метод подътверждения
-                    chConfirmText: this.state.chConfirmText,
-                    chComments: this.state.chComments,
-                    cart: this.props.cart,
+                key: this.generateKey(), 
+                idOrder: responseJson.toString(),
+                chFIO: this.state.chFIO,
+                chPhone: this.state.chPhone,
+                chCity: this.state.chCity,
+                chStreet: this.state.chStreet,
+                chNumHome: this.state.chNumHome,
+                chHousing: this.state.chHousing,
+                chEntrance: this.state.chEntrance,
+                chFloor: this.state.chFloor,
+                chApartment: this.state.chApartment,
+                chDeliveryAddress: this.state.chDeliveryAddress, // адрес доставки
+                chTypeDeliveryTime: this.state.chTypeDeliveryTime, //  время доставки
+                chDeliveryTime: this.state.chDeliveryTime, // к какому времени выполнить доставку
+                chSumma: this.state.chSumma, /// суммма с которой нужно дать сдачу
+                chPay: this.state.chPay, // метод оплаты
+                chPayDescription: this.state.chPayDescription, // текст метода доставки
+                chConfirm: this.state.chConfirm, // метод подътверждения
+                chTypeDeliveryText: this.state.chTypeDeliveryText, // описание способа доставки
+                chTypeDelivery: this.state.chTypeDelivery, // id типа доставки
+                chConfirmText: this.state.chConfirmText, // описание способа подътверждения
+                chComments: this.state.chComments,
+                cart: this.props.cart,
             };
             //this.props.onAddOrder(val);
             //console.log(this.props.order);
@@ -179,14 +190,15 @@ class CheckoutConfirm extends React.Component {
             this.props.cart.map(item => (
                 this.props.cart.filter(rentChildrenPrint => rentChildrenPrint.iProduct ===  item.iProduct)
             ));
-                */
-           /* 
+            */
+                
+           
             this.props.navigation.navigate('CompletedOrder', {animation: 'SlideFromLeft', animationDuration: 500 });
    
         })
         .catch((error) => {
              console.error(error);
-        });*/
+        });
     }
 
     render() {

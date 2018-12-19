@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Dimensions, Image, ActivityIndicator, ImageBackground, InteractionManager} from 'react-native';
 import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
 import Header from './components/Header';
 import BGNoAuth from './components/BGNoAuth';
 const { width } = Dimensions.get('window');
@@ -21,6 +22,14 @@ class Addresses extends Component {
             didFinishInitialAnimation: true,
         });
         });
+        var {params} = this.props.navigation.state;
+        firebase.auth().onAuthStateChanged(user => {
+            if (user)
+                this.setState({ AuthState: 1 });
+            else
+                this.setState({ AuthState: 0 });
+        });
+        this.state.routeGoBack = params !== undefined ? params.routeGoBack : '';
     }
     static navigationOptions = ({ navigation  }) => {
         return {

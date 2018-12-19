@@ -27,7 +27,8 @@ class Checkout extends React.Component {
             chFloor: '', // этаж
             chApartment: '', // квартира
 
-            chTypeDelivery: '',
+            chTypeDelivery: '1',
+            chTypeDeliveryText: 'Доставка',
 
             // время доставки
             chTypeDeliveryTime: 1, // выбор типа времени "как можно скорее или к определенному времени"
@@ -52,6 +53,7 @@ class Checkout extends React.Component {
             selectStyleArrowAddress: styles.arrowRightSelectAddress,
 
             addressView: 'Выбрать из моих адресов',
+            addressViewPickup: "Самовывоз",
             didFinishInitialAnimation: false,
 
             /// минимальная и максимальная дата для заказа
@@ -106,7 +108,41 @@ class Checkout extends React.Component {
         this.inputs['Имя'].focus();
         
     }
+    getSelectAddressPickup()
+    {
+        if(this.props.options.addressSelect !== undefined )
+        {
+            let result = this.props.addresses.filter(x => x.idAddress === this.props.options.addressSelect);
 
+            var chHousing = result[0].chHousing ? "/"+result[0].chHousing : ""; // корпус
+            var chEntrance = result[0].chEntrance ? ", подъезд "+result[0].chEntrance : ""; // подъезд
+            var chFloor = result[0].chFloor ? ", этаж "+result[0].chFloor : ""; // этаж
+            var chApartment = result[0].chApartment ? ", кв. "+result[0].chApartment : "" // кв
+            var addressText = "г. "+result[0].chCity+", ул."+result[0].chStreet +" "+result[0].chNumHome+chHousing+chEntrance+chFloor+chApartment;
+            this.state.chDeliveryAddress = addressText;
+            var lengthaddress = addressText.length;
+
+            if(lengthaddress > 37) {
+                var length = addressText.length - 37;
+                addressText = addressText.substr(0, addressText.length - length)+"...";
+            }
+            
+            this.state.addressView = addressText;
+            
+            this.state.selectStyleArrowAddress = styles.arrowRightSelectAddress;
+            if(this.state.isViewInputAdressVisible === true) {
+                this.state.addressViewPickup = "Самовывоз";
+                this.state.selectStyleArrowAddress = styles.arrowRightNoSelectAddress;
+                this.state.chDeliveryAddress = '';
+            }
+        }
+        else {
+            this.state.addressViewPickup = "Самовывоз";
+            this.state.selectStyleArrowAddress = styles.arrowRightNoSelectAddress;
+            this.state.chDeliveryAddress = '';
+        }
+        return ( <Text style={{color:'#4E4E4E'}}>{this.state.addressViewPickup}</Text> )
+    }
     getSelectAddress()
     {
         if(this.props.options.addressSelect !== undefined )
@@ -152,15 +188,18 @@ class Checkout extends React.Component {
     /// срабатывает по нажатию на радобатон выбора доставки
     onSelectDeliveryAddress(index, value){
         // ввод вручную адреса доставки
+        this.setState({ chTypeDelivery: value});
         if(value === 2){
             this.setState({ isViewInputAdressVisible: true, });
             this.setState({ selectStyleDeliveryAdress: styles.viewCardStyle, });
             this.state.chDeliveryAddress = '';
+            this.setState({ chTypeDeliveryText: 'Доставка'});
         }
         /// выбор адреса доставки
         if(value ===  1){
             this.setState({ selectStyleDeliveryAdress: this.props.customers.blPickup == 1 ? styles.viewCardStyleDeliveryNoAdressAndPickup : styles.viewCardStyleDeliveryNoAdress, });
             this.setState({ isViewInputAdressVisible: false, });
+            this.setState({ chTypeDeliveryText: 'Доставка'});
             this.props.navigation.navigate('Addresses', {routeGoBack: 'Checkout',})                 
         }
         /// выбор замовывоза
@@ -170,6 +209,7 @@ class Checkout extends React.Component {
             if(this.props.customers.blPickup == 1 && this.props.customers.blDelivery == 0)
             {
                 this.state.isViewInputAdressVisible = false; /// скрываем поля ввода адреса доставки
+                this.setState({ chTypeDeliveryText: 'Самовывоз'});
                 this.state.selectStyleDeliveryAdress = styles.viewCardStyleDeliveryOnlyPickup;
                 this.props.navigation.navigate('Pickups', {routeGoBack: 'Checkout',})
             }
@@ -179,6 +219,7 @@ class Checkout extends React.Component {
                 // 
                 this.setState({ selectStyleDeliveryAdress: this.props.customers.blPickup == 1 ? styles.viewCardStyleDeliveryNoAdressAndPickup : styles.viewCardStyleDeliveryNoAdress, });
                 this.setState({ isViewInputAdressVisible: false, });
+                this.setState({ chTypeDeliveryText: 'Самовывоз'});
                 this.props.navigation.navigate('Pickups', {routeGoBack: 'Checkout',})
             }
         }
@@ -277,10 +318,12 @@ class Checkout extends React.Component {
                     chDeliveryTime: this.state.chDeliveryTime,
                     chSumma: this.state.chSumma,
                     chPay: this.state.chPay, // метод оплаты
-                    chPayDescription: this.state.chPayDescription, // текст метода доставки
+                    chPayDescription: this.state.chPayDescription, // текст метода оплаты
                     chConfirm: this.state.chConfirm, // метод подътверждения
                     chConfirmText: this.state.chConfirmText,
                     chComments: this.state.chComments,
+                    chTypeDeliveryText: this.state.chTypeDeliveryText,
+                    chTypeDelivery: this.state.chTypeDelivery,
     
                 }
                 console.log(val);
@@ -305,6 +348,8 @@ class Checkout extends React.Component {
                     chConfirm: this.state.chConfirm, // метод подътверждения
                     chConfirmText: this.state.chConfirmText,
                     chComments: this.state.chComments,
+                    chTypeDeliveryText: this.state.chTypeDeliveryText,
+                    chTypeDelivery: this.state.chTypeDelivery,
                 });
       /*      }
         }*/
@@ -368,7 +413,7 @@ class Checkout extends React.Component {
                     onSelect = {(index, value) => this.onSelectDeliveryAddress(index, value)} >
                     <RadioButton value={3}>
                         <View style={styles.arrowRightView}>
-                            <Text style={{color:'#4E4E4E'}}>Самовывоз</Text>
+                            {this.getSelectAddressPickup()}
                             <Image style={this.state.selectStyleArrowAddress} 
                                 source={require('../assets/arrowRight.png')} />
                         </View>

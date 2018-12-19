@@ -7,7 +7,6 @@ import AnimatedBar from "react-native-animated-bar";
 YellowBox.ignoreWarnings(['Require cycle:']);
 
 const loagIndex = 0.4;
-const URL = 'http://mircoffee.by/deliveryserv/app/';
 
 class Loading extends Component {
   constructor(props) {
@@ -60,11 +59,7 @@ class Loading extends Component {
         this.setState({ route: 'Main'})
       }
       else
-      {
-        console.log("no user");
-        //this.props.navigation.navigate('Phone')
-        this.setState({ route: 'Start'})
-      }
+      { this.setState({ route: 'Start'})  }
     })
   }
   loadingOptions()
