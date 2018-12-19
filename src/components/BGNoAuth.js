@@ -1,47 +1,29 @@
 import React from 'react';
 import { StyleSheet, Dimensions, TouchableHighlight, Text, View, Button, TouchableOpacity, Image, ScrollView} from 'react-native';
 const { width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 class BGNoAuth extends React.Component {
     render() {
         return(
             <View style={{
                 flex: 1,
-                width: width,
-                height: 600,
-                position: 'absolute',
-                zIndex: 10,
                 backgroundColor: 'rgba(0,0,0, 0.5)',
-                marginTop: 0,
-                alignItems:'center',
-                elevation: 1,
+                width: width,
+                height: height,
+                position: 'absolute',
+                justifyContent: 'center',
             }}>
-                <View style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: 10,
-                    marginBottom: 120,
-                }}>
-                    <Text style={{
+                <Text style={{
                         color: '#fff',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        marginTop: 20,
                     }}>{this.props.text} </Text>
-                
-                    <TouchableOpacity  underlayColor='rgba(255,255,255,0.1)'
+                    <TouchableOpacity  underlayColor='rgba(255,255,255,0.1)' style={{justifyContent: 'center', alignItems: 'center'}}
                     onPress={() =>  this.props.nav.navigate('Phone', { goBack: 'Addresses',}) }>
                     <Text style = {styles.buttonText}>
                         ВОЙТИ
                     </Text>
                     </TouchableOpacity>
-                    <Button
-                onPress={
-                  () => this.props.navigation.navigate('Phone')
-              }
-                title="Phone"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
-              />
-                </View>
             </View>
         );
     }

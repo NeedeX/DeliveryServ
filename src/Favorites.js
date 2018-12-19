@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, TouchableHighlight, Text, View, ImageBackground, TouchableOpacity, Image, ScrollView} from 'react-native';
+import { StyleSheet, Dimensions, TouchableHighlight, InteractionManager, ActivityIndicator, Text, View, ImageBackground, TouchableOpacity, Image, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 import BGNoAuth from './components/BGNoAuth';
@@ -12,6 +12,7 @@ class Favorites extends React.Component {
         this.state = {
             AuthState: 0,
             countFav: 0,
+            didFinishInitialAnimation: false,
         }  
     }
     static navigationOptions = ({ navigation  }) => {
@@ -27,6 +28,7 @@ class Favorites extends React.Component {
       };
     componentDidMount()
     {
+        /*
         firebase.auth().onAuthStateChanged(user => {
             //console.log("==>");
             if (user) {
@@ -37,7 +39,13 @@ class Favorites extends React.Component {
             }
             else
                 this.setState({ AuthState: 0 });
+        });*/
+        InteractionManager.runAfterInteractions(() => {
+            this.setState({
+                didFinishInitialAnimation: true,
+            });
         });
+
     }
     loadingFavorites(uid)
     {
@@ -222,14 +230,40 @@ class Favorites extends React.Component {
         var {navigate} = this.props.navigation;
         var {params} = this.props.navigation.state;
         return (
-        <View style={{backgroundColor: '#fff',}}> 
+        <View style={ styles.container}> 
             <ImageBackground
-              style={{ flex: 1, width: width, height: 190}}
-              imageStyle={{ resizeMode: 'stretch' }}
-              source={require('../assets/main.png')}
+            style={{ flex: 1, width: width, height: 170, marginTop:0, alignItems: 'center', justifyContent: 'flex-start'}}
+            imageStyle={{ resizeMode: 'cover' }}
+            source={require('../assets/main.png')}
             >
-            <View style={{ alignItems: 'center',  }}>
-                
+            {
+                this.state.didFinishInitialAnimation === false ?
+                <View style={{ alignItems: "center", justifyContent:'center'}}>
+                    <View style={ [styles.circleIcone,{
+                        marginTop: 84,
+                    }] }>
+                    <Image source={require('../assets/favoritesIcon.png')} style={ styles.imageIcon } />
+                    <ActivityIndicator size="large" color="#583286" style={{marginTop: 50,}} />
+                    </View>
+                </View>
+                :
+                <View>
+                {
+                    this.props.favorites.length >  0 ?
+                    this.renderViewListFavorites()
+                    :
+                    <View style={{ alignItems: "center", justifyContent:'center'}}>
+                        <Text style={ styles.textNoItems }>Избранных товаров нет</Text>
+                        <View style={ styles.circleIcone }>
+                        <Image source={require('../assets/favoritesIcon.png')} style={ styles.imageIcon } />
+                        </View>
+                    </View>
+                }
+                </View>
+            }
+
+
+
             {
               this.props.favorites.length >  0 ?
                 this.renderViewListFavorites()
@@ -243,38 +277,11 @@ class Favorites extends React.Component {
                         color: '#FFFFFF',
                         
                     }}>Избранных товаров нет</Text>
-                    <View style={{
-
-backgroundColor: '#fff',
-elevation: 1,
-width: 124,
-height: 124,
-borderRadius: 70,
-marginTop: 20,
-
-
-}}>
-                        <Image 
-                            source={require('../assets/favoritesIcon.png')}
-                            style={
-                                styles.imageIcon}
-                        />
-        
-                    </View>
+                   
 
                     
                 </View>
             }
-                <View style={{
-                    flex: 1,
-                    justifyContent: 'flex-end',
-                    alignContent: 'flex-end',
-                    alignItems:'flex-end',
-                    width: width,
-
-                }}>
-                    </View>   
-               </View>
                
             </ImageBackground>
             {
@@ -292,13 +299,29 @@ marginTop: 20,
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F3F3F3',
+        justifyContent: 'center',
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        zIndex: 10,
+        backgroundColor: '#fff',
+    },
+    circleIcone:
+    {
+        backgroundColor: '#fff',
+        elevation: 2,
+        width: 124,
+        height: 124,
+        borderRadius: 70,
+        marginTop: 40,
+    },
+    textNoItems:{
+        fontFamily: 'Roboto',
+        fontWeight: '600',
+        fontSize: 14,
+        lineHeight: 24,
+        color: '#FFFFFF',
+        marginTop: 20,
     },
     imgFavStyle:
-  {width: 24,  height: 20, zIndex: 0, justifyContent: 'flex-end', marginTop: 4,},
+    {width: 24,  height: 20, zIndex: 0, justifyContent: 'flex-end', marginTop: 4,},
     viewCardStyle:{
         flex:1,
         elevation: 5,  

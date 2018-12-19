@@ -33,7 +33,7 @@ class CardProductInConfirm extends Component {
           view = <Text></Text>
         }
         else{
-          view = <Text style={styles.textOldPriceStyle}> { parseFloat(iOldPrice).toFixed(2)+" " + this.props.options.chCurrencyCode} </Text>
+          view = <Text style={styles.textOldPriceStyle}> { parseFloat(iOldPrice).toFixed(2)+" " + this.props.customers.chCurrency} </Text>
         }
         return view;
     }
@@ -43,7 +43,7 @@ class CardProductInConfirm extends Component {
             return ingridientes.map(i => (
                 <View style={{flexDirection: 'row', marginLeft: 10, fontSize: 10,}}>
                     <Text style={{fontSize: 10,}}>{i.chName}</Text>
-                    <Text style={{fontSize: 10,}}> +{parseFloat(i.chPriceChange).toFixed(2) +" " + this.props.options.chCurrencyCode}</Text>
+                    <Text style={{fontSize: 10,}}> +{parseFloat(i.chPriceChange).toFixed(2) +" " + this.props.customers.chCurrency}</Text>
 
                 </View>
             ))
@@ -102,14 +102,14 @@ class CardProductInConfirm extends Component {
                                 </TouchableOpacity>
                             </View>
                             { /* <Text style={styles.textDescrStyle}>{this.props.chComposition}</Text> */}
-                            <Text style={styles.textWeightStyle}>{this.props.optionsName} {parseFloat(Number(this.props.chPrice) + Number(this.props.optionsPrice)).toFixed(2) +" " + this.props.options.chCurrencyCode}</Text>
+                            <Text style={styles.textWeightStyle}>{this.props.optionsName} {parseFloat(Number(this.props.chPrice) + Number(this.props.optionsPrice)).toFixed(2) +" " + this.props.customers.chCurrency}</Text>
                             
                             <View>
                                 {this.renderIng(this.props.ing)}
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'flex-end', marginLeft: 7,}}>
                             
-                                <Text style={styles.textPriceStyle}> {parseFloat(Number(this.props.chPrice) + Number(this.props.optionsPrice) + Number(this.state.ingPrice)).toFixed(2) +" " + this.props.options.chCurrencyCode} </Text>
+                                <Text style={styles.textPriceStyle}> {parseFloat(Number(this.props.chPrice) + Number(this.props.optionsPrice) + Number(this.state.ingPrice)).toFixed(2) +" " + this.props.customers.chCurrency} </Text>
                                 {this.oldPrice(this.props.chOldPrice)}
                                 
                             </View>
@@ -216,6 +216,7 @@ export default connect (
       products: state.ProductsReducer,
       options: state.OptionReducer,
       tegs: state.TegsReducer,
+      customers: state.CustomersReducer,
     }),
     dispatch => ({
       addCart: (index) => {

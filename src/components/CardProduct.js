@@ -36,7 +36,7 @@ class CardProduct extends Component {
           view = <Text></Text>
         }
         else{
-          view = <Text style={styles.textOldPriceStyle}> {parseFloat(iOldPrice).toFixed(2) + " " + this.props.options.chCurrencyCode} </Text>
+          view = <Text style={styles.textOldPriceStyle}> {parseFloat(iOldPrice).toFixed(2) + " " + this.props.customers.chCurrency} </Text>
         }
         return view;
     }
@@ -159,7 +159,7 @@ class CardProduct extends Component {
                              justifyContent: 'flex-start',
                             }}>
                                 <Text style={styles.textPriceStyle}> 
-                                    {parseFloat(Number(this.props.chPrice) + Number(this.state.selectPriceChange)).toFixed(2) + " " + this.props.options.chCurrencyCode} 
+                                    {parseFloat(Number(this.props.chPrice) + Number(this.state.selectPriceChange)).toFixed(2) + " " + this.props.customers.chCurrency} 
                                 </Text>
                                 {this.oldPrice(this.props.chOldPrice)}
                                 <View style={{
@@ -319,7 +319,7 @@ export default connect (
       products: state.ProductsReducer,
       options: state.OptionReducer,
       tegs: state.TegsReducer,
-      //offers: state.CommercialOfferReducer,
+      customers: state.CustomersReducer,
     }),
     dispatch => ({
       addCart: (index) => {

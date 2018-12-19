@@ -14,24 +14,35 @@ class Checkout extends React.Component {
         super(props);
         var {params} = this.props.navigation.state;
         this.state = {
-            chFIO: '',
-            chPhone:  '',
-            chDeliveryAddress: '',
-            chCity: 'Витебск',
-            chStreet: '',
-            chNumHome: '',
-            chHousing: '',
-            chEntrance: '',
+            chFIO: '',              // имя
+            chPhone:  '',           // телефон
+
+            // доставка
+            chDeliveryAddress: '',  // адрес
+            chCity: this.props.customers.CITY,      // город
+            chStreet: '',           // улица
+            chNumHome: '',          /// дом
+            chHousing: '',          // корпус
+            chEntrance: '', // подъезд
             chFloor: '', // этаж
-            chApartment: '',
+            chApartment: '', // квартира
+
+            chTypeDelivery: '',
+
+            // время доставки
             chTypeDeliveryTime: 1, // выбор типа времени "как можно скорее или к определенному времени"
-            chDeliveryTime: '', //"2016-05-15 12:00",   //  время доставки
+            chDeliveryTime: '', //"2016-05-15 12:00",  время доставки
+
+            // отлата
             chSumma: '', // сумма с которой дать сдачу
             chPay: 1, // метод оплаты (Наличными курьеру)
             chPayDescription: 'Наличными курьеру',
+            // подътверждение
             chConfirm: 2, // метод подътверждения  1- sms (по умолчанию)
             chConfirmText: 'SMS Сообщение',
             chComments: '',
+
+            ////////////////////////////////////////////////////////////
             isChildVisible: false,
             isChildVisibleSumma: true,
             isViewInputAdressVisible: true,
@@ -152,14 +163,12 @@ class Checkout extends React.Component {
             this.setState({ isViewInputAdressVisible: false, });
             this.props.navigation.navigate('Addresses', {routeGoBack: 'Checkout',})                 
         }
-        /// viewCardStyleDeliveryNoAdressAndPickup
         /// выбор замовывоза
         if(value ===  3)
         {
             // если только самовывоз
             if(this.props.customers.blPickup == 1 && this.props.customers.blDelivery == 0)
             {
-                
                 this.state.isViewInputAdressVisible = false; /// скрываем поля ввода адреса доставки
                 this.state.selectStyleDeliveryAdress = styles.viewCardStyleDeliveryOnlyPickup;
                 this.props.navigation.navigate('Pickups', {routeGoBack: 'Checkout',})
@@ -503,9 +512,7 @@ class Checkout extends React.Component {
                             autoCapitalize={'none'}
                             autoCorrect={false}
                             blurOnSubmit={ false }
-                            onSubmitEditing={() => { this.focusNextField('Город'); }}
-                            ref={ input => { this.inputs['Телефон'] = input; }}
-                            onChangeText={ (chPhone) => this.validatePhone(chPhone) }
+                            onChangeText={ (chPhone) => this.setState({chPhone: chPhone}) }
                         />
                     </View>
                     
@@ -531,7 +538,7 @@ class Checkout extends React.Component {
                                 blurOnSubmit={ false }
                                 onSubmitEditing={() => { this.focusNextField('Улица'); }}
                                 ref={ input => { this.inputs['Город'] = input; }}
-                                onChangeText={ (chCity) => this.validatePhone(chCity) }
+                                onChangeText={ (chCity) => this.setState({chCity: chCity}) }
                             /> 
                             {this.divider()}
                             <Sae
@@ -542,7 +549,7 @@ class Checkout extends React.Component {
                                 blurOnSubmit={ false }
                                 onSubmitEditing={() => { this.focusNextField('Дом'); }}
                                 ref={ input => { this.inputs['Улица'] = input; }}
-                                onChangeText={ (chStreet) => this.validatePhone(chStreet) }
+                                onChangeText={ (chStreet) => this.setState({chStreet: chStreet}) }
                             /> 
                             {this.divider()}
                             <Sae
@@ -553,7 +560,7 @@ class Checkout extends React.Component {
                                 blurOnSubmit={ false }
                                 onSubmitEditing={() => { this.focusNextField('Корпус'); }}
                                 ref={ input => { this.inputs['Дом'] = input; }}
-                                onChangeText={ (chNumHome) => this.validatePhone(chNumHome) }
+                                onChangeText={ (chNumHome) => this.setState({chNumHome: chNumHome}) }
                             /> 
                             {this.divider()}
                             <Sae
@@ -564,7 +571,7 @@ class Checkout extends React.Component {
                                 blurOnSubmit={ false }
                                 onSubmitEditing={() => { this.focusNextField('Подъезд'); }}
                                 ref={ input => { this.inputs['Корпус'] = input; }}
-                                onChangeText={ (chHousing) => this.validatePhone(chHousing) }
+                                onChangeText={ (chHousing) => this.setState({chHousing: chHousing}) }
                             /> 
                             {this.divider()}
                             <Sae
@@ -575,7 +582,7 @@ class Checkout extends React.Component {
                                 blurOnSubmit={ false }
                                 onSubmitEditing={() => { this.focusNextField('Этаж'); }}
                                 ref={ input => { this.inputs['Подъезд'] = input; }}
-                                onChangeText={ (chEntrance) => this.validatePhone(chEntrance) }
+                                onChangeText={ (chEntrance) => this.setState({chEntrance: chEntrance}) }
                             /> 
                             {this.divider()}
                             <Sae
@@ -586,7 +593,7 @@ class Checkout extends React.Component {
                                 blurOnSubmit={ false }
                                 onSubmitEditing={() => { this.focusNextField('Квартира'); }}
                                 ref={ input => { this.inputs['Этаж'] = input; }}
-                                onChangeText={ (chFloor) => this.validatePhone(chFloor) }
+                                onChangeText={ (chFloor) => this.setState({chFloor: chFloor}) }
                             /> 
                             {this.divider()}
                             <Sae
@@ -595,7 +602,7 @@ class Checkout extends React.Component {
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 blurOnSubmit={ false }
-                                onChangeText={ (chApartment) => this.validatePhone(chApartment) }
+                                onChangeText={ (chApartment) => this.setState({chApartment: chApartment}) }
                             />               
                         </View>
                     </AnimatedHideView> 
@@ -604,12 +611,7 @@ class Checkout extends React.Component {
                 <View style={this.state.selectStyleDeliveryTime}>
                     {/* время доставки*/}
                     {this.radioDeliveryTime()}
-                    
-                    <AnimatedHideView
-                        visible={this.state.isChildVisible}
-                        style={{ padding: 0, }}
-                        duration={200}
-                        >
+                    <AnimatedHideView visible={this.state.isChildVisible} style={{ padding: 0, }} duration={200}>
                         <View>
                         <DatePicker
                             style={{width: 180,}}
@@ -624,34 +626,21 @@ class Checkout extends React.Component {
                             confirmBtnText="Confirm"
                             cancelBtnText="Cancel"
                             customStyles={{
-                            dateIcon: {
-                                position: 'absolute',
-                                left: 0,
-                                top: 4,
-                                marginLeft: 0
-                            },
-                            dateInput: {
-                                marginLeft: 10,
-                                borderRadius: 5,
-                            }
-                            // ... You can check the source to find the other keys.
+                                dateIcon: { position: 'absolute', left: 0, top: 4, marginLeft: 0 },
+                                dateInput: { marginLeft: 10, borderRadius: 5, }
                             }}
                             onDateChange={(date) => {this.setState({chDeliveryTime: date})}}
                         />
                         </View>
                     </AnimatedHideView>
-                    
                     <Text style={styles.text}>{this.state.timeDeliveryText}</Text>
                 </View>
                 <Text style={styles.textTitleStyle}>4. Способ оплаты </Text>
                 <View style={this.state.selectStyleMetodPay}>
-                    
                     <RadioGroup 
                         selectedIndex={1}
                         color='#6A3DA1'
-                        
                         onSelect = {(index, value) => this.onSelectPay(index, value)} >
-                        
                         {/* <RadioButton value={2}>
                             <Text>Банковской картой</Text>
                         </RadioButton> */}
@@ -665,23 +654,19 @@ class Checkout extends React.Component {
                     <AnimatedHideView
                         visible={this.state.isChildVisibleSumma}
                         style={{ padding: 0, }}
-                        duration={200}
-                        >
-
+                        duration={200} >
                             {this.divider()}
                             <TextInput style={styles.textInputStyle}
-                                    underlineColorAndroid = "transparent"
-                                    placeholder = "Укажите с какой суммы потребуется сдача"
-                                    placeholderTextColor = "#828282"
-                                    autoCapitalize = "none"
-                                    onChangeText={(chSumma) => this.setState({chSumma})}
-                                    value={this.state.chSumma}/> 
-                        
+                                underlineColorAndroid = "transparent"
+                                placeholder = "Укажите с какой суммы потребуется сдача"
+                                placeholderTextColor = "#828282"
+                                autoCapitalize = "none"
+                                onChangeText={(chSumma) => this.setState({chSumma})}
+                                value={this.state.chSumma}/> 
                     </AnimatedHideView>
                 </View>
                 <Text style={styles.textTitleStyle}>5. Подтверждение заказа</Text>
                 <View style={styles.viewCardStyle}>
-                    
                     <RadioGroup 
                         selectedIndex={1}
                         color='#6A3DA1'
@@ -695,9 +680,7 @@ class Checkout extends React.Component {
                     </RadioGroup>
                     <Text style={styles.text}>{/*this.state.chConfirmText*/}</Text>
                     {this.divider()}
-                    <TextInput style={{
-                        color: 'red',
-                    }}
+                    <TextInput style={{ color: 'red', }}
                         multiline = {true}
                         underlineColorAndroid = "transparent"
                         placeholder = "Комментарий к заказу"
@@ -706,22 +689,7 @@ class Checkout extends React.Component {
                         onChangeText={(chComments) => this.setState({chComments})}
                         value={this.state.chComments}/>
                 </View>
-                <View
-                style={{
-                    flex: 1,
-                    
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    paddingBottom: 20,
-                    paddingTop: 20,
-                  }}>
-                  {/*
-                    <TouchableHighlight
-                      style={{elevation: 3}}
-                      onPress={() => this.validePurchase()}>
-                  */}
-
-
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingBottom: 20, paddingTop: 20, }}>
                     <TouchableHighlight  underlayColor='rgba(255,255,255,0.1)'
                       style={{elevation: 3, width: 150,}}
                       onPress={() =>  this.validePurchase() }>
@@ -926,8 +894,9 @@ export default connect (
     products: state.ProductsReducer,
     order: state.OrderReducer,
     user: state.UserReducer,
-    options: state.OptionReducer, /// <= удалить
+    options: state.OptionReducer,
     customers: state.CustomersReducer,
+
   }),
   dispatch => ({
     addCart: (index) => {

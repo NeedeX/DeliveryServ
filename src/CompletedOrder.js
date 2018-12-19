@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, StatusBar, BackHandler, ImageBackground} from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, StatusBar, BackHandler, ImageBackground} from 'react-native';
 import { NavigationActions, StackActions} from 'react-navigation';
-
+const { width } = Dimensions.get('window');
 
 class CompletedOrder extends React.Component {
     constructor(props){

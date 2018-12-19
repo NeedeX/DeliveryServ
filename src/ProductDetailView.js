@@ -318,7 +318,7 @@ class ProductDetailView extends React.Component {
     return <TouchableOpacity style={{elevation: 3, flex: 1, marginTop: 10, alignItems: 'flex-start'}}  
             onPress={() => {this.addIngredient( !value, idIngredients, chPriceChange, index) }}>
               <Text style={  value  ? styles.btnSelectIngSelect : styles.btnSelectIng }>
-                {chName} - {chPriceChange +" "+ this.props.options.chCurrencyCode}
+                {chName} - {chPriceChange +" "+ this.props.customers.chCurrency}
                 </Text>
             </TouchableOpacity>
   }
@@ -360,7 +360,7 @@ class ProductDetailView extends React.Component {
           marginRight: this.state.ing.length === index+1 ? 150 : 0,  }}  
           onPress={() => { this.addIngredient( !this.state.ing[index].value, this.state.ing[index].idIngredients, this.state.ing[index].chPriceChange, index) }}>
                 <Text style={ this.state.ing[index].value ? styles.btnSelectIngSelect : styles.btnSelectIng }>
-                  {this.state.ing[index].chName} - {this.state.ing[index].chPriceChange +" "+ this.props.options.chCurrencyCode}
+                  {this.state.ing[index].chName} - {this.state.ing[index].chPriceChange +" "+ this.props.customers.chCurrency}
                   </Text>
               </TouchableOpacity>
               {
@@ -370,7 +370,7 @@ class ProductDetailView extends React.Component {
 
                 }}  onPress={() => { this.addIngredient( !this.state.ing[index+1].value, this.state.ing[index+1].idIngredients, this.state.ing[index+1].chPriceChange, index+1) }}>
                 <Text style={ this.state.ing[index+1].value ? styles.btnSelectIngSelect : styles.btnSelectIng }>
-                  {this.state.ing[index+1].chName} - {this.state.ing[index+1].chPriceChange +" "+ this.props.options.chCurrencyCode}
+                  {this.state.ing[index+1].chName} - {this.state.ing[index+1].chPriceChange +" "+ this.props.customers.chCurrency}
                   </Text>
               </TouchableOpacity>
               : null
@@ -506,7 +506,7 @@ class ProductDetailView extends React.Component {
           <View style={{flexDirection: 'row', marginBottom: 20, marginTop: 20, justifyContent:'space-between'}}>
             <View style={{marginLeft: 13,}}>
               <Text style={ styles.textPrice }>              
-                Цена {parseFloat(Number(result[0].chPrice) + Number(this.state.selectPriceChange) + Number(this.state.addPriceIng)).toFixed(2)+ " " + this.props.options.chCurrencyCode}
+                Цена {parseFloat(Number(result[0].chPrice) + Number(this.state.selectPriceChange) + Number(this.state.addPriceIng)).toFixed(2)+ " " + this.props.customers.chCurrency}
               </Text>
             </View>
             <View style={{marginTop: 10, marginRight: 10,}}>
@@ -708,6 +708,7 @@ export default connect (
     favorite: state.FavoriteReducer,
     options: state.OptionReducer,
     tegs: state.TegsReducer,
+    customers: state.CustomersReducer,
   }),
   dispatch => ({
     addCart: (index) => {

@@ -79,7 +79,7 @@ class CheckoutConfirm extends React.Component {
       )
       this.state.allPriceCart = allPriceCart;
       //console.log(this.state.allPriceCart);
-      return parseFloat(allPriceCart).toFixed(2) +" " + this.props.options.chCurrencyCode;
+      return parseFloat(allPriceCart).toFixed(2) +" " + this.props.customers.chCurrency;
     }
     validePurchase()
     {
@@ -110,7 +110,7 @@ class CheckoutConfirm extends React.Component {
         }
         console.log(val);
         
-        
+        /*
         //console.log(this.state);
         fetch('http://mircoffee.by/deliveryserv/app/InsertOrder.php', 
         {
@@ -180,13 +180,13 @@ class CheckoutConfirm extends React.Component {
                 this.props.cart.filter(rentChildrenPrint => rentChildrenPrint.iProduct ===  item.iProduct)
             ));
                 */
-            
+           /* 
             this.props.navigation.navigate('CompletedOrder', {animation: 'SlideFromLeft', animationDuration: 500 });
    
         })
         .catch((error) => {
              console.error(error);
-        });
+        });*/
     }
 
     render() {
@@ -406,12 +406,12 @@ const styles = StyleSheet.create({
 export default connect (
   state => ({
     cart: state.CartReducer,
-    banners: state.BannerReducer,
     categories: state.CategoriesReducer,
     products: state.ProductsReducer,
     order: state.OrderReducer,
     user: state.UserReducer,
     options: state.OptionReducer,
+    customers: state.CustomersReducer,
   }),
   dispatch => ({
     addCart: (index) => {

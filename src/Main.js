@@ -206,6 +206,7 @@ export default connect (
     favorite: state.FavoriteReducer,
     addresses: state.AddressReducer,
     tegs: state.TegsReducer,
+    customers: state.CustomersReducer,
   }),
   dispatch => ({
     addUserData: (userData) => {

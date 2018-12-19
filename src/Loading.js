@@ -8,6 +8,7 @@ YellowBox.ignoreWarnings(['Require cycle:']);
 
 const loagIndex = 0.4;
 const URL = 'http://mircoffee.by/deliveryserv/app/';
+
 class Loading extends Component {
   constructor(props) {
     super(props)
@@ -17,16 +18,14 @@ class Loading extends Component {
       route: '',
     };
 
-    this.loadingCustomers();
-    this.loadingBanners();
-    this.loadingCategories();
-    this.loadingProducts();
-    this.loadOptions();
-    this.loadTegs();
-    
+    this.loadingOptions();
+
+    this.loadingCustomers(this.props.options.UIDClient, this.props.options.URL);
+    this.loadingBanners(this.props.options.UIDClient, this.props.options.URL);
+    this.loadingCategories(this.props.options.UIDClient, this.props.options.URL);
+    this.loadingProducts(this.props.options.UIDClient, this.props.options.URL);
+    this.loadingTegs(this.props.options.UIDClient, this.props.options.URL);
     this.loadingUser();
-    
-    
   }
   static navigationOptions = {
     header: null,
@@ -45,14 +44,11 @@ class Loading extends Component {
           actions: [NavigationActions.navigate({ routeName: this.state.route })],
         });
         this.props.navigation.dispatch(resetAction);
-  
       }, 1500)
-      :
-      null
+      : null
     });
   }
-  loadingUser()
-  {
+  loadingUser() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         //this.setState({ user: user.toJSON() });
@@ -70,18 +66,32 @@ class Loading extends Component {
         this.setState({ route: 'Start'})
       }
     })
-
-
   }
-  loadingCustomers()
+  loadingOptions()
   {
-    return fetch(URL+'LoadingCustomers.php')
+    this.props.loadOptions();
+    console.log("this.props.options", this.props.options);
+    this.setState(state => { return {  progress: state.progress + loagIndex, }; });
+   
+  }
+  loadingCustomers(UIDClient, URL)
+  {
+    return fetch(URL+'LoadingCustomers.php',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        UIDClient: UIDClient,
+      })
+    })
     .then((response) => response.json())
     .then((responseJson) => {
 
         this.props.loadCustomers(responseJson);
-        //console.log("customers = ", this.props.customers);
-        
+        console.log("customers = ", this.props.customers);
         this.setState(state => {
           return {
             progress: state.progress + loagIndex,
@@ -93,17 +103,24 @@ class Loading extends Component {
       console.error(error);
     });
   }
-  loadingBanners()
+  loadingBanners(UIDClient, URL)
   {
-    return fetch(URL+'LoadingBanners.php')
+    return fetch(URL+'LoadingBanners.php',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        UIDClient: UIDClient,
+      })
+    })
     .then((response) => response.json())
     .then((responseJson) => {
-
         this.props.loadBanners(responseJson.banners);
         this.setState(state => {
-          return {
-            progress: state.progress + loagIndex,
-          };
+          return { progress: state.progress + loagIndex, };
         });
 
     })
@@ -111,9 +128,19 @@ class Loading extends Component {
       console.error(error);
     });
   }
-  loadingCategories()
+  loadingCategories(UIDClient, URL)
   {
-    return fetch(URL+'LoadingCategories.php')
+    return fetch(URL+'LoadingCategories.php',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        UIDClient: UIDClient,
+      })
+    })
     .then((response) => response.json())
     .then((responseJson) => {
      this.props.loadCategories(responseJson.categories);
@@ -129,9 +156,19 @@ class Loading extends Component {
     });
     
   }
-  loadingProducts()
+  loadingProducts(UIDClient, URL)
   {
-    return fetch(URL+'LoadingProducts.php')
+    return fetch(URL+'LoadingProducts.php',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        UIDClient: UIDClient,
+      })
+    })
     .then((response) => response.json())
     .then((responseJson) => {
         this.props.loadProducts(responseJson.products);
@@ -146,25 +183,19 @@ class Loading extends Component {
       console.error(error);
     });
   }
-  loadOptions()
+  loadingTegs(UIDClient, URL)
   {
-    return fetch(URL+'LoadingOptions.php')
-    .then((response) => response.json())
-    .then((responseJson) => {
-        this.props.loadOptions(responseJson.options);
-        this.setState(state => {
-          return {
-            progress: state.progress + loagIndex,
-          };
-        });
+    return fetch(URL+'LoadingTegs.php',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        UIDClient: UIDClient,
+      })
     })
-    .catch((error) => {
-      console.error(error);
-    });
-  }
-  loadTegs()
-  {
-    return fetch(URL+'LoadingTegs.php')
     .then((response) => response.json())
     .then((responseJson) => {
         this.props.loadTegs(responseJson.tegs);
@@ -237,6 +268,7 @@ export default connect (
     addresses: state.AddressReducer,
     favorite: state.FavoriteReducer,
     customers: state.CustomersReducer,
+    options: state.OptionReducer,
   }),
   dispatch => ({
     loadBanners: (bannersData) => {

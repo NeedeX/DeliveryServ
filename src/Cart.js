@@ -44,7 +44,7 @@ class Cart extends React.Component {
           view = <Text></Text>
         }
         else{
-          view = <Text style={{ fontSize:15, justifyContent: 'flex-end', color: '#ccc', textDecorationLine: 'line-through'}}> {parseFloat(iOldPrice).toFixed(2)+ " " + this.props.options.chCurrencyCode}  </Text>
+          view = <Text style={{ fontSize:15, justifyContent: 'flex-end', color: '#ccc', textDecorationLine: 'line-through'}}> {parseFloat(iOldPrice).toFixed(2)+ " " + this.props.customers.chCurrency}  </Text>
         }
         return view;
     }
@@ -71,7 +71,7 @@ class Cart extends React.Component {
       )
       this.state.allPriceCart = allPriceCart;
       
-      return parseFloat(allPriceCart).toFixed(2)+" " + this.props.options.chCurrencyCode;
+      return parseFloat(allPriceCart).toFixed(2)+" " + this.props.customers.chCurrency;
     }
     render() {
       //console.log("cart.js"); 
@@ -260,6 +260,7 @@ export default connect (
     categories: state.CategoriesReducer,
     products: state.ProductsReducer,
     options: state.OptionReducer,
+    customers: state.CustomersReducer,
   }),
   dispatch => ({
     addCart: (index) => {
