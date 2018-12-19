@@ -16,6 +16,7 @@
     "react-native-dash": "0.0.9",
     "react-native-datepicker": "^1.7.2",
     "react-native-dialog": "^5.5.0",
+    "react-native-firebase": "^5.1.1",
     "react-native-flexi-radio-button": "^0.2.2",
     "react-native-gesture-handler": "^1.0.10",
     "react-native-popup-dialog": "^0.16.5",

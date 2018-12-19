@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {StyleSheet, ImageBackground, Dimensions, TouchableHighlight,TouchableOpacity, InteractionManager, ActivityIndicator, Image, Text, View, Button, StatusBar, ScrollView} from 'react-native';
+import {StyleSheet, ImageBackground, Dimensions, Button, TouchableHighlight,TouchableOpacity, InteractionManager, ActivityIndicator, Image, Text, View, StatusBar, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
+import firebase from 'react-native-firebase';
 import ButtomCategoryNew from './components/ButtomCategoryNew';
 import Header from './components/Header';
 const { width } = Dimensions.get('window');
@@ -21,6 +22,18 @@ class Main extends Component {
         didFinishInitialAnimation: true,
       });
     });
+    firebase.auth().onAuthStateChanged(user => {
+      //console.log("==>");
+      if (user) {
+        this.setState({ userEmail: user._user.email});
+        this.setState({ userUid: user._user.uid});
+        console.log("userEmail = ", this.state.userEmail);
+        console.log("userUid = ", this.state.userUid);
+        console.log("this.props.user = ", this.props.user);
+        //this.checkUser();
+      }
+    })
+
   }
   static navigationOptions = ({ navigation  }) => {
     return {
@@ -47,7 +60,9 @@ class Main extends Component {
     ),
     };
   };
-
+  signOut = () => {
+    firebase.auth().signOut();
+  }
   renderStocks(nav){
     return this.props.banners.map((banners, index) => (
       <TouchableOpacity activeOpacity={0.9} style={{flex: 1, }} key={index} onPress={() => nav('StocksView', { bannersId: banners.iStock, title: banners.chName, desc:banners.sDescriptio,  countInBasket: this.state.countInBasket })}>
@@ -96,7 +111,6 @@ class Main extends Component {
                   activeDot={<View style={{backgroundColor: '#fff', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
                   dot={<View style={{backgroundColor: 'rgba(0,0,0,.2)', width: 5, height: 5, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
                   >
-                  
                     {this.renderStocks(navigate)}
             </Swiper>
            
@@ -121,7 +135,28 @@ class Main extends Component {
                 ))
               }
               </View>
-              
+              <Button
+                onPress={
+                  () => this.props.navigation.navigate('Login')
+              }
+                title="Login"
+                color="#841584"
+                accessibilityLabel="Learn more about this purple button"
+              />
+              <Button
+                onPress={
+                  () => this.props.navigation.navigate('Phone')
+              }
+                title="Phone"
+                color="#841584"
+                accessibilityLabel="Learn more about this purple button"
+              />
+              <Button
+            title="Выход"
+            onPress={() =>
+              this.signOut()
+            }
+          />
           </ScrollView>
         
         }

@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, InteractionManager, StatusBar, ImageBackground, Image} from 'react-native';
+import {StyleSheet, Text, YellowBox, InteractionManager, StatusBar, ImageBackground, Image} from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
+import firebase from 'react-native-firebase';
 import { connect } from 'react-redux';
 import AnimatedBar from "react-native-animated-bar";
+YellowBox.ignoreWarnings(['Require cycle:']);
 
 const loagIndex = 0.4;
 const URL = 'http://mircoffee.by/deliveryserv/app/';
@@ -12,6 +14,7 @@ class Loading extends Component {
     this.state = { 
       didFinishInitialAnimation: false,
       progress: 0, // прогресс загрузки
+      route: '',
     };
 
     this.loadingCustomers();
@@ -21,7 +24,7 @@ class Loading extends Component {
     this.loadOptions();
     this.loadTegs();
     
-    //this.loadUser();
+    this.loadingUser();
     
     
   }
@@ -39,7 +42,7 @@ class Loading extends Component {
       setTimeout(() => {
         const resetAction = StackActions.reset({
           index: 0,
-          actions: [NavigationActions.navigate({ routeName: 'Main' })],
+          actions: [NavigationActions.navigate({ routeName: this.state.route })],
         });
         this.props.navigation.dispatch(resetAction);
   
@@ -48,6 +51,28 @@ class Loading extends Component {
       null
     });
   }
+  loadingUser()
+  {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        //this.setState({ user: user.toJSON() });
+        this.props.loadUser(user);
+        //console.log(user._user);
+        //console.log(this.props.user[0]._user.uid);
+        //this.loadAddresses(user._user.uid);
+        //this.loadingFavorites(user._user.uid);
+        this.setState({ route: 'Main'})
+      }
+      else
+      {
+        console.log("no user");
+        //this.props.navigation.navigate('Phone')
+        this.setState({ route: 'Start'})
+      }
+    })
+
+
+  }
   loadingCustomers()
   {
     return fetch(URL+'LoadingCustomers.php')
@@ -55,7 +80,7 @@ class Loading extends Component {
     .then((responseJson) => {
 
         this.props.loadCustomers(responseJson);
-        console.log("customers = ", this.props.customers);
+        //console.log("customers = ", this.props.customers);
         
         this.setState(state => {
           return {

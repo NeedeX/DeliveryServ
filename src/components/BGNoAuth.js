@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, TouchableHighlight, Text, View, ImageBackground, TouchableOpacity, Image, ScrollView} from 'react-native';
+import { StyleSheet, Dimensions, TouchableHighlight, Text, View, Button, TouchableOpacity, Image, ScrollView} from 'react-native';
 const { width } = Dimensions.get('window');
 class BGNoAuth extends React.Component {
     render() {
@@ -27,12 +27,20 @@ class BGNoAuth extends React.Component {
                         textAlign: 'center'
                     }}>{this.props.text} </Text>
                 
-                    <TouchableHighlight  underlayColor='rgba(255,255,255,0.1)'
+                    <TouchableOpacity  underlayColor='rgba(255,255,255,0.1)'
                     onPress={() =>  this.props.nav.navigate('Phone', { goBack: 'Addresses',}) }>
                     <Text style = {styles.buttonText}>
                         ВОЙТИ
                     </Text>
-                    </TouchableHighlight>
+                    </TouchableOpacity>
+                    <Button
+                onPress={
+                  () => this.props.navigation.navigate('Phone')
+              }
+                title="Phone"
+                color="#841584"
+                accessibilityLabel="Learn more about this purple button"
+              />
                 </View>
             </View>
         );

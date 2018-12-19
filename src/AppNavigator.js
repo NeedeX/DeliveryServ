@@ -12,10 +12,19 @@ import Cart from './Cart';
 import Checkout from './Checkout';
 import Pickups from './Pickups';
 import Addresses from './Addresses';
+import Favorites from './Favorites';
 import CheckoutConfirm from './CheckoutConfirm';
 import CompletedOrder from './CompletedOrder';
 // drawer 
 import DrawerMenu from './components/Drawer';
+
+
+/// auth
+import LoadingAuth from './auth/Loading';
+import Login from './auth/Login';
+import Phone from './auth/Phone';
+import SignUp from './auth/SignUp';
+import Start from './Start';
 
 const transitionConfig = () => {
   return {
@@ -55,6 +64,13 @@ const AppNavigator = createStackNavigator({
   CheckoutConfirm: { screen: CheckoutConfirm},
   CompletedOrder: { screen: CompletedOrder},
   Addresses: { screen: Addresses },
+  Favorites: { screen: Favorites},
+  /// auth
+  LoadingAuth : { screen: Loading },
+  Login : { screen: Login },
+  Phone : { screen: Phone },
+  SignUp : { screen: SignUp },
+  Start: { screen: Start},
 },
 {
   initialRouteName: 'Loading',
