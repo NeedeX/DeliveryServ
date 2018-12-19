@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Dimensions, Image, ActivityIndicator, ImageBackground, InteractionManager} from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
+import FAB from 'react-native-fab'
 import Header from './components/Header';
 import BGNoAuth from './components/BGNoAuth';
 const { width } = Dimensions.get('window');
@@ -87,7 +88,14 @@ class Addresses extends Component {
         {
             this.state.AuthState == 0 ?
             this.renderNoAuth(navigate)
-            :null
+            :
+            <FAB 
+                buttonColor="#F891A9" 
+                iconTextColor="#FFFFFF" 
+                onClickAction={() => {this.props.navigation.navigate('AddAddress')}} 
+                visible={true} 
+                iconTextComponent={<Image source={require('../assets/addIcon.png')} />} 
+            />
         }
     </View>
     );
@@ -126,7 +134,8 @@ const styles = StyleSheet.create({
         lineHeight: 24,
         color: '#FFFFFF',
         marginTop: 20,
-    }
+    },
+
 });
 export default connect (
     state => ({

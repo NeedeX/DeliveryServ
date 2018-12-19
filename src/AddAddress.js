@@ -1,8 +1,7 @@
 import React from 'react';
-import {  StyleSheet, TextInput, Text, View, Button, TouchableHighlight, Image, ScrollView, ImageBackground} from 'react-native';
+import {  StyleSheet, TextInput, Text, View, Button, InteractionManager, ActivityIndicator, TouchableHighlight, Image, ScrollView, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
-import { Container,} from 'native-base';
-import CustomHeader from './components/CustomHeaderWithGoBack';
+import Header from './components/Header';
 
 
 class AddAddress extends React.Component {
@@ -19,8 +18,25 @@ class AddAddress extends React.Component {
         }
         this.focusNextField = this.focusNextField.bind(this);
         this.inputs = {};
-      }
-    
+    }
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+        this.setState({
+            didFinishInitialAnimation: true,
+        });
+        });
+    }
+    static navigationOptions = ({ navigation  }) => {
+        return {
+          title: 'Home',
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            textAlign: 'center',
+          },
+          header: (props) => <Header title={'Мои адреса'} nav={ navigation } {...props} />,
+        };
+    };
     focusNextField(id) {
         this.inputs[id].focus();
       }
@@ -131,15 +147,16 @@ class AddAddress extends React.Component {
         var {navigate} = this.props.navigation;
         var {params} = this.props.navigation.state;
         return (
-        <Container style={{backgroundColor: '#F3F3F3'}}> 
-            <CustomHeader 
-                countInBasket={this.props.cart.length}
-                nav={this.props.navigation}
-                title="Мои адреса"
-                drawerOpen={() => this.props.navigation.navigate('DrawerOpen')} 
-            />
+        <View style={styles.container}> 
             <ScrollView>
-                
+            {
+            this.state.didFinishInitialAnimation === false ?
+            <View style={{ alignItems: "center", justifyContent:'center'}}>
+                <Text>gferght</Text>
+            </View>
+            :
+            null
+            }
                 <Text style={styles.textTitleStyle}>Добавить новый адрес</Text>
                 <View style={styles.viewCardStyle}>
                     <Text style={styles.text}>{this.state.chDeliveryAddressText}</Text>
@@ -275,7 +292,7 @@ class AddAddress extends React.Component {
             </ScrollView>
           
 
-        </Container>
+        </View>
         );
   }
 }

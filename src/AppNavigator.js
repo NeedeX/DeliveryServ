@@ -12,6 +12,7 @@ import Cart from './Cart';
 import Checkout from './Checkout';
 import Pickups from './Pickups';
 import Addresses from './Addresses';
+import AddAddress from './AddAddress';
 import Favorites from './Favorites';
 import CheckoutConfirm from './CheckoutConfirm';
 import CompletedOrder from './CompletedOrder';
@@ -64,6 +65,7 @@ const AppNavigator = createStackNavigator({
   CheckoutConfirm: { screen: CheckoutConfirm},
   CompletedOrder: { screen: CompletedOrder},
   Addresses: { screen: Addresses },
+  AddAddress: { screen: AddAddress},
   Favorites: { screen: Favorites},
   /// auth
   LoadingAuth : { screen: Loading },
