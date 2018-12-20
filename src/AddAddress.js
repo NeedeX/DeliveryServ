@@ -54,11 +54,11 @@ class AddAddress extends React.Component {
             chEntrance: this.state.chEntrance,
             chFloor: this.state.chFloor,
             chApartment: this.state.chApartment,
-            UIDGoogleUser: this.props.user[0]._user.uid, // пользователя приложения, выданный гуглом
+            UIDGoogleUser: this.props.user.uid, // пользователя приложения, выданный гуглом
             UIDClient: this.props.options.UIDClient,
         };
 
-        console.log(val);
+        console.log("addAddressDB = ", val);
 
         fetch('http://mircoffee.by/deliveryserv/app/InsertAddress.php', 
         {
@@ -77,7 +77,7 @@ class AddAddress extends React.Component {
                 chEntrance: this.state.chEntrance,
                 chFloor: this.state.chFloor,
                 chApartment: this.state.chApartment,
-                UIDGoogleUser: this.props.user[0]._user.uid,
+                UIDGoogleUser: this.props.user.uid,
                 UIDClient: this.props.options.UIDClient,
             })
    
@@ -97,7 +97,7 @@ class AddAddress extends React.Component {
                     chEntrance: this.state.chEntrance,
                     chApartment: this.state.chApartment,
                     chFloor: this.state.chFloor,
-                    UIDGoogleUser: this.props.user[0]._user.uid,
+                    UIDGoogleUser: this.props.user.uid,
                     UIDClient: this.props.options.UIDClient,
 
                 };

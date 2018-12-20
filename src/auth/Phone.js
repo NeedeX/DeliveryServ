@@ -92,11 +92,21 @@ class PhoneAuth extends Component {
           placeholder={'Номер телефона ... '}
           value={phoneNumber}
         />
-
         <TouchableHighlight  underlayColor='rgba(255,255,255,0.1)'
           style={{justifyContent: 'center', alignItems: 'center', marginTop: 10,}}
           onPress={this.signIn}>
-          <Text style = {styles.buttonText}>
+          <Text style={{
+            fontFamily: 'OswaldMedium',
+            fontSize: 12,
+            color: '#FFFFFF',
+            borderWidth: 0,
+            padding: 10,
+            borderColor: '#6A3DA1',
+            backgroundColor: '#6A3DA1',
+                borderRadius: 5,
+                paddingLeft: 10,
+                paddingRight: 10,
+          }}>
             ОТПРАВИТЬ КОД
           </Text>
         </TouchableHighlight>
@@ -148,53 +158,53 @@ class PhoneAuth extends Component {
       </View>
     );
   }
+  userDB(user)
+  {
+    //console.log("UIDGoogleUser = ", user.uid);
+    //console.log("chPhone = ", user.phoneNumber);
+    //console.log("chUID = ", this.props.options.UIDClient);
+  
+    return fetch(this.props.options.URL+'InsertUser.php',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        UIDGoogleUser: user.uid,
+        chPhone: user.phoneNumber,
+        UIDClient: this.props.options.UIDClient,
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  }
 
   render() {
     const { user, confirmResult } = this.state;
     return (
-      <View style={{backgroundColor: '#FAFAFA', }}> 
+      <View style={styles.container}>
         <StatusBar
           hidden={false}
           backgroundColor="#583286"
           barStyle="light-content"
         />
-
-
-       
-      <View style={{ flex: 1, alignItems: 'center',}}>
-
-         {/* 
-      <Image 
-          source={require('../components/assets/images/logo.png')} 
-          style={styles.ImageStyle}
-        />
-
-       как должно быть
+        <View>
         {!user && !confirmResult && this.renderPhoneNumberInput()}
-        
         {this.renderMessage()}
-        
         {!user && confirmResult && this.renderVerificationCodeInput()}
-      
-        */}
-
-
-        {!user && !confirmResult && this.renderPhoneNumberInput()}
-        
-        {this.renderMessage()}
-        
-        {!user && confirmResult && this.renderVerificationCodeInput()}
-        
         {user && (
-          <View
-            style={{
-              padding: 15,
-              justifyContent: 'center',
-              alignItems: 'center',
-              flex: 1,
-            }}
-          >
+          <View style={{ padding: 15, justifyContent: 'center',
+              alignItems: 'center', flex: 1, }} >
           {this.props.loadUser(user)}
+          {this.userDB(user)}
           {this.props.navigation.navigate('Main')}
           
           {/*
@@ -203,19 +213,21 @@ class PhoneAuth extends Component {
             <Text>{JSON.stringify(user)}</Text>
             <Button title="Выход" color="red" onPress={this.signOut} />
           */}
-            </View>
-        )
-        
+          </View>
+          )
         }
-        
-      </View>
-      
+        </View>
       </View>
     );
   }
 }
 const styles = StyleSheet.create({
-
+  container: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
   styleTitle:{
     fontFamily: 'Roboto',
     fontWeight: '600',
@@ -247,7 +259,6 @@ const styles = StyleSheet.create({
   buttonText:{
     fontFamily: 'OswaldMedium',
     fontSize: 12,
-    lineHeight: 18,
     color: '#FFFFFF',
     borderWidth: 0,
     padding: 10,
@@ -277,7 +288,7 @@ export default connect (
     banners: state.BannerReducer,
     categories: state.CategoriesReducer,
     products: state.ProductsReducer,
-    offers: state.CommercialOfferReducer,
+    options: state.OptionReducer,
     user: state.UserReducer,
   }),
   dispatch => ({

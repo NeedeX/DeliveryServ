@@ -36,15 +36,7 @@ class Loading extends Component {
         didFinishInitialAnimation: true,
       });
       
-      this.state.didFinishInitialAnimation ?
-      setTimeout(() => {
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [NavigationActions.navigate({ routeName: this.state.route })],
-        });
-        this.props.navigation.dispatch(resetAction);
-      }, 1500)
-      : null
+      
     });
   }
   loadingUser() {
@@ -57,9 +49,28 @@ class Loading extends Component {
         //this.loadAddresses(user._user.uid);
         //this.loadingFavorites(user._user.uid);
         this.setState({ route: 'Main'})
+        this.state.didFinishInitialAnimation ?
+        setTimeout(() => {
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({ routeName: 'Main' })],
+        });
+        this.props.navigation.dispatch(resetAction);
+      }, 1500)
+      : null
       }
       else
-      { this.setState({ route: 'Start'})  }
+      { this.setState({ route: 'Start'}) 
+      this.state.didFinishInitialAnimation ?
+      setTimeout(() => {
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'Start' })],
+      });
+      this.props.navigation.dispatch(resetAction);
+    }, 1500)
+    : null
+    }
     })
   }
   loadingOptions()
