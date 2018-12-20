@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, StyleSheet, Text, View, InteractionManager, TouchableOpacity, Image, ScrollView, Button, ActivityIndicator} from 'react-native';
 import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
 import AnimatedHideView from 'react-native-animated-hide-view';
 import Dialog from "react-native-dialog";
 import Header from './components/Header';
@@ -68,10 +69,8 @@ class ProductDetailView extends React.Component {
       //console.log("все достепные ингридиенты resultProduct[0].ingredients ",  resultProduct[0].ingredients);
       //console.log("Выбранные ингридиенты resultProductInCart[0].ing", resultProductInCart[0].ing);
       // если при переходе из корзины, есть выбранные ингридиенты
-      if(typeof resultProductInCart[0].ing !== 'undefined' && typeof resultProductInCart[0].ing.length !== 'undefined')
-      {
-        if(resultProductInCart[0].ing.length > 0)
-        {
+      if(typeof resultProductInCart[0].ing !== 'undefined' && typeof resultProductInCart[0].ing.length !== 'undefined'){
+        if(resultProductInCart[0].ing.length > 0) {
           // проходим по всем ингридиентам
           for(i = 0; i < resultProduct[0].ingredients.length; i++)
           {
@@ -96,8 +95,6 @@ class ProductDetailView extends React.Component {
       ))
     }
     this.addIngredient = this.addIngredient.bind(this);
-
-    
   }
   static navigationOptions = ({ params }) => {
 
@@ -158,53 +155,78 @@ class ProductDetailView extends React.Component {
   // функция добавления в избранное
   addToFavorite(iProduct)
   {
-    /*
+    //console.log("iProduct = ", iProduct);
+    //console.log("this.props.user.uid = ", this.props.user.uid);
     firebase.auth().onAuthStateChanged(user => {
       if(user)
       {  
-        //console.log(iProduct);
-        //console.log('+');
-        //console.log(this.props.user[0].uid);
-        this.addInDB(iProduct, this.props.user[0].uid)
+        this.addInDB(iProduct, this.props.user.uid)
       }
       else
       {
         this.showDialog();
         this.renderDialog();
       }
-    })*/
+    })
   }
   addInDB(iProduct, UID)
   {
     fetch('http://mircoffee.by/deliveryserv/app/InsertFavorite.php', 
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Accept-Encoding': "gzip, deflate",
-          'Content-Type': 'application/json',
-        },
-            body: JSON.stringify({
-              chUID: UID,
-              idProduct: iProduct,
-            })
-   
-        })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            // Отображение ответного сообщения, поступающего с сервера после вставки записей.
-            console.log(responseJson);
-            val = {
-                    key: this.generateKey(), 
-                    idFavorite: responseJson,
-                    idProduct: iProduct,
-            };
-            this.props.addFavorite(val);
-            //this.props.onAddInFavorite(val);
-            console.log(this.props.favorite);
-            //this.props.navigation.navigate('CompletedOrder', {animation: 'SlideFromLeft', animationDuration: 500 });
-        })
-        .catch((error) => { console.error(error); });
+    {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+          body: JSON.stringify({
+            UIDClient: this.props.options.UIDClient,
+          UIDGoogleUser: UID,
+            idProduct: iProduct,
+          })
+ 
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+          // Отображение ответного сообщения, поступающего с сервера после вставки записей.
+          console.log(responseJson);
+          val = {
+                  key: this.generateKey(), 
+                  idFavorite: responseJson,
+                  idProduct: iProduct,
+          };
+          this.props.addFavorite(val);
+          //this.props.onAddInFavorite(val);
+          console.log(this.props.favorite);
+          //this.props.navigation.navigate('CompletedOrder', {animation: 'SlideFromLeft', animationDuration: 500 });
+      })
+      .catch((error) => { console.error(error); });
+    /*
+    console.log("chUID = ", this.props.options.UIDClient)
+    console.log("UIDGoogleUser = ", UID)
+    console.log("idProduct  = ", iProduct)
+    return fetch(this.props.options.URL+'InsertFavorite.php',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        UIDClient: this.props.options.UIDClient,
+        UIDGoogleUser: UID,
+        idProduct: iProduct,
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson);
+      
+    })
+    .catch((error) => {
+      console.error(error);
+    });*/
+        
   }
   renderFavoriteButtom(iProduct)
   {
@@ -213,7 +235,7 @@ class ProductDetailView extends React.Component {
     if(resultFav.length > 0)
     { return (
         <TouchableOpacity style={{elevation: 3, marginRight: 15, marginTop: 15,}}
-          onPress={() => { this.delToFavorite(resultFav[0].idFavorite, this.props.user[0].uid)}}>
+          onPress={() => { this.delToFavorite(resultFav[0].idFavorite, this.props.user.uid)}}>
           <Image
             style={ styles.imgFavStyle }
             source={require('../assets/iconHeartFav.png')}
@@ -397,7 +419,7 @@ class ProductDetailView extends React.Component {
   }
   renderBtnInCart(idProduct){
     const result = this.props.cart.filter(cart => cart.iProduct === idProduct);
-    console.log("this.props.navigation.state.params.routeGoBack = ", this.props.navigation.state.params.routeGoBack);
+    //console.log("this.props.navigation.state.params.routeGoBack = ", this.props.navigation.state.params.routeGoBack);
     
     if(result.length > 0)
       return ( <Text style = {styles.buttonText}>{this.props.navigation.state.params.routeGoBack === 'inCart' ? "СОХРАНИТЬ" : "ДОБАВИТЬ ЕЩЁ"}</Text> )

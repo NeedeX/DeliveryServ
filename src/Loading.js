@@ -47,7 +47,7 @@ class Loading extends Component {
         //console.log(user._user);
         //console.log(this.props.user[0]._user.uid);
         //this.loadAddresses(user._user.uid);
-        //this.loadingFavorites(user._user.uid);
+        this.loadingFavorites(user.uid);
         this.setState({ route: 'Main'})
         this.state.didFinishInitialAnimation ?
         setTimeout(() => {
@@ -72,6 +72,30 @@ class Loading extends Component {
     : null
     }
     })
+  }
+  loadingFavorites(chUIDGoogleUser)
+  {
+    return fetch(this.props.options.URL+'LoadingFavorites.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chUIDGoogleUser: chUIDGoogleUser,
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log("responseJson = ", responseJson);
+      
+      //his.props.clearFavorite();
+      this.props.loadFavorites(responseJson.favorite);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   }
   loadingOptions()
   {

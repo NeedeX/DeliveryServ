@@ -28,7 +28,7 @@ class Favorites extends React.Component {
       };
     componentDidMount()
     {
-        /*
+        
         firebase.auth().onAuthStateChanged(user => {
             //console.log("==>");
             if (user) {
@@ -39,7 +39,7 @@ class Favorites extends React.Component {
             }
             else
                 this.setState({ AuthState: 0 });
-        });*/
+        });
         InteractionManager.runAfterInteractions(() => {
             this.setState({
                 didFinishInitialAnimation: true,
@@ -200,7 +200,7 @@ class Favorites extends React.Component {
                              justifyContent: 'flex-start',
                             }}>
                                 <Text style={styles.textPriceStyle}> 
-                                    {parseFloat(resultProduct[0].chPrice).toFixed(2) + " " + this.props.options.chCurrencyCode}
+                                    {parseFloat(resultProduct[0].chPrice).toFixed(2) + " " + this.props.customers.chCurrency}
                                 </Text>
                                 {this.oldPrice(resultProduct[0].chOldPrice)}                    
                             </View>
@@ -261,28 +261,6 @@ class Favorites extends React.Component {
                 }
                 </View>
             }
-
-
-
-            {
-              this.props.favorites.length >  0 ?
-                this.renderViewListFavorites()
-                :
-                <View style={{ alignItems: 'center', marginTop: 30, }}>
-                    <Text style={{
-                        fontFamily: 'Roboto',
-                        fontWeight: '600',
-                        fontSize: 14,
-                        lineHeight: 24,
-                        color: '#FFFFFF',
-                        
-                    }}>Избранных товаров нет</Text>
-                   
-
-                    
-                </View>
-            }
-               
             </ImageBackground>
             {
                 this.state.AuthState == 0 ?
@@ -430,6 +408,7 @@ export default connect (
     products: state.ProductsReducer,
     favorites: state.FavoriteReducer,
     options: state.OptionReducer,
+    customers: state.CustomersReducer,
   }),
   dispatch => ({
     loadFavorites: (index) => {
