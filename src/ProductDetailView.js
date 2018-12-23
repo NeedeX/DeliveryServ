@@ -171,6 +171,12 @@ class ProductDetailView extends React.Component {
   }
   addInDB(iProduct, UID)
   {
+    console.log("iProduct = ", iProduct);
+    console.log("UID = ", UID);
+    console.log("this.props.options.UIDClient = ", this.props.options.UIDClient);
+    
+    
+    
     fetch('http://mircoffee.by/deliveryserv/app/InsertFavorite.php', 
     {
       method: 'POST',
@@ -181,7 +187,7 @@ class ProductDetailView extends React.Component {
       },
           body: JSON.stringify({
             UIDClient: this.props.options.UIDClient,
-          UIDGoogleUser: UID,
+            UIDGoogleUser: UID,
             idProduct: iProduct,
           })
  
@@ -189,7 +195,7 @@ class ProductDetailView extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
           // Отображение ответного сообщения, поступающего с сервера после вставки записей.
-          console.log(responseJson);
+          //console.log(responseJson);
           val = {
                   key: this.generateKey(), 
                   idFavorite: responseJson,
@@ -197,10 +203,12 @@ class ProductDetailView extends React.Component {
           };
           this.props.addFavorite(val);
           //this.props.onAddInFavorite(val);
-          console.log(this.props.favorite);
+          //console.log(this.props.favorite);
           //this.props.navigation.navigate('CompletedOrder', {animation: 'SlideFromLeft', animationDuration: 500 });
       })
       .catch((error) => { console.error(error); });
+
+      
     /*
     console.log("chUID = ", this.props.options.UIDClient)
     console.log("UIDGoogleUser = ", UID)
@@ -256,7 +264,7 @@ class ProductDetailView extends React.Component {
     }
     
   }
-  delToFavorite(idFavorite, UID)
+  delToFavorite(idFavorite, UIDGoogleUser)
   {
     fetch('http://mircoffee.by/deliveryserv/app/DelFavorites.php', 
       {
@@ -267,7 +275,7 @@ class ProductDetailView extends React.Component {
           'Content-Type': 'application/json',
         },
             body: JSON.stringify({
-              chUID: UID,
+              UIDGoogleUser: UIDGoogleUser,
               idFavorite: idFavorite,
             })
    
