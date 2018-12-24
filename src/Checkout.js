@@ -19,7 +19,7 @@ class Checkout extends React.Component {
 
             // доставка
             chDeliveryAddress: '',  // адрес
-            chCity: this.props.customers.CITY,      // город
+            chCity: this.props.options.CITY,      // город
             chStreet: '',           // улица
             chNumHome: '',          /// дом
             chHousing: '',          // корпус
@@ -69,7 +69,6 @@ class Checkout extends React.Component {
         this.focusNextField = this.focusNextField.bind(this);
         this.inputs = {};
 
-        console.log("customers = ", this.props.customers);
         /// если только самовывоз 
         if(this.props.customers.blPickup == 1 && this.props.customers.blDelivery == 0)
         {
@@ -483,9 +482,7 @@ class Checkout extends React.Component {
         }
     }
     radioDeliveryTime()
-    {
-        console.log("this.props.customers.blLater = ", this.props.customers.blLater);
-        
+    {   
         if(this.props.customers.blLater == 1) {
             return(
                 <RadioGroup selectedIndex={0} color='#6A3DA1'

@@ -42,11 +42,9 @@ class Loading extends Component {
   loadingUser() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        //this.setState({ user: user.toJSON() });
+
         this.props.loadUser(user);
-        //console.log(user._user);
-        //console.log(this.props.user[0]._user.uid);
-        //this.loadAddresses(user._user.uid);
+        this.loadingAddresses(user.uid);
         this.loadingFavorites(user.uid);
         this.setState({ route: 'Main'})
         this.state.didFinishInitialAnimation ?
@@ -73,6 +71,28 @@ class Loading extends Component {
     }
     })
   }
+  loadingAddresses(chUIDGoogleUser){
+    return fetch(this.props.options.URL + 'LoadingAddresses.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chUIDGoogleUser: chUIDGoogleUser,
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.props.clearAddresses();
+      this.props.loadAddresses(responseJson.addresses);
+
+      console.log("this.props.addresses = ", this.props.addresses);
+      this.setState(state => { return {  progress: state.progress + loagIndex, }; });
+    })
+    .catch((error) => { console.error(error); });
+  }
   loadingFavorites(chUIDGoogleUser)
   {
     return fetch(this.props.options.URL+'LoadingFavorites.php', {
@@ -88,10 +108,12 @@ class Loading extends Component {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log("responseJson = ", responseJson);
+      
       
       //his.props.clearFavorite();
       this.props.loadFavorites(responseJson.favorite);
+      console.log("this.props.favorite = ", this.props.favorite);
+      this.setState(state => { return {  progress: state.progress + loagIndex, }; });
     })
     .catch((error) => {
       console.error(error);
@@ -121,7 +143,7 @@ class Loading extends Component {
     .then((responseJson) => {
 
         this.props.loadCustomers(responseJson);
-        console.log("customers = ", this.props.customers);
+        console.log("this.props.customers = ", this.props.customers);
         this.setState(state => {
           return {
             progress: state.progress + loagIndex,

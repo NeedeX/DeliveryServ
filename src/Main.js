@@ -27,8 +27,8 @@ class Main extends Component {
       if (user) {
         this.setState({ userEmail: user._user.email});
         this.setState({ userUid: user._user.uid});
-        console.log("userEmail = ", this.state.userEmail);
-        console.log("userUid = ", this.state.userUid);
+        //console.log("userEmail = ", this.state.userEmail);
+        //console.log("userUid = ", this.state.userUid);
         console.log("this.props.user = ", this.props.user);
         //this.checkUser();
       }

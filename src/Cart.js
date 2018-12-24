@@ -74,8 +74,8 @@ class Cart extends React.Component {
       return parseFloat(allPriceCart).toFixed(2)+" " + this.props.customers.chCurrency;
     }
     render() {
-      //console.log("cart.js"); 
-      console.log(this.props.cart);   
+
+      console.log("this.props.cart = ", this.props.cart);   
       var {navigate} = this.props.navigation;
       var {params} = this.props.navigation.state;
       return (

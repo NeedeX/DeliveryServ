@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Dimensions, Image, ActivityIndicator, ImageBackground, InteractionManager} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Dimensions, Image, ActivityIndicator, ImageBackground, InteractionManager} from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 import FAB from 'react-native-fab'
 import Header from './components/Header';
 import BGNoAuth from './components/BGNoAuth';
+import CardAddress from './components/CardAddress';
 const { width } = Dimensions.get('window');
 
 class Addresses extends Component {
@@ -48,6 +49,58 @@ class Addresses extends Component {
             text={'Для просмотра и добавления адреса нужно войти в личный кабинет'}
             goBack={'Addresses'}
             nav={this.props.navigation} />
+    }
+    renderViewListAddresses(){
+        return <View style={{ marginTop: 0, }}>
+            <View style={{
+                  backgroundColor: '#fff',
+                  borderTopStartRadius: 10,
+                  borderTopEndRadius: 10,
+                  height: 500,
+                }} >
+                  <View style={styles.viewTextTitle}>
+                      <Text style={ styles.textTitle}>Адреса доставки</Text>
+                  </View>
+                  <View style={{
+                    backgroundColor: '#fff',
+                    borderRadius: 10,
+                    borderTopEndRadius: 0,
+                    borderTopStartRadius: 0,
+                    width: width - 40,
+                    elevation: 2, 
+                 }}>
+                <ScrollView >
+                    <View style={{ width: width - 40, marginBottom: 20,}}>
+                    {
+                      this.props.addresses.map((item, index) => (
+                            <CardAddress 
+                                key = {index}
+                                idAddress = {item.idAddress}
+                                iClient = {item.iClient}
+                                chAddress = {item.chAddress}
+                                chCity = {item.chCity}
+                                chStreet = {item.chStreet}
+                                chNumHome = {item.chNumHome}
+                                chHousing = {item.chHousing}
+                                chEntrance = {item.chEntrance}
+                                chFloor = {item.chFloor}
+                                chApartment = {item.chApartment}
+                                nav={this.props.navigation}
+                                routeGoBack = {this.state.routeGoBack}
+                            />
+                     
+                        ))
+                    }
+
+                    </View>
+                </ScrollView>
+                  
+                  </View>
+                  
+                </View>
+                
+            </View>
+            
     }
   render() {
     var {navigate} = this.props.navigation;
@@ -134,6 +187,18 @@ const styles = StyleSheet.create({
         lineHeight: 24,
         color: '#FFFFFF',
         marginTop: 20,
+    },
+    textTitle:{
+        fontFamily: 'Roboto',
+        fontWeight: '600',
+        fontSize: 14,
+        lineHeight: 24,
+        backgroundColor: '#6A3DA1',
+        borderRadius: 10,
+        color: '#F2F2F2',
+        height: 45,
+        paddingLeft: 20,
+        paddingTop: 10,
     },
 
 });

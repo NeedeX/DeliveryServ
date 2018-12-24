@@ -12,7 +12,6 @@ class CheckoutConfirm extends React.Component {
         this.state = {
             chFIO: params.chFIO,
             chPhone: params.chPhone,
-            chDeliveryAddress: params.chDeliveryAddress,
 
             chCity: params.chCity,
             chStreet: params.chStreet,
@@ -89,13 +88,14 @@ class CheckoutConfirm extends React.Component {
         
         
         var val ={
-            UID: this.props.user.length === 0 ? null : this.props.user[0]._user.uid, // UID пользователя приложения
+            UIDClient: this.props.options.UIDClient,
+            UIDGoogleUser: this.props.user.length === 0 ? null : this.props.user.uid, // UID пользователя приложения
             chFIO: this.state.chFIO,
             chPhone: this.state.chPhone,
-                chCity: this.state.chCity,
-                chStreet: this.state.chStreet,
-                chNumHome: this.state.chNumHome,
-                chHousing: this.state.chHousing,
+            chCity: this.state.chCity,
+            chStreet: this.state.chStreet,
+            chNumHome: this.state.chNumHome,
+            chHousing: this.state.chHousing,
                 chEntrance: this.state.chEntrance,
                 chFloor: this.state.chFloor,
                 chApartment: this.state.chApartment,
@@ -116,7 +116,7 @@ class CheckoutConfirm extends React.Component {
         }
         console.log(val);
         
-        
+        /*
         //console.log(this.state);
         fetch('http://mircoffee.by/deliveryserv/app/InsertOrder.php', 
         {
@@ -183,8 +183,8 @@ class CheckoutConfirm extends React.Component {
                 chComments: this.state.chComments,
                 cart: this.props.cart,
             };
-            //this.props.onAddOrder(val);
-            //console.log(this.props.order);
+            this.props.onAddOrder(val);
+            console.log(this.props.order);
             this.props.clearCart();
             /*
             this.props.cart.map(item => (
@@ -192,13 +192,14 @@ class CheckoutConfirm extends React.Component {
             ));
             */
                 
-           
+           /*
             this.props.navigation.navigate('CompletedOrder', {animation: 'SlideFromLeft', animationDuration: 500 });
    
         })
         .catch((error) => {
              console.error(error);
         });
+        */
     }
 
     render() {
@@ -227,7 +228,13 @@ class CheckoutConfirm extends React.Component {
                         <Text style={styles.textTitleStyle2}>Телефон</Text>
                         <Text style={styles.textStyleValue}>{params.chPhone}</Text>
                         <Text style={styles.textTitleStyle2}>Адрес</Text>
-                        <Text style={styles.textStyleValue}>{params.chCity}, ул.{params.chStreet}, {params.chNumHome}{params.chHousing === '' ? '' : '/'}{params.chHousing}, подъезд {params.chEntrance}, кв.{params.chApartment}</Text>
+                        {
+                            params.chDeliveryAddress !== "" ?
+                            <Text style={styles.textStyleValue}>{params.chDeliveryAddress}</Text>
+                            :
+                            <Text style={styles.textStyleValue}>{params.chCity}, ул.{params.chStreet}, {params.chNumHome}{params.chHousing === '' ? '' : '/'}{params.chHousing}, подъезд {params.chEntrance}, кв.{params.chApartment}</Text>
+                        
+                        }
                         <View
                             style={{  borderBottomColor: '#E4E4E4',
                                 borderBottomWidth: 1, marginTop: 3, marginBottom: 3, }} />

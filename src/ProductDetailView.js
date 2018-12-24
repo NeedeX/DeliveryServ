@@ -137,10 +137,8 @@ class ProductDetailView extends React.Component {
   handleDelete = () => {
     this.setState({ dialogVisible: false });
     this.props.navigation.navigate('Phone');
-
   };
-  renderDialog()
-  {
+  renderDialog() {
     return (
       <Dialog.Container visible={this.state.dialogVisible}>
         <Dialog.Title>Предупреждение</Dialog.Title>
@@ -153,88 +151,43 @@ class ProductDetailView extends React.Component {
     )
   }
   // функция добавления в избранное
-  addToFavorite(iProduct)
-  {
-    //console.log("iProduct = ", iProduct);
-    //console.log("this.props.user.uid = ", this.props.user.uid);
+  addToFavorite(iProduct){
     firebase.auth().onAuthStateChanged(user => {
-      if(user)
-      {  
+      if(user){  
         this.addInDB(iProduct, this.props.user.uid)
       }
-      else
-      {
+      else {
         this.showDialog();
         this.renderDialog();
       }
     })
   }
-  addInDB(iProduct, UID)
-  {
-    console.log("iProduct = ", iProduct);
-    console.log("UID = ", UID);
-    console.log("this.props.options.UIDClient = ", this.props.options.UIDClient);
-    
-    
-    
-    fetch('http://mircoffee.by/deliveryserv/app/InsertFavorite.php', 
-    {
+  addInDB(iProduct, UID){
+    fetch(this.props.options.URL + 'InsertFavorite.php', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Accept-Encoding': "gzip, deflate",
         'Content-Type': 'application/json',
       },
-          body: JSON.stringify({
-            UIDClient: this.props.options.UIDClient,
-            UIDGoogleUser: UID,
-            idProduct: iProduct,
-          })
- 
+        body: JSON.stringify({
+          UIDClient: this.props.options.UIDClient,
+          UIDGoogleUser: UID,
+          idProduct: iProduct,
+        })
       })
       .then((response) => response.json())
       .then((responseJson) => {
-          // Отображение ответного сообщения, поступающего с сервера после вставки записей.
-          //console.log(responseJson);
-          val = {
-                  key: this.generateKey(), 
-                  idFavorite: responseJson,
-                  idProduct: iProduct,
-          };
-          this.props.addFavorite(val);
-          //this.props.onAddInFavorite(val);
-          //console.log(this.props.favorite);
-          //this.props.navigation.navigate('CompletedOrder', {animation: 'SlideFromLeft', animationDuration: 500 });
+        // Отображение ответного сообщения, поступающего с сервера после вставки записей.
+        val = {
+          key: this.generateKey(), 
+          idFavorite: responseJson,
+          idProduct: iProduct,
+        };
+        this.props.addFavorite(val);
       })
-      .catch((error) => { console.error(error); });
-
-      
-    /*
-    console.log("chUID = ", this.props.options.UIDClient)
-    console.log("UIDGoogleUser = ", UID)
-    console.log("idProduct  = ", iProduct)
-    return fetch(this.props.options.URL+'InsertFavorite.php',{
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Accept-Encoding': "gzip, deflate",
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        UIDClient: this.props.options.UIDClient,
-        UIDGoogleUser: UID,
-        idProduct: iProduct,
-      })
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      console.log(responseJson);
-      
-    })
-    .catch((error) => {
-      console.error(error);
-    });*/
-        
+      .catch((error) => { console.error(error); 
+    });
   }
   renderFavoriteButtom(iProduct)
   {
@@ -251,8 +204,8 @@ class ProductDetailView extends React.Component {
         </TouchableOpacity>
       )
     }
-    else
-    { return (
+    else { 
+    return (
       <TouchableOpacity style={{elevation: 3, marginRight: 15, marginTop: 15,}}
         onPress={() => { this.addToFavorite(iProduct)}}>
         <Image
@@ -262,34 +215,29 @@ class ProductDetailView extends React.Component {
       </TouchableOpacity>
       )
     }
-    
   }
-  delToFavorite(idFavorite, UIDGoogleUser)
-  {
-    fetch('http://mircoffee.by/deliveryserv/app/DelFavorites.php', 
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Accept-Encoding': "gzip, deflate",
-          'Content-Type': 'application/json',
-        },
-            body: JSON.stringify({
-              UIDGoogleUser: UIDGoogleUser,
-              idFavorite: idFavorite,
-            })
-   
-        })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            // Отображение ответного сообщения, поступающего с сервера после вставки записей.
-            console.log(responseJson);
-            val = {
-              idFavorite: idFavorite,
-            };
-            this.props.delFavorite(val);
-        })
-        .catch((error) => { console.error(error); });
+  delToFavorite(idFavorite, UIDGoogleUser){
+    fetch(this.props.options.URL + 'DelFavorites.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        UIDGoogleUser: UIDGoogleUser,
+        idFavorite: idFavorite,
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Отображение ответного сообщения, поступающего с сервера после вставки записей.
+      val = {
+        idFavorite: idFavorite,
+      };
+      this.props.delFavorite(val);
+    })
+    .catch((error) => { console.error(error); });
   }
   viewBtnOptions(options){
     if(options.length > 0)

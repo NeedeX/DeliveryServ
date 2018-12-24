@@ -80,10 +80,18 @@ class CardAddress extends React.Component {
             <TouchableOpacity activeOpacity={0.9}
             onPress={() =>  this.addSelectAddresses(this.props.idAddress, this.props.routeGoBack) }>
             <View style={{
+                marginBottom: -8,
+            }}>
+                <Text style={ styles.textStyle }>
+                г.{this.props.chCity}</Text>
+            </View>
+            
+            <View style={{
                 backgroundColor: '#fff',
-                elevation: 3,
+                elevation: 2,
                 borderRadius: 10,
                 margin: 10,
+                marginTop: 0,
             }}>
 
             <View style={{
@@ -128,20 +136,26 @@ class CardAddress extends React.Component {
                 {
                     this.props.chEntrance !== "" || this.props.chFloor !== "" ?
                     <View>
-                        <Text style={ styles.textStyle }>
+                        <Text style={ {
+                            textAlign: 'left',
+                            marginLeft: 10, 
+                            height: 30,
+                            padding: 5, 
+                            color: '#828282', 
+                            fontSize: 12,
+                        } }>
                         {this.props.chEntrance !== "" ?"подъезд: "+this.props.chEntrance+",": ""}
                         {this.props.chFloor !== "" ?" этаж: "+this.props.chFloor:""}
                         </Text>
                         
-                        {this.divider()}
+                        
                     </View>
                     
                     :
                     <View />
                 }
                 
-                <Text style={ styles.textStyle }>
-                г.{this.props.chCity}</Text>
+                
                 
             </View>
         </TouchableOpacity>
