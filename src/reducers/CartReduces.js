@@ -19,7 +19,7 @@ export default function CartReduces (state = INITIAL_STATE, action) {
         // проходим по основному state
         const updatedRootItems = state.map(item => {
           if(item.idInCart === action.payload.idInCart){
-            console.log("item.idInCart", item.idInCart);
+            //console.log("item.idInCart", item.idInCart);
             
             return {...item, ...action.payload};
           }

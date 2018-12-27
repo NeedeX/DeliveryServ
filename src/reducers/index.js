@@ -12,6 +12,7 @@ import AddressReducer from './AddressReducer';
 import FavoriteReducer from './FavoriteReducer';
 import TegsReducer from './TegsReducer';
 import CustomersReducer from './CustomersReducer';
+import HistoryReducer from './HistoryReducer';
 
 const allReducers = combineReducers ({
     
@@ -27,6 +28,7 @@ const allReducers = combineReducers ({
     FavoriteReducer: FavoriteReducer,
     TegsReducer: TegsReducer,
     CustomersReducer: CustomersReducer,
+    HistoryReducer: HistoryReducer,
 });
 
 export default allReducers;

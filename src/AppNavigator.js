@@ -16,6 +16,8 @@ import AddAddress from './AddAddress';
 import Favorites from './Favorites';
 import CheckoutConfirm from './CheckoutConfirm';
 import CompletedOrder from './CompletedOrder';
+import History from './History';
+
 // drawer 
 import DrawerMenu from './components/Drawer';
 
@@ -67,6 +69,7 @@ const AppNavigator = createStackNavigator({
   Addresses: { screen: Addresses },
   AddAddress: { screen: AddAddress},
   Favorites: { screen: Favorites},
+  History: { screen: History},
   /// auth
   LoadingAuth : { screen: Loading },
   Login : { screen: Login },
