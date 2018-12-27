@@ -10,6 +10,7 @@ class CheckoutConfirm extends React.Component {
         super(props);
         var {params} = this.props.navigation.state;
         this.state = {
+            UIDClient: this.props.options.UIDClient,
             chFIO: params.chFIO,
             chPhone: params.chPhone,
 
@@ -83,12 +84,9 @@ class CheckoutConfirm extends React.Component {
       //console.log(this.state.allPriceCart);
       return parseFloat(allPriceCart).toFixed(2) +" " + this.props.customers.chCurrency;
     }
-    validePurchase()
-    {
-        
-        
+    validePurchase(){
         var val ={
-            UIDClient: this.props.options.UIDClient,
+            UIDClient: this.state.UIDClient,
             UIDGoogleUser: this.props.user.length === 0 ? null : this.props.user.uid, // UID пользователя приложения
             chFIO: this.state.chFIO,
             chPhone: this.state.chPhone,
@@ -112,12 +110,10 @@ class CheckoutConfirm extends React.Component {
                 chComments: this.state.chComments,
                 allPriceCart: this.state.allPriceCart,
                 cart: this.props.cart,
-                UIDClient: this.props.UIDClient,
         }
         console.log(val);
         
-        /*
-        //console.log(this.state);
+
         fetch('http://mircoffee.by/deliveryserv/app/InsertOrder.php', 
         {
             method: 'POST',
@@ -127,7 +123,8 @@ class CheckoutConfirm extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                UID: this.props.user.length === 0 ? null : this.props.user[0]._user.uid, // UID пользователя приложения
+                UIDClient: this.state.UIDClient,
+                UIDGoogleUser: this.props.user.length === 0 ? null : this.props.user.uid, // UID пользователя приложения
                 chFIO: this.state.chFIO,
                 chPhone: this.state.chPhone,
                 chCity: this.state.chCity,
@@ -150,8 +147,6 @@ class CheckoutConfirm extends React.Component {
                 chComments: this.state.chComments,
                 allPriceCart: this.state.allPriceCart,
                 cart: this.props.cart,
-                UIDClient: this.props.UIDClient, /// UID владельца заведенияы
-    
             })
    
         })
@@ -185,21 +180,15 @@ class CheckoutConfirm extends React.Component {
             };
             this.props.onAddOrder(val);
             console.log(this.props.order);
-            this.props.clearCart();
-            /*
-            this.props.cart.map(item => (
-                this.props.cart.filter(rentChildrenPrint => rentChildrenPrint.iProduct ===  item.iProduct)
-            ));
-            */
-                
-           /*
+            this.props.clearCart();  
+   
             this.props.navigation.navigate('CompletedOrder', {animation: 'SlideFromLeft', animationDuration: 500 });
    
         })
         .catch((error) => {
              console.error(error);
         });
-        */
+
     }
 
     render() {

@@ -152,6 +152,14 @@ class Main extends Component {
                 accessibilityLabel="Learn more about this purple button"
               />
               <Button
+                onPress={
+                  () => this.props.navigation.navigate('CompletedOrder')
+              }
+                title="CompletedOrder"
+                color="#841584"
+                accessibilityLabel="Learn more about this purple button"
+              />
+              <Button
             title="Выход"
             onPress={() =>
               this.signOut()

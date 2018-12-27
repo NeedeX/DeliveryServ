@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, StatusBar, BackHandler, ImageBackground} from 'react-native';
 import { NavigationActions, StackActions} from 'react-navigation';
+import Header from './components/Header';
 const { width } = Dimensions.get('window');
 
 class CompletedOrder extends React.Component {
@@ -14,19 +15,29 @@ class CompletedOrder extends React.Component {
           return true;
         });
     }
-
+    static navigationOptions = ({ navigation  }) => {
+        return {
+          title: 'Home',
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            textAlign: 'center',
+          },
+          header: (props) => <Header title={'Мои адреса'} nav={ navigation } {...props} />,
+        };
+    };
     render() {
         return (
-        <View style={{backgroundColor: '#fff'}}> 
+            <View style={styles.container}>
             <StatusBar
                 hidden={false}
                 backgroundColor="#583286"
                 barStyle="light-content" />
             <ImageBackground
-            style={{ flex: 1, width: width, height: 170, }}
-            imageStyle={{ resizeMode: 'stretch' }}
-            source={require('../assets/main.png')}
-            >
+                style={{ flex: 1, width: width, height: 170, marginTop:0, alignItems: 'center', justifyContent: 'flex-start'}}
+                imageStyle={{ resizeMode: 'cover' }}
+                source={require('../assets/main.png')}
+                >
             <Text style={styles.textTitleStyle}>Спасибо за заказ!</Text>
             <View style={{
                     backgroundColor: '#fff',
