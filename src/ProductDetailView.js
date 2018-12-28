@@ -494,7 +494,7 @@ class ProductDetailView extends React.Component {
                   var val = {};
                   val = {     
                     key: this.generateKey(),
-                    idInCart: params.idInCart,
+                    idInCart: this.props.navigation.state.params.routeGoBack === 'inCart' ? params.idInCart : this.generateKey(),
                     iProduct: result[0].iProduct,
                     iCategories: result[0].iCategories,
                     chMainImage: result[0].chMainImage,
@@ -516,9 +516,7 @@ class ProductDetailView extends React.Component {
 
                   else
                     this.props.addCart(val);
-                  
-
-
+              
                   // обнуляем счетчик вывода ингридиентов
                   this.state.viewLeftRigthCount = 0;      
                 }}>

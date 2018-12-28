@@ -28,7 +28,7 @@ export default function CartReduces (state = INITIAL_STATE, action) {
         return updatedRootItems;
         break;
       case "DELETE_CART":
-      console.log("action.payload.idInCart = ", action.payload.idInCart)
+      //console.log("action.payload.idInCart = ", action.payload.idInCart)
         return state.filter(cart => cart.idInCart !== action.payload.idInCart)
         break;
       case "CLEAR_CART":
