@@ -1,281 +1,276 @@
-import React from 'react';
-import { ListView, 
-  TouchableHighlight, StatusBar,
-  StyleSheet, Dimensions, Text, View, Button, TouchableOpacity, Image, ScrollView, ImageBackground, InteractionManager, ActivityIndicator} from 'react-native';
+import React, {Component} from 'react';
+import {Platform, StyleSheet, Text, View, InteractionManager, ActivityIndicator, ScrollView,TouchableOpacity, ImageBackground, Dimensions, Image} from 'react-native';
 import { connect } from 'react-redux';
-import Card from './components/CardProductInCart';
-import EmptyCart from './components/EmptyCart';
-import Header from './components/Header';
 
+import Header from './components/Header';
+import BGNoAuth from './components/BGNoAuth';
 const { width } = Dimensions.get('window');
-class Cart extends React.Component {
+
+class Cart extends Component {
   constructor(props){
     super(props);
-    var {params} = this.props.navigation.state;
-    this.state = { 
+    this.state = {
       didFinishInitialAnimation: false,
-    }
+      ingPrice: 0,
+    }  
   }
   static navigationOptions = ({ navigation  }) => {
     return {
       title: 'Home',
-      headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-        textAlign: 'center',
-      },
-      header: (props) => <Header title={'Корзина'} nav={ navigation } {...props} />,
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontWeight: 'bold',
+                textAlign: 'center',
+            },
+            header: (props) => <Header title={'Корзина'} nav={ navigation } {...props} />,
+        };
     };
-  };
-  // Lifecycle methods
-  componentDidMount() {
-    InteractionManager.runAfterInteractions(() => {
-      this.setState({
-        didFinishInitialAnimation: true,
-      });
-    });
+  componentDidMount(){
+        InteractionManager.runAfterInteractions(() => {
+            this.setState({ didFinishInitialAnimation: true, });
+        });
   }
-  generateKey = () => {
-    return `${ new Date().getTime() }`;
+  renderIng(ingridientes){
+    if(ingridientes && ingridientes.length > 0){
+      ingridientes.map(i => (
+        this.state.ingPrice = this.state.ingPrice + Number(i.chPriceChange)
+      ))
+      return ingridientes.map(i => (
+        <View style={{flexDirection: 'row', marginLeft: 10, fontSize: 10,}}>
+          <Text style={{fontSize: 10,}}>{i.chName}</Text>
+          <Text style={{fontSize: 10,}}> +{parseFloat(i.chPriceChange).toFixed(2) +" " + this.props.customers.chCurrency}</Text>
+        </View>
+      ))
+    }
+    
   }
-    oldPrice = (iOldPrice) =>{
+  oldPrice(iOldPrice)
+    {
         var view = '';
-        if(iOldPrice == 0){
+        if(iOldPrice === "" || iOldPrice === undefined){
           view = <Text></Text>
         }
         else{
-          view = <Text style={{ fontSize:15, justifyContent: 'flex-end', color: '#ccc', textDecorationLine: 'line-through'}}> {parseFloat(iOldPrice).toFixed(2)+ " " + this.props.customers.chCurrency}  </Text>
+          view = <Text style={styles.textOldPriceStyle}> { parseFloat(iOldPrice).toFixed(2)+" " + this.props.customers.chCurrency} </Text>
         }
         return view;
     }
-    priceIng(ing, chPrice, optionsPrice)
-    {
-      var priceIng = 0;
-      if(ing.length > 0){ 
-        ing.map(i => (
-          priceIng = priceIng + Number(i.chPriceChange)
-        )) 
-      }
-      priceIng = Number(priceIng) + Number(chPrice) + Number(optionsPrice);
-      return priceIng; 
-    }
-    allPriceCart() {
-      var allPriceCart = 0;
-      
-      this.props.cart.map(item =>(
-        item.ing ?
-        allPriceCart = allPriceCart + this.priceIng(item.ing, item.chPrice, item.optionsPrice)
-        :
-        allPriceCart = allPriceCart + Number(item.chPrice) + Number(item.optionsPrice)
+  renderCardInCart(){
+    console.log("this.props.cart = ", this.props.cart);
+    return(
+      <View style={{ backgroundColor: '#fff', borderTopStartRadius: 10, borderTopEndRadius: 10,  height: 500, }}>
+        <View style={styles.viewTextTitle}>
+            <Text style={ styles.textTitle}>Ваши товары</Text>
+          </View>
+          <View style={{ backgroundColor: '#fff', borderRadius: 10, borderTopEndRadius: 0, borderTopStartRadius: 0, width: width - 40,  elevation: 2, }}>
+            <ScrollView style={{paddingBottom: 10,}}>
+            {
+              this.props.cart.map((i, index) => (
+              <View style={{ marginBottom: 5, marginTop: 5,}}>
+                <TouchableOpacity  key={index} underlayColor='rgba(255,255,255,0.1)'
+                  style={{ borderRadius: 10, elevation: 1,}} 
+                  onPress={() => this.props.navigation.navigate('ProductDetailView', { iProduct: i.iProduct, idInCart: i.idInCart, routeGoBack: 'inCart', iCategories: i.iCategories})}
+                  >
+                  <View style={{flexDirection: 'row', backgroundColor: '#fff', justifyContent: 'space-between', flex: 1}}>
+                    <View style={{ width: 80, alignItems: 'center', justifyContent:'center', padding:5, marginLeft: 5}}>
+                      <Image
+                        style={{width: 80, height: 80, zIndex: 0, }}
+                        source={ i.chMainImage === "" ? require('../assets/noImage.jpg') : { uri: i.chMainImage }}
+                        />
+                    </View>
+                    <View style={{ flex: 1, justifyContent: 'flex-start',}}>
+                      <Text style={styles.textNameStyle}>{i.chName}</Text>
+                      <Text style={styles.texOptionStyle}>{i.optionsName} {parseFloat(Number(i.chPrice) + Number(i.optionsPrice)).toFixed(2) +" " + this.props.customers.chCurrency}</Text>
+                      {this.renderIng(i.ing)}
+                      <Text style={styles.textPriceStyle}> {parseFloat(Number(i.chPrice) + Number(i.optionsPrice) + Number(this.state.ingPrice)).toFixed(2) +" " + this.props.customers.chCurrency} </Text>
+                                {this.oldPrice(i.chOldPrice)}
+                    </View>
+                    <View style={{justifyContent: 'flex-start', paddingTop: 10, paddingRight: 10,}}>
+                      <TouchableOpacity underlayColor='rgba(255,255,255,0.1)'
+                        onPress={() => { val = { key: i.key, idInCart: i.idInCart, iProduct: i.iProduct, } 
+                        this.props.delCart(val); } }>
+                        <Image style={{width: 25, height: 25}} source={require('../assets/iconDelInCart.png')}/>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              ))
+            }
+            </ScrollView>
+          </View>
+        </View>
         )
-      )
-      this.state.allPriceCart = allPriceCart;
-      
-      return parseFloat(allPriceCart).toFixed(2)+" " + this.props.customers.chCurrency;
+    }
+    divider()
+    {
+        return(
+        <View style={{
+            flex: 1,
+            borderBottomColor: '#E2E2E2',
+            borderBottomWidth: 1,
+            marginLeft: 10,
+            marginRight: 10,
+            justifyContent: 'center', alignItems: 'center',
+        }} />)
     }
     render() {
-
-      console.log("this.props.cart = ", this.props.cart);   
-      var {navigate} = this.props.navigation;
-      var {params} = this.props.navigation.state;
-      return (
+        var {navigate} = this.props.navigation;
+        return (
         <View style={styles.container}>
-          <ImageBackground
-          style={{ flex: 1, width: width, height: 170, marginTop:0, alignItems: 'center', justifyContent: 'flex-start'}}
-          imageStyle={{ resizeMode: 'cover' }}
-          source={require('../assets/main.png')}
-        >
+            <ImageBackground
+            style={{ flex: 1, width: width, height: 170, marginTop:0, alignItems: 'center', justifyContent: 'flex-start'}}
+            imageStyle={{ resizeMode: 'cover' }}
+            source={require('../assets/main.png')}>
             {
-              this.state.didFinishInitialAnimation === false ?
-              <ActivityIndicator size="large" color="#583286" />
+                this.state.didFinishInitialAnimation === false ?
+                <View style={{ alignItems: "center", justifyContent:'center'}}>
+                    <View style={ [styles.circleIcone, { marginTop: 84, }] }>
+                        <Image source={require('../assets/historyIcon.png')} style={ styles.imageIcon } />
+                        <ActivityIndicator size="large" color="#583286" style={{marginTop: 50,}} />
+                    </View>
+                </View>
                 :
-              this.props.cart.length >  0 ? 
-              <View style={{ 
-                width: width-50,
-                margin: 20,
-
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                borderRadius: 10,
-                elevation: 3,
-                backgroundColor: '#fff',
-                marginBottom: 50,
-              }}>
-                <Text style={styles.titleStyle}>Ваши товары</Text>
-                <ScrollView>
+                <View>
                 {
-                      this.props.cart.map((item, index) => (
-                  
-                        <Card
-                            key={this.generateKey()}
-                            iProduct={item.iProduct}
-                            idInCart={item.idInCart}   
-                            iCategories={item.iCategories}                    
-                            chName={item.chName}
-                            chMainImage={item.chMainImage}
-                            chPrice={item.chPrice}
-                            chOldPrice={item.chOldPrice}
-                            optionsId={item.optionsId}
-                            optionsName={item.optionsName}
-                            optionsPrice={item.optionsPrice}
-                            ing={item.ing}
-                            tegsProduct={item.tegsProduct}
-                            nav={this.props.navigation}
-                            index={index}
-                            
-                        />
-                      )
-                    )
-                  }
-                  <View style={{ marginTop: 10,}}/>
-                  <View style={styles.viewStringPrice}>
-                    <Text style={{fontSize: 14, fontFamily: 'Roboto', color: '#828282',}}>Стоимость товаров:</Text>
-                    <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-end", }}>
-                      <Text style={{}}>
-                            {this.allPriceCart()}
-                      </Text>
+                    this.props.cart.length >  0 ?
+                    <View>
+                        {this.renderCardInCart()}
                     </View>
-                  </View>
-                  <View style={styles.viewStringPrice}>
-                        <View style={{flexDirection: 'column',}}>
-                          <Text style={{fontSize: 14, fontFamily: 'Roboto', color: '#828282',}} >Доставка: </Text>
-                          <Text style={{
-                            fontFamily: 'Roboto',
-                            fontSize: 10,
-                            lineHeight: 12,
-                            color: '#BDBDBD',
-                          }}>(при заказе от 20 руб. доставка бесплатно) </Text>
+                    :
+                    <View style={{ alignItems: "center", justifyContent:'center'}}>
+                        <Text style={ styles.textNoItems }>Прошлые заказы</Text>
+                        <View style={ [styles.circleIcone, { marginTop: 40, }] }>
+                            <Image source={require('../assets/historyIcon.png')} style={ styles.imageIcon } />
                         </View>
-                    <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-end" }}>
-                      <Text style={{fontSize: 14, fontFamily: 'Roboto',}}> 0 </Text>
                     </View>
-                  </View>
-                  <View style={{ flex: 1,  flexDirection: 'row', alignItems: 'flex-start',
-                                  justifyContent: 'flex-start',
-                                  marginLeft: 15,  marginRight: 15,  marginBottom: 10,
-                                }}>
-                        <Text style={{color: '#6A3DA1', fontWeight: '600', fontSize: 16, fontFamily: 'Roboto'}}>К оплате: </Text>
-                        <View 
-                          style={{
-                            flex: 1,
-                            justifyContent: "flex-end",
-                            alignItems: "flex-end", 
-                          }}>
-                          <Text style={{color: '#6A3DA1', fontWeight: '600', fontSize: 16, fontFamily: 'Roboto'}}>
-                            {this.allPriceCart()}
-                          </Text>
-                        </View>
-                  </View>
-                  <TouchableOpacity style={{
-                      marginTop: 10, 
-                      alignItems: 'center',
-                      marginBottom: 20,
-                      justifyContent: 'center', }}
-                      /*onPress={() => alert('Checkout')}*/
-                      onPress={() => this.props.navigation.navigate('Checkout')}
-                      >
-                      <Text style = {styles.buttonText}>
-                        ОФОРМИТЬ ЗАКАЗ
-                      </Text>
-                  </TouchableOpacity>
-                </ScrollView>
-              </View>
-
-               :
-
-  
-               <EmptyCart 
-                    nav={this.props.navigation}
-                />
+                }
+                </View>
                 
-    
             }
-            
-    
-        </ImageBackground>
-      </View>
-        
-
+            </ImageBackground>
+        </View>
         );
-  }
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+    },
+    circleIcone:
+    {
+        backgroundColor: '#fff',
+        elevation: 2,
+        width: 124,
+        height: 124,
+        borderRadius: 70,
+        marginTop: 20,
+    },
+    imageIcon:{ 
+        zIndex: 1,
+        width: 70,
+        height: 64,
+        marginTop: 35,
+        justifyContent: 'center',
+        alignItems: "center",
+        marginLeft: 30,
+    },
+    textNoItems:{
+        fontFamily: 'Roboto',
+        fontWeight: '600',
+        fontSize: 14,
+        lineHeight: 24,
+        color: '#FFFFFF',
+        marginTop: 20,
+    },
+    viewTextTitle:{
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        width: width - 40,
+        zIndex: 1000,
+        
+    },
+    textTitle:{
+        fontFamily: 'Roboto',
+        fontWeight: '600',
+        fontSize: 14,
+        lineHeight: 24,
+        backgroundColor: '#6A3DA1',
+        borderRadius: 10,
+        color: '#F2F2F2',
+        height: 45,
+        paddingLeft: 20,
+        paddingTop: 10,
+    },
+    textDate:{
+        fontFamily: 'Roboto',
+        fontWeight: '400', 
+        fontSize: 12,
+        color:'#828282',
+        textAlign: 'center',
+    },
+    textNameStyle: { 
+      fontSize: 14, 
+      fontWeight: "600", 
+      color: '#F67695',
+      marginLeft: 10,
+      fontWeight: "600",
+      fontFamily: 'OswaldMedium',
   },
-  buttonText:{
-    borderWidth: 0,
-    padding: 10,
-    borderColor: '#6A3DA1',
-    backgroundColor: '#6A3DA1',
-    color: '#fff',
+    arrowBottom:
+    {
+        width: 15,
+        height: 15,
+        marginTop: 6,
+        marginLeft: 0,
+        marginRight: 3,
+    },
+    textPriceItem: {
+        fontFamily: 'Roboto',
+        fontSize: 12,
+        color: '#4E4E4E',
+    },
+    texOptionStyle:{
+      fontFamily: 'Roboto',
+      color: '#828282',
+      fontSize: 10,
+      paddingLeft: 10,
+  },
+  textOldPriceStyle:{
+    fontSize: 12, 
+    justifyContent: 'flex-end', 
+    color: '#BDBDBD', 
+    textDecorationLine: 'line-through', 
+    marginTop: 6, 
+    marginLeft: 5
+  },
+  textPriceStyle: {
+    marginTop: 3,
+    fontSize: 14, 
+    justifyContent: 'flex-end', 
+    color: '#6A3DA1',
     fontWeight: "600",
-    borderRadius: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
-    textAlign: "center",
-    
     fontFamily: 'OswaldMedium',
-    fontSize: 12,
-},
-  img:{
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 200,
-    opacity:.85,
   },
-  viewStringPrice:{
-    flex: 1,  flexDirection: 'row', alignItems: 'flex-start',
-                                  justifyContent: 'flex-start', 
-                                  marginLeft: 15,  marginRight: 15,  marginBottom: 10,
-  },
-  titleStyle:
-  {
-    fontFamily: 'Roboto',
-    fontWeight: '600',
-    fontSize: 14,
-    lineHeight: 20,
-    backgroundColor: '#6A3DA1',
-    borderRadius: 10,
-    color: '#F2F2F2',
-    height: 40,
-    paddingLeft: 20,
-    paddingTop: 7,
-  }
 
-
-  
 });
-  
-//export default connect(mapStateToProps)(Home);
-
 export default connect (
-  state => ({
-    cart: state.CartReducer,
-    banners: state.BannerReducer,
-    categories: state.CategoriesReducer,
-    products: state.ProductsReducer,
-    options: state.OptionReducer,
-    customers: state.CustomersReducer,
-  }),
-  dispatch => ({
-    addCart: (index) => {
-        dispatch({ type: 'ADD_CART', payload: index})
-    },
-    /*
-    onAddCategory: (categoryData) => {
-      dispatch({ type: 'ADD_CATEGORY', payload: categoryData});
-    },
-    onEditRootCategory: (categoryData) => {
-      dispatch({ type: 'EDIT_ROOT_CATEGORY', payload: categoryData});
-    },    
-    onEditCategory: (categoryData) => {
-      dispatch({ type: 'EDIT_CATEGORY', payload: categoryData});
-    },*/
-  })
-)(Cart);
+    state => ({
+      cart: state.CartReducer,
+      categories: state.CategoriesReducer,
+      products: state.ProductsReducer,
+      options: state.OptionReducer,
+      customers: state.CustomersReducer,
+      history: state.HistoryReducer,
+      user: state.UserReducer,
+    }),
+    dispatch => ({
+      delCart: (index) => {
+        dispatch({ type: 'DELETE_CART', payload: index})
+      }
+    })
+  )(Cart);

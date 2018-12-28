@@ -84,11 +84,7 @@ class History extends Component {
     }
     hideView(idOrder)
     {
-        console.log("idOrder = ", idOrder);
-        
         const resultProduct = this.props.history.filter(history => history.idOrder ===  idOrder);
-        console.log("resultProduct.isView = ", resultProduct[0].isView);
-        
         if(resultProduct[0].isView === true) {
             val = {
                 idOrder: idOrder,
@@ -113,9 +109,9 @@ class History extends Component {
                 borderTopStartRadius: 10,
                 borderTopEndRadius: 10,
                 height: 500,
-              }}>
-              <View style={styles.viewTextTitle}>
-                      <Text style={ styles.textTitle}>Ваши избранные товары</Text>
+            }}>
+                <View style={styles.viewTextTitle}>
+                    <Text style={ styles.textTitle}>Прошлые заказы</Text>
                 </View>
                 <View style={{
                     backgroundColor: '#fff',
@@ -130,7 +126,7 @@ class History extends Component {
                 this.props.history.map((item, index) => (
                 <View style={{ marginBottom: 5, marginTop: 5,}}>
                     <TouchableOpacity  key={index} underlayColor='rgba(255,255,255,0.1)'
-                      style={{  elevation: 2, backgroundColor: '#F2F2F2', height: 50, }} onPress={() =>  this.hideView(item.idOrder) }>
+                      style={{ borderRadius: 10, elevation: 1, backgroundColor: '#F2F2F2', height: 50, }} onPress={() =>  this.hideView(item.idOrder) }>
                         <View style={{flexDirection: 'row', backgroundColor: '#F2F2F2', justifyContent: 'space-between', flex: 1}}>
                             <View style={{ width: 80, alignItems: 'center', justifyContent:'center', }}>
                                 {this.dateOrder(item.dDateOrder)}
@@ -159,7 +155,7 @@ class History extends Component {
                             item.sostav.map((i, index)=>(
                                 this.renderItemsInSostav(i.chChangePrice,
                                 i.chNameProduct, i.chOption, i.chPriceProduct, i.iProduct,
-                                i.ingredients, index, item.sostav.length)
+                                i.ingredients, index, item.sostav.length, this.props.navigation)
                             ))
                         }
                         
@@ -173,12 +169,30 @@ class History extends Component {
             </View>
         )
     }
+    renderIng(ingredients) {
+        if(ingredients.length > 0)
+        {
+            return (ingredients.map((i, inedx) => (
+                <View>
+                    <Text style={{ color: '#828282', fontSize: 10,}}>
+                    {i.chNameIngridients} + 
+                    {parseFloat(Number(i.chChangePrice))} {this.props.customers.chCurrency}
+                    </Text>
+                </View>
+            )))
+        }
+        else
+            return null
+    }
     renderItemsInSostav(chChangePrice, chNameProduct, chOption, chPriceProduct, 
-        iProduct, ingredients, index, length) { 
+        iProduct, ingredients, index, length, nav) { 
         const product = this.props.products.filter(product => product.iProduct ===  iProduct);
-        console.log("product = ", product[0].chMainImage);
         
         return( 
+            <TouchableOpacity  key={index} underlayColor='rgba(255,255,255,0.1)'
+
+                      onPress={() => nav.navigate('ProductDetailView', { iProduct: iProduct, iCategories: product[0].iCategories})}
+                      >
         <View>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1, alignItems: 'center'}}>
                 <View style={{
@@ -191,13 +205,27 @@ class History extends Component {
                     />
                 </View>
                 <View style={{ flex: 1, }}>
-                    <Text style={{textAlign: 'left', color: '#4E4E4E', fontFamily: 'Roboto', fontSize: 12}}>{chNameProduct}</Text>
-                    </View>
+                    {
+                        ingredients.length === 0 ?
+                        <Text style={{textAlign: 'left', color: '#4E4E4E', fontFamily: 'Roboto', fontSize: 12}}>{chNameProduct}</Text>
+                        :
+                        <Text style={{textAlign: 'left', color: '#4E4E4E', fontFamily: 'Roboto', fontSize: 12}}>{chNameProduct} {parseFloat(Number(chPriceProduct))} {this.props.customers.chCurrency}</Text>
+                    }
+                    {
+                        parseInt(Number(chChangePrice)) !== 0 ?
+                        <Text>{chOption}</Text>
+                        :
+                        null
+                    }
+                    
+                    {this.renderIng(ingredients)}
+                </View>
                 <View style={{ width: 70, alignItems: "center"}}>
-                    <Text style={styles.textPriceItem}>{chPriceProduct} {this.props.customers.chCurrency}</Text>
+                    <Text style={styles.textPriceItem}>{ parseFloat(Number(chPriceProduct)) +  parseFloat(Number(chChangePrice))} {this.props.customers.chCurrency}</Text>
                 </View>
                 
             </View>
+            
         {
             /*
             length > 1 ?
@@ -211,7 +239,7 @@ class History extends Component {
             :
             this.divider()
         }
-        </View>)
+        </View></TouchableOpacity>)
     }
     divider()
     {
@@ -246,10 +274,8 @@ class History extends Component {
                 <View>
                 {
                     this.props.history.length >  0 ?
-
-                        <View>
-
-                    {this.renderCardHistory()}
+                    <View>
+                        {this.renderCardHistory()}
                     </View>
                     :
                     <View style={{ alignItems: "center", justifyContent:'center'}}>
@@ -328,7 +354,7 @@ const styles = StyleSheet.create({
     },
     textDate:{
         fontFamily: 'Roboto',
-        fontWeight: '500', 
+        fontWeight: '400', 
         fontSize: 12,
         color:'#828282',
         textAlign: 'center',

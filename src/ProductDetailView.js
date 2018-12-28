@@ -508,7 +508,7 @@ class ProductDetailView extends React.Component {
                     tegsProduct: result[0].tegs,
                     ing: this.state.ing.filter(op => op.value === true),
                   }
-                  console.log("val", val);
+                  //console.log("val", val);
                   
                   if(this.props.navigation.state.params.routeGoBack === 'inCart')
                     //alert(params.idInCart)
