@@ -1,8 +1,9 @@
 import React from 'react';
-import {  StyleSheet, TextInput, Text, View, Button, InteractionManager, ActivityIndicator, TouchableHighlight, Image, ScrollView, ImageBackground} from 'react-native';
+import {  StyleSheet, TextInput, Dimensions, Text, View, Button, InteractionManager, ActivityIndicator, TouchableHighlight, Image, ScrollView, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
 import Header from './components/Header';
 import { Sae } from 'react-native-textinput-effects';
+const { width } = Dimensions.get('window');
 
 class AddAddress extends React.Component {
     constructor(props){
@@ -280,7 +281,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         backgroundColor: '#fff',
         marginTop: 10,
-        width: 300,
+        width: width - 70,
     },
     textInputStyle: {
         height: 45, 

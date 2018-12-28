@@ -902,7 +902,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignContent: 'space-between',
-        width: 280,
+        width: width-80,
 
     },
     arrowRightNoSelectAddress:{

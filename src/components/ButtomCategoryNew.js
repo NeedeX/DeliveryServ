@@ -15,9 +15,9 @@ class CustomHeader extends Component {
                 () => this.props.nav.navigate('Category', { iCategories: this.props.iCategory, title: this.props.chName})
             }
             style={styles.touchableOpacityStyle}>
-                <View style={{elevation: 3,  borderRadius: 15}}>
+                <View style={{elevation: 2,  borderRadius: 15}}>
                     <Image source={ this.props.chMainImage.length > 0 ? { uri: this.props.chMainImage } : require('./assets/noImageAvailable.png')} 
-                    style={{  width: 144,  height: 104, borderRadius: 15, }}
+                    style={{  width: 146,  height: 106, borderRadius: 15, }}
                     imageStyle={{ borderRadius: 15 }}/>
                 </View>
                 <View style={{ flex: 1, flexDirection: 'row', borderRadius: 25, height: 50,}}>

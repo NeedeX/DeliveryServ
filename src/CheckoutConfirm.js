@@ -199,11 +199,11 @@ class CheckoutConfirm extends React.Component {
         var {navigate} = this.props.navigation;
         var {params} = this.props.navigation.state;
         return (
-        <ImageBackground
-            style={{ flex: 1, width: width, height: 170, }}
-            imageStyle={{ resizeMode: 'stretch' }}
+            <ImageBackground
+            style={{ flex: 1, width: width, height: 170, marginTop:0, alignItems: 'center', justifyContent: 'flex-start'}}
+            imageStyle={{ resizeMode: 'cover' }}
             source={require('../assets/main.png')}
-        >
+          >
         {
             this.state.didFinishInitialAnimation === false ?
             <ActivityIndicator size="large" color="#583286" />
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     viewStyleWrap:{
-        width: 320,
+        width: width-50,
         margin: 20,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,

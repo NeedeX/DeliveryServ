@@ -66,7 +66,7 @@ class Main extends Component {
   renderStocks(nav){
     return this.props.banners.map((banners, index) => (
       <TouchableOpacity activeOpacity={0.9} style={{flex: 1, }} key={index} onPress={() => nav('StocksView', { bannersId: banners.iStock, title: banners.chName, desc:banners.sDescriptio,  countInBasket: this.state.countInBasket })}>
-        <View style={{elevation: 3,height: 145,
+        <View style={{elevation: 2,height: 145,
         borderRadius: 20,}}>
         <Image key={banners.iStock} source={{ uri: banners.sImage }} style={styles.img}/> 
         </View>
@@ -102,6 +102,7 @@ class Main extends Component {
                 </Text>
                 </TouchableOpacity>
             </View>
+
               <Swiper
                   height={200}
                   autoplay={true}
@@ -112,16 +113,16 @@ class Main extends Component {
                   dot={<View style={{backgroundColor: 'rgba(0,0,0,.2)', width: 5, height: 5, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
                   >
                     {this.renderStocks(navigate)}
-            </Swiper>
-           
+              </Swiper>
+  
             </ImageBackground>
             <View>
             <Text style={{color: '#4E4E4E', fontFamily: 'OswaldSemiBold', fontSize: 20,
                   lineHeight: 37, marginLeft: 30,}}>Меню</Text>
             </View>
             <View style={{ flex: 1,
-                  paddingLeft: 24, paddingRight: 24, justifyContent: 'space-between',
-                  paddingBottom: 20,flexDirection: 'row', flexWrap: 'wrap'
+                   justifyContent: 'space-evenly',
+                  paddingBottom: 30, flexDirection: 'row', flexWrap: 'wrap'
                 }}>
               {
                 this.props.categories.map((cat, index) => (
@@ -180,16 +181,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  viewSwiper:
-  {
-    width: width,
-    marginTop: 10,
-    borderColor: '#fff',
-  },
+
   wrapper: { 
     marginLeft: 15,
     marginRight: 15,
-
   },
   img:{
         flex: 1,

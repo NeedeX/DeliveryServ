@@ -58,11 +58,10 @@ class CardProduct extends Component {
             style={{ width: this.itemWidth, backgroundColor:'#F3F3F3'
             }}>
             <View>
-                <View style={{backgroundColor: '#fff', 
-                borderRadius: 0, 
-                height: 120, flexDirection: 'row',  width: 320,
+                <View style={{backgroundColor: '#fff', borderRadius: 0,  flex: 1, 
+                height: 120, flexDirection: 'row',  width: width-50,
                 padding: 10 }}>
-                    <View style={{ flex: 0.5, }}>
+                    <View>
                         <Image
                         style={{width: 80, height: 80, zIndex: 0}}
                         source={ this.props.chMainImage === "" ? require('./assets/noImage.jpg') : { uri: this.props.chMainImage }}
@@ -133,8 +132,8 @@ class CardProduct extends Component {
                 {
                     this.props.index === this.props.cart.length - 1  ?
                     <Image style={{
-                        width: 295,
-                        marginLeft: (width - 40 - 290)/2,
+                        width: width-50,
+                        
                     }} source={require('./assets/lineDotted.png')} />
                     :
                     <View style={{
