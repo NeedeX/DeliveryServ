@@ -109,34 +109,28 @@ class Checkout extends React.Component {
     }
     getSelectAddressPickup()
     {
-        if(this.props.options.addressSelect !== undefined )
+        if(this.props.options.addressPickup !== undefined )
         {
-            let result = this.props.addresses.filter(x => x.idAddress === this.props.options.addressSelect);
+           
+            let result = this.props.locations.filter(x => x.idLocations === this.props.options.addressPickup);
 
-            var chHousing = result[0].chHousing ? "/"+result[0].chHousing : ""; // корпус
-            var chEntrance = result[0].chEntrance ? ", подъезд "+result[0].chEntrance : ""; // подъезд
-            var chFloor = result[0].chFloor ? ", этаж "+result[0].chFloor : ""; // этаж
-            var chApartment = result[0].chApartment ? ", кв. "+result[0].chApartment : "" // кв
-            var addressText = "г. "+result[0].chCity+", ул."+result[0].chStreet +" "+result[0].chNumHome+chHousing+chEntrance+chFloor+chApartment;
-            this.state.chDeliveryAddress = addressText;
-            var lengthaddress = addressText.length;
-
-            if(lengthaddress > 37) {
-                var length = addressText.length - 37;
-                addressText = addressText.substr(0, addressText.length - length)+"...";
-            }
+            console.log("result = ", result);
             
-            this.state.addressView = addressText;
+            this.state.addressView = "Выбрать из моих адресов";
+            this.state.chDeliveryAddress = '';
+            this.state.addressViewPickup = '"'+result[0].chName + '" '+ result[0].chAddress;
             
             this.state.selectStyleArrowAddress = styles.arrowRightSelectAddress;
             if(this.state.isViewInputAdressVisible === true) {
                 this.state.addressViewPickup = "Самовывоз";
+                this.state.addressView = "Выбрать из моих адресов";
                 this.state.selectStyleArrowAddress = styles.arrowRightNoSelectAddress;
                 this.state.chDeliveryAddress = '';
             }
         }
         else {
             this.state.addressViewPickup = "Самовывоз";
+            this.state.addressView = "Выбрать из моих адресов";
             this.state.selectStyleArrowAddress = styles.arrowRightNoSelectAddress;
             this.state.chDeliveryAddress = '';
         }
@@ -146,6 +140,7 @@ class Checkout extends React.Component {
     {
         if(this.props.options.addressSelect !== undefined )
         {
+            this.state.addressViewPickup = "Самовывоз";
             let result = this.props.addresses.filter(x => x.idAddress === this.props.options.addressSelect);
 
             var chHousing = result[0].chHousing ? "/"+result[0].chHousing : ""; // корпус
@@ -166,12 +161,14 @@ class Checkout extends React.Component {
             this.state.selectStyleArrowAddress = styles.arrowRightSelectAddress;
             if(this.state.isViewInputAdressVisible === true) {
                 this.state.addressView = "Выбрать из моих адресов";
+                this.state.addressViewPickup = "Самовывоз";
                 this.state.selectStyleArrowAddress = styles.arrowRightNoSelectAddress;
                 this.state.chDeliveryAddress = '';
             }
         }
         else {
             this.state.addressView = "Выбрать из моих адресов";
+            this.state.addressViewPickup = "Самовывоз";
             this.state.selectStyleArrowAddress = styles.arrowRightNoSelectAddress;
             this.state.chDeliveryAddress = '';
         }
@@ -989,7 +986,7 @@ export default connect (
     user: state.UserReducer,
     options: state.OptionReducer,
     customers: state.CustomersReducer,
-
+    locations: state.LocationReducer,
   }),
   dispatch => ({
     addCart: (index) => {
@@ -1004,6 +1001,9 @@ export default connect (
     clearOrder: (orderData) => {
         dispatch({ type: 'CLEAR_ORDER', payload: orderData});
     },
+    delOption: (index) => {
+        dispatch({ type: 'DEL_OPTION', payload: index});
+      }
     /*
     onEditRootCategory: (categoryData) => {
       dispatch({ type: 'EDIT_ROOT_CATEGORY', payload: categoryData});

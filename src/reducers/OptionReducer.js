@@ -3,6 +3,8 @@ const INITIAL_STATE =
   UIDClient: '519d772436da44bf1528',
   URL: 'http://mircoffee.by/deliveryserv/app/',
   CITY: 'Витебск', /// город введенный поумолчанию при оформлении заказа
+  addressSelect: undefined, 
+  addressPickup: undefined,
 };
 
 

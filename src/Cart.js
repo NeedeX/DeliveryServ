@@ -96,7 +96,7 @@ class Cart extends Component {
     return parseFloat(allPriceCart).toFixed(2)+" " + this.props.customers.chCurrency;
   }
   renderCardInCart(){
-    console.log("this.props.cart = ", this.props.cart);
+    //console.log("this.props.cart = ", this.props.cart);
     return(
       <View style={{ backgroundColor: '#fff', borderTopStartRadius: 10, borderTopEndRadius: 10,  height: 500, }}>
         <View style={styles.viewTextTitle}>

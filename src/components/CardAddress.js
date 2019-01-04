@@ -61,6 +61,7 @@ class CardAddress extends React.Component {
             this.props.addOption(val);
             var val = {
                 addressSelect: id,
+                addressPickup: undefined,
             }
             
             this.props.addOption(val);

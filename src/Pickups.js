@@ -29,16 +29,23 @@ class Pickups extends Component {
           });
         });
     }
-    selectPickup(id, route)
+    selectPickup(id, routeGoBack)
     {
-      console.log(route);
+      //console.log(id);
+      const tempArrLoc = this.props.locations.find(i => i.idLocations === id);
+      //console.log(tempArrLoc);
+      
       var val = {
-        idPickup: id,
-        }
+        //idPickup: id,
+        addressPickup: id,
+        addressSelect: undefined,
+      }
       this.props.addOption(val);
+      //console.log("this.props.options = ", this.props.options);
+      this.props.navigation.navigate(routeGoBack)
     }
     render() {
-      console.log( this.props.navigation.state.params.routeGoBack);
+    ///console.log( this.props.navigation.state.params.routeGoBack);
       
     return (
     <View style={styles.container}> 
@@ -51,12 +58,12 @@ class Pickups extends Component {
             this.state.didFinishInitialAnimation === false ?
             <ActivityIndicator size="large" color="#583286" />
             :
-            <View style={{ alignItems: 'center', justifyContent: 'center'}}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 20,}}>
               <View style={{ backgroundColor: '#fff', borderRadius: 10, width: width - 40,  elevation: 2, }}>
               <View style={styles.viewTextTitle}>
                 <Text style={ styles.textTitle}>Адреса самовывоза</Text>
               </View>
-              <RadioGroup selectedIndex={2} color='#6A3DA1'
+              <RadioGroup color='#6A3DA1'
                     onSelect = {(index, value) => this.selectPickup(value, this.props.navigation.state.params.routeGoBack)} >
                     {
 
@@ -124,7 +131,7 @@ export default connect (
       dispatch({ type: 'LOAD_LOCATION', payload: data});
     },*/
     addOption: (index) => {
-      dispatch({ type: 'ADD_OPTION_ID_PICKUP', payload: index});
-  },
+      dispatch({ type: 'ADD_OPTION', payload: index});
+    },
   })
 )(Pickups);
