@@ -20,7 +20,14 @@ export default function OptionReducer (state = INITIAL_STATE, action) {
             ...action.payload,
           }
       }
-      break;  
+      break;
+      case "ADD_OPTION_ID_PICKUP":{
+        return {
+          ...state,
+          ...action.payload,
+        }
+    }
+    break; 
       
       default:
         return state;

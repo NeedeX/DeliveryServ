@@ -29,7 +29,17 @@ class Pickups extends Component {
           });
         });
     }
+    selectPickup(id, route)
+    {
+      console.log(route);
+      var val = {
+        idPickup: id,
+        }
+      this.props.addOption(val);
+    }
     render() {
+      console.log( this.props.navigation.state.params.routeGoBack);
+      
     return (
     <View style={styles.container}> 
         <ImageBackground
@@ -47,12 +57,11 @@ class Pickups extends Component {
                 <Text style={ styles.textTitle}>Адреса самовывоза</Text>
               </View>
               <RadioGroup selectedIndex={2} color='#6A3DA1'
-                    onSelect = {(index, value) => console.log(index)} >
-                    
+                    onSelect = {(index, value) => this.selectPickup(value, this.props.navigation.state.params.routeGoBack)} >
                     {
 
                       this.props.locations.map((item, index) => (
-                        <RadioButton value={index}>
+                        <RadioButton value={item.idLocations}>
                           <View style={styles.arrowRightView}>
                             <Text>"{item.chName}" {item.chAddress}</Text>
                           </View>
@@ -114,5 +123,8 @@ export default connect (
     loadLocation: (data) => {
       dispatch({ type: 'LOAD_LOCATION', payload: data});
     },*/
+    addOption: (index) => {
+      dispatch({ type: 'ADD_OPTION_ID_PICKUP', payload: index});
+  },
   })
 )(Pickups);
