@@ -100,8 +100,8 @@ class Cart extends Component {
     return(
       <View style={{ backgroundColor: '#fff', borderTopStartRadius: 10, borderTopEndRadius: 10,  height: 500, }}>
         <View style={styles.viewTextTitle}>
-            <Text style={ styles.textTitle}>Ваши товары</Text>
-          </View>
+          <Text style={ styles.textTitle}>Ваши товары</Text>
+        </View>
           <View style={{ backgroundColor: '#fff', borderRadius: 10, borderTopEndRadius: 0, borderTopStartRadius: 0, width: width - 40,  elevation: 2, }}>
             <ScrollView style={{paddingBottom: 10,}}>
             {
