@@ -17,7 +17,7 @@ export default class Pickups extends Component {
             fontWeight: 'bold',
             textAlign: 'center',
           },
-          header: (props) => <Header title={'Адреса самовывоза'} nav={ navigation } {...props} />,
+          header: (props) => <Header title={'Пункты самовывоза'} nav={ navigation } {...props} />,
         };
     };
     componentDidMount() {

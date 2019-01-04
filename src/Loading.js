@@ -24,6 +24,7 @@ class Loading extends Component {
     this.loadingCategories(this.props.options.UIDClient, this.props.options.URL);
     this.loadingProducts(this.props.options.UIDClient, this.props.options.URL);
     this.loadingTegs(this.props.options.UIDClient, this.props.options.URL);
+    this.loadingLocation(this.props.options.UIDClient, this.props.options.URL);
     this.loadingUser();
   }
   static navigationOptions = {
@@ -37,6 +38,35 @@ class Loading extends Component {
       });
       
       
+    });
+  }
+  loadingLocation(UIDClient, URL){
+    //loadLocation
+    return fetch(URL+'LoadingLocations.php',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        UIDClient: UIDClient,
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+
+        //this.props.loadLocation(responseJson.locations);
+        console.log("this.props.locations = ", responseJson.locations);
+        this.setState(state => {
+          return {
+            progress: state.progress + loagIndex,
+          };
+        });
+
+    })
+    .catch((error) => {
+      console.error(error);
     });
   }
   loadingUser() {
@@ -321,8 +351,12 @@ export default connect (
     favorite: state.FavoriteReducer,
     customers: state.CustomersReducer,
     options: state.OptionReducer,
+    locations: state.LocationReducer,
   }),
   dispatch => ({
+    loadLocation: (data) => {
+      dispatch({ type: 'LOAD_LOCATION', payload: data});
+    },
     loadBanners: (bannersData) => {
       dispatch({ type: 'LOAD_BANNERS', payload: bannersData});
     },

@@ -514,7 +514,40 @@ class Checkout extends React.Component {
             )
         }
     }
+    validateName(text){
+        if(text.length === 0) { 
+            this.setState({errorName: 'Вы не ввели имя'});
+            this.setState({isErrorName: true})
+        }
+        else { 
+            this.setState({errorName: ''});
+            this.setState({isErrorName: false});
+            this.setState({chFIO:text}) 
+        }
+    }
+    validatePhone(text)
+    {
+        if(this.state.chFIO.length === 0) { 
+            this.setState({errorName: 'Вы не ввели имя'});
+            this.setState({isErrorName: true}) 
+        }
+        else { 
+            this.setState({errorName: ''});
+            this.setState({isErrorName: false}) 
+        }
 
+        //console.log(text);
+        let reg = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
+        if(reg.test(text) === false) {
+            this.setState({errorPhone:"Не верный номер телефона"})
+            this.setState({isErrorPhone: true});
+        }
+        else {
+            this.setState({chPhone: text})
+            this.setState({errorPhone: ''})
+            this.setState({isErrorPhone: false});
+        }
+    }
 
     render() {
         if(this.state.index === 0)
@@ -544,18 +577,36 @@ class Checkout extends React.Component {
                             onSubmitEditing={() => { this.focusNextField('Телефон'); }}
                             ref={ input => { this.inputs['Имя'] = input; }}
                             style={styles.textInputStyleNew}
-                            onChangeText={(chFIO) => this.setState({chFIO: chFIO}) }
+                            onChangeText={(chFIO) => this.validateName(chFIO)}
                         />
+                        <AnimatedHideView
+                            visible={this.state.isErrorName}
+                            style={{ padding: 0, marginTop: -10,}}
+                            duration={200}
+                            unmountOnHide={true} >
+                            <Text style={{ marginLeft: 10, color: 'red',}}>{this.state.errorName}</Text>
+                        </AnimatedHideView>
+                        
                         {this.divider()}
                         <Sae
                             label={'Телефон'}
                             style={styles.textInputStyleNew}
+                            keyboardType={'phone-pad'}
                             // TextInput props
                             autoCapitalize={'none'}
                             autoCorrect={false}
                             blurOnSubmit={ false }
-                            onChangeText={ (chPhone) => this.setState({chPhone: chPhone}) }
+                            onChangeText={ (chPhone) =>  this.validatePhone(chPhone)
+                        }
                         />
+                        <AnimatedHideView
+                        visible={this.state.isErrorPhone}
+                        style={{ padding: 0, marginTop: -10,}}
+                        duration={200}
+                        unmountOnHide={true}
+                        >
+                            <Text style={{ marginLeft: 10, color: 'red'}}>{this.state.errorPhone}</Text>
+                        </AnimatedHideView>
                     </View>
                     
                 </View>
@@ -722,7 +773,7 @@ class Checkout extends React.Component {
                     </RadioGroup>
                     <Text style={styles.text}>{/*this.state.chConfirmText*/}</Text>
                     {this.divider()}
-                    <TextInput style={{ color: 'red', }}
+                    <TextInput style={{ color: 'red', paddingLeft: 10,}}
                         multiline = {true}
                         underlineColorAndroid = "transparent"
                         placeholder = "Комментарий к заказу"
