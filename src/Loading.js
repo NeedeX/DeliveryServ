@@ -56,8 +56,8 @@ class Loading extends Component {
     .then((response) => response.json())
     .then((responseJson) => {
 
-        //this.props.loadLocation(responseJson.locations);
-        console.log("this.props.locations = ", responseJson.locations);
+        this.props.loadLocation(responseJson.locations);
+        console.log("this.props.locations = ", this.props.locations);
         this.setState(state => {
           return {
             progress: state.progress + loagIndex,

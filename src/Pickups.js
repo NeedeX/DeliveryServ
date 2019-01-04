@@ -42,20 +42,26 @@ class Pickups extends Component {
             <ActivityIndicator size="large" color="#583286" />
             :
             <View style={{ alignItems: 'center', justifyContent: 'center'}}>
+              <View style={{ backgroundColor: '#fff', borderRadius: 10, width: width - 40,  elevation: 2, }}>
               <View style={styles.viewTextTitle}>
                 <Text style={ styles.textTitle}>Адреса самовывоза</Text>
               </View>
-              <View style={{ backgroundColor: '#fff', borderRadius: 10, borderTopEndRadius: 0, borderTopStartRadius: 0, width: width - 40,  elevation: 2, }}>
-
+              <RadioGroup selectedIndex={2} color='#6A3DA1'
+                    onSelect = {(index, value) => console.log(index)} >
+                    
                     {
 
                       this.props.locations.map((item, index) => (
-                        <Text>{item.chAddress}</Text>
+                        <RadioButton value={index}>
+                          <View style={styles.arrowRightView}>
+                            <Text>"{item.chName}" {item.chAddress}</Text>
+                          </View>
+                        </RadioButton>
                         ))
 
                     }
     
-    
+                </RadioGroup>
               </View>
             </View>
         }
