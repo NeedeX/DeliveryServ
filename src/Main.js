@@ -18,7 +18,7 @@ class Main extends Component {
     };
     // Build a channel
   }
-
+///https://github.com/yangnana11/react-native-fcm-demo/blob/master/App.android.js
   async componentDidMount()
   {
     InteractionManager.runAfterInteractions(() => {
