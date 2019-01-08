@@ -30,7 +30,7 @@ class Drawer extends React.Component {
             </View>
             :
             <View style={{ height: 50, paddingLeft: 20, paddingTop: 10,}}>
-              <TouchableOpacity  onPress={() => this.props.navigation.navigate('Phone')}>
+              <TouchableOpacity  onPress={() => this.props.navigation.navigate('Cart')}>
                 <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 20 }}>Войти</Text>
               </TouchableOpacity>
             </View>

@@ -95,10 +95,10 @@ class Main extends Component {
             >
             <View style={ styles.viewStockTitleBtn }>
               <Text style={{color: '#F2F2F2', fontFamily: 'OswaldSemiBold', fontSize: 20,
-                lineHeight: 37, marginLeft: 30,}}>Акции</Text>
+                lineHeight: 37, marginLeft: 40,}}>Акции</Text>
                 <TouchableOpacity  onPress={() => this.props.navigation.navigate('Stocks')}>
                 <Text style={{color: '#F2F2F2', fontFamily: 'Roboto', fontSize: 14,
-                lineHeight: 24, marginRight: 30, marginTop: 10, fontWeight: '600'}}>все
+                lineHeight: 24, marginRight: 40, marginTop: 10, fontWeight: '600'}}>все
                 </Text>
                 </TouchableOpacity>
             </View>
@@ -118,11 +118,12 @@ class Main extends Component {
             </ImageBackground>
             <View>
             <Text style={{color: '#4E4E4E', fontFamily: 'OswaldSemiBold', fontSize: 20,
-                  lineHeight: 37, marginLeft: 30,}}>Меню</Text>
+                  lineHeight: 37, marginLeft: 40,}}>Меню</Text>
             </View>
-            <View style={{ flex: 1,
-                   justifyContent: 'space-evenly',
-                  paddingBottom: 30, flexDirection: 'row', flexWrap: 'wrap'
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', 
+                   justifyContent: 'space-around', 
+                   width: width - 30, marginLeft: 15,
+                  flexDirection: 'row', flexWrap: 'wrap'
                 }}>
               {
                 this.props.categories.map((cat, index) => (
@@ -177,14 +178,14 @@ class Main extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
 
   wrapper: { 
-    marginLeft: 15,
-    marginRight: 15,
+    marginLeft: 30,
+    marginRight: 30,
   },
   img:{
         flex: 1,

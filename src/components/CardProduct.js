@@ -107,13 +107,10 @@ class CardProduct extends Component {
             <TouchableOpacity
             activeOpacity={1}
             onPress={() => this.props.nav.navigate('ProductDetailView', { iProduct: this.props.iProduct, iCategories: this.props.iCategories,})}
-            style={{ width: this.itemWidth, backgroundColor:'#F3F3F3'
-            }}>
-                <View style={{ elevation: 1, backgroundColor: '#fff', 
-                borderRadius: 3, marginBottom: 10, 
-                flexDirection: 'row',
-                padding: 5,}}>
-                    <View style={{ flex: 0.5, }}>
+            >
+                <View style={{ flex: 1, flexDirection: "row", elevation: 2, marginBottom: 10, backgroundColor: '#fff'}}>
+                    {/* картинка */}
+                    <View style={{ margin: 10, marginRight: 5, minHeight: 100,}}>
                         <Image
                         style={{width: 100, height: 100, zIndex: 0}}
                         source={ this.props.chMainImage === "" ? require('./assets/noImage.jpg') : { uri: this.props.chMainImage }}
@@ -124,7 +121,7 @@ class CardProduct extends Component {
                             this.props.tegsProduct.length > 0 ?
                             this.props.tegsProduct.map((t, index) =>(
                                 <View key={index} style={{backgroundColor:  "#"+this.props.tegs.find(tf => tf.idTag === t.iTag).chColor,
-                                width: 58, height: 19, marginLeft: -5, borderBottomEndRadius: 5,
+                                width: 58, height: 19, marginLeft: -10, borderBottomEndRadius: 5,
                                 borderTopRightRadius: 5, marginBottom: 5,  
                                 }}>
                                     <Text style={{color: '#FFFFFF', textAlign: 'center', fontSize: 10,
@@ -139,79 +136,58 @@ class CardProduct extends Component {
                         }
                         </View>
                     </View>
-                    <View style={{ flexDirection: 'column', flex: 1, }}>
-                        <View style={{ flex: 1, }}>
-                            <View style={{ flexDirection: 'row', }}>
-                                <Text style={styles.textNameStyle}>{this.props.chName}</Text>
-                                
-                            </View>
-                            <Text style={styles.textDescrStyle}>{this.props.chDescription}</Text>
-                             { /*<Text style={styles.textWeightStyle}>Вес: {this.state.selectWeight}</Text> */ }
-                            <View style={{
-                                flexDirection: 'row',
-                            }}>
-                                {this.btnOptionsSelect(this.props.optionsProduct)}
-                            </View>
-                            
-                        </View>
-                        <View style={{ flexDirection: 'row', alignSelf: 'flex-end', alignItems: 'flex-end'}}>
-                            <View style={{ flex: 1,  flexDirection: 'row', alignItems: 'flex-start',
-                             justifyContent: 'flex-start',
-                            }}>
+                    {/** основа */}
+                    <View style={{ flex: 1, marginLeft: 5, marginRight: 10, justifyContent: 'center', }}>
+                        {/* Название */}
+                        <View ><Text style={styles.textNameStyle}>{this.props.chName}</Text></View>
+                        {/* Описание*/}
+                        <View><Text style={styles.textDescrStyle}>{this.props.chDescription}</Text></View>
+                        {/* опции*/}
+                        <View style={{  flexDirection: 'row', justifyContent: 'center',}}>{this.btnOptionsSelect(this.props.optionsProduct)}</View>
+                        {/* цена и кнопка*/}
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10,}}>
+                            {/* цена */}
+                            <View style={{ flexDirection: 'row'}}>
                                 <Text style={styles.textPriceStyle}> 
                                     {parseFloat(Number(this.props.chPrice) + Number(this.state.selectPriceChange)).toFixed(2) + " " + this.props.customers.chCurrency} 
                                 </Text>
                                 {this.oldPrice(this.props.chOldPrice)}
-                                <View style={{
-                                    flex: 1,
-                                    justifyContent: "flex-end",
-                                    alignItems: "flex-end" }}>
-                                
+                            </View>
+                            {/* кнопка */}
+                            <View>
                                 <TouchableHighlight underlayColor='rgba(255,255,255,0)'
-                                    style={{elevation: 3}}
-                                        onPress={() => {
-                                            var val = {};
-                                            val = {
-                                                key: this.generateKey(),
-                                                idInCart: this.generateKey(),
-                                                iProduct: this.props.iProduct,
-                                                iCategories: this.props.iCategories,
-                                                chMainImage: this.props.chMainImage,
-                                                chName: this.props.chName,
-                                                chDescription: this.props.chDescription,
-                                                chPrice: this.props.chPrice,
-                                                chOldPrice: this.props.chOldPrice,
-
-                                                optionsId: this.state.selectIdSetsDetail,
-                                                optionsPrice: this.state.selectPriceChange,
-                                                optionsName: this.state.selectOptionsName,
-                                                tegsProduct: this.props.tegsProduct
-                                                //iPrice: this.state.selectPrice,
-                                                //iOldPrice: this.state.selectOldPrice,
-                                            }
-                                            //console.log(val);
-                                            
-                                            this.props.addCart(val)        
-                                        }
+                                    style={{elevation: 2}}
+                                    onPress={() => {
+                                        var val = {};
+                                        val = {
+                                            key: this.generateKey(),
+                                            idInCart: this.generateKey(),
+                                            iProduct: this.props.iProduct,
+                                            iCategories: this.props.iCategories,
+                                            chMainImage: this.props.chMainImage,
+                                            chName: this.props.chName,
+                                            chDescription: this.props.chDescription,
+                                            chPrice: this.props.chPrice,
+                                            chOldPrice: this.props.chOldPrice,
+                                            optionsId: this.state.selectIdSetsDetail,
+                                            optionsPrice: this.state.selectPriceChange,
+                                            optionsName: this.state.selectOptionsName,
+                                            tegsProduct: this.props.tegsProduct
+                                            //iPrice: this.state.selectPrice,
+                                            //iOldPrice: this.state.selectOldPrice,
+                                        }     
+                                        this.props.addCart(val)        
+                                    }
                                     }>
-                                        {this.renderBtnInCart(this.props.iProduct)}
-                                    </TouchableHighlight>
-
-
-                                </View>
-                               
-                            
-                            
+                                    {this.renderBtnInCart(this.props.iProduct)}
+                                </TouchableHighlight>
                             </View>
                         </View>
                     </View>
                 </View>
             </TouchableOpacity>
-
         );
     }
-
-    
 }
 
 const styles = StyleSheet.create({
@@ -270,7 +246,9 @@ const styles = StyleSheet.create({
         color: '#4E4E4E',
         fontFamily: 'Roboto',
         fontWeight: '600',
-        lineHeight: 24
+        lineHeight: 14,
+        marginTop: 10,
+        marginBottom: 10,
     },
     textDescrStyle:{
         fontSize: 12, 
@@ -280,9 +258,6 @@ const styles = StyleSheet.create({
         color: '#828282',
         lineHeight: 14,
         paddingBottom: 3,
-  
-
-        
     },
     textWeightStyle:{
         fontFamily: 'Roboto',
@@ -295,17 +270,19 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end', 
         color: '#BDBDBD', 
         textDecorationLine: 'line-through', 
-        marginTop: 6, 
+        marginTop: 0, 
+        marginLeft: 5,
         
     },
     textPriceStyle: {
-        marginTop: 3,
+        marginTop: 9,
         fontSize: 14, 
         justifyContent: 'flex-end', 
         color: '#4E4E4E',
         fontWeight: "600",
         fontFamily: 'Roboto',
-        lineHeight: 24
+        lineHeight: 14,
+        paddingLeft: 10,
     }
 
   
