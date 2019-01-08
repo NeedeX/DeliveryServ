@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {StyleSheet, ImageBackground, Dimensions, Button, TouchableHighlight,TouchableOpacity, InteractionManager, ActivityIndicator, Image, Text, View, StatusBar, ScrollView} from 'react-native';
+import {StyleSheet, ImageBackground, Platform,Alert, Dimensions, Button, TouchableHighlight,TouchableOpacity, InteractionManager, ActivityIndicator, Image, Text, View, StatusBar, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
 import ButtomCategoryNew from './components/ButtomCategoryNew';
 import Header from './components/Header';
 const { width } = Dimensions.get('window');
 import firebase from 'react-native-firebase';
-//import type { Notification, NotificationOpen } from 'react-native-firebase';
+import type { Notification, NotificationOpen } from 'react-native-firebase';
 
 
 class Main extends Component {
@@ -19,176 +19,147 @@ class Main extends Component {
     // Build a channel
   }
 
-componentDidMount()
-{
-  InteractionManager.runAfterInteractions(() => {
-    this.setState({
-      didFinishInitialAnimation: true,
+  async componentDidMount()
+  {
+    InteractionManager.runAfterInteractions(() => {
+      this.setState({
+        didFinishInitialAnimation: true,
+      });
     });
-  });
-  firebase.auth().onAuthStateChanged(user => {
-    //console.log("==>");
-    if (user) {
-      this.setState({ userEmail: user._user.email});
-      this.setState({ userUid: user._user.uid});
-      //console.log("userEmail = ", this.state.userEmail);
-      //console.log("userUid = ", this.state.userUid);
-      console.log("this.props.user = ", this.props.user);
-      //this.checkUser();
-    }
-  })
-/*
-  const enabled =  firebase.messaging().hasPermission();
-  if (enabled) {
-      // user has permissions
-  } 
-  else {
-      // user doesn't have permission
-      try {
-           firebase.messaging().requestPermission();
-          // User has authorised
-      } catch (error) {
-          // User has rejected permissions
-          alert('No permission for notification');
+    firebase.auth().onAuthStateChanged(user => {
+      //console.log("==>");
+      if (user) {
+        this.setState({ userEmail: user._user.email});
+        this.setState({ userUid: user._user.uid});
+        //console.log("userEmail = ", this.state.userEmail);
+        //console.log("userUid = ", this.state.userUid);
+        console.log("this.props.user = ", this.props.user);
+        //this.checkUser();
       }
-  }
-
-  const notificationOpen: NotificationOpen =  firebase.notifications().getInitialNotification();
-  if (notificationOpen) {
-      // App was opened by a notification
-      // Get the action triggered by the notification being opened
+    })
+    const notificationOpen: NotificationOpen = await firebase.notifications().getInitialNotification();
+    console.log("notificationOpen = ", notificationOpen);
+  
+    if (notificationOpen) {
+      // Приложение было открыто уведомлением
+      // Получить действие, вызванное открытием уведомления
       const action = notificationOpen.action;
-      // Get information about the notification that was opened
+      console.log("action = ", action);
+      // Получить информацию об открытии уведомления
       const notification: Notification = notificationOpen.notification;
-      if (notification.body!==undefined) {
-          alert(notification.body);
+      console.log("notification1 = ", notification);
+      
+      if (notification!==undefined) {
+          alert(notification);
       } else {
-          var seen = [];
-          alert(JSON.stringify(notification.data, function(key, val) {
-              if (val != null && typeof val == "object") {
-                  if (seen.indexOf(val) >= 0) {
-                      return;
-                  }
-                  seen.push(val);
-              }
-              return val;
-          }));
+        var seen = [];
+        alert(JSON.stringify(notification, function(key, val) {
+            if (val != null && typeof val == "object") {
+                if (seen.indexOf(val) >= 0) {
+                    return;
+                }
+                seen.push(val);
+            }
+            return val;
+        }));
       }
-      firebase.notifications().removeDeliveredNotification(notification.notificationId);
-  }
-
-  const channel = new firebase.notifications.Android.Channel('test-channel', 'Test Channel', firebase.notifications.Android.Importance.Max)
-      .setDescription('My apps test channel');
-
-  // Create the channel
-  firebase.notifications().android.createChannel(channel);
-
-  firebase.messaging().subscribeToTopic('news1');
-
-  this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification: Notification) => {
-      // Process your notification as required
-      // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
-  });
-  this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
-      // Process your notification as required
-      console.log('get Message');
-      console.log(notification);
+      //firebase.notifications().removeDeliveredNotification(notification.notificationId);
+    }
+    const channel = new firebase.notifications.Android.Channel('test-channel', 'Test Channel', firebase.notifications.Android.Importance.Max)
+          .setDescription('My apps test channel');
+    // Создать канал
+    firebase.notifications().android.createChannel(channel);
+    this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification: Notification) => {
+      // Обработайте ваше уведомление как требуется
+      // ANDROID: Удаленные уведомления не содержат идентификатор канала. Вам нужно будет указать это вручную, если вы хотите повторно отобразить уведомление.
+    });
+    this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
+      // Обработайте ваше уведомление как требуется
+      console.log("notification2 = ", notification);
+      
       notification
           .android.setChannelId('test-channel')
           .android.setSmallIcon('ic_launcher');
       firebase.notifications()
           .displayNotification(notification);
-      // if (Platform.OS === 'android') {
-      //
-      //     const localNotification = new firebase.notifications.Notification({
-      //         sound: 'default',
-      //         show_in_foreground: true,
-      //         show_in_background: true
-      //     })
-      //         .setNotificationId(notification.notificationId)
-      //         .setTitle(notification.title)
-      //         .setSubtitle(notification.subtitle)
-      //         .setBody(notification.body)
-      //         .setData(notification.data)
-      //         .android.setChannelId('test-channel') // e.g. the id you chose above
-      //         .android.setSmallIcon('ic_launcher') // create this icon in Android Studio
-      //         .android.setColor('#000000') // you can set a color here
-      //         .android.setPriority(firebase.notifications.Android.Priority.High);
-      //
-      //     firebase.notifications()
-      //         .displayNotification(localNotification)
-      //         .catch(err => console.error(err));
-      //
-      // } else if (Platform.OS === 'ios') {
-      //
-      //     const localNotification = new firebase.notifications.Notification()
-      //         .setNotificationId(notification.notificationId)
-      //         .setTitle(notification.title)
-      //         .setSubtitle(notification.subtitle)
-      //         .setBody(notification.body)
-      //         .setData(notification.data)
-      //         .ios.setBadge(notification.ios.badge);
-      //
-      //     firebase.notifications()
-      //         .displayNotification(localNotification)
-      //         .catch(err => console.error(err));
-      //
-      // }
+      if (Platform.OS === 'android') {
+            //
+        const localNotification = new firebase.notifications.Notification({
+          sound: 'default',
+          show_in_foreground: true,
+          show_in_background: true
+        })
+        .setNotificationId(notification.notificationId)
+        .setTitle(notification.title)
+        //.setSubtitle(notification.subtitle)
+        .setBody(notification.body)
+        //.setData(notification.data)
+        .android.setChannelId('test-channel') // например идентификатор, который вы выбрали выше
+        .android.setSmallIcon('ic_launcher') // создать этот значок в Android Studio
+        .android.setColor('#000000') // Вы можете установить цвет здесь
+        .android.setPriority(firebase.notifications.Android.Priority.High);
+        //
+        firebase.notifications()
+        .displayNotification(localNotification)
+        .catch(err => console.error(err));
+            //
+      } 
+      //else if (Platform.OS === 'ios') {
+            //
+            //     const localNotification = new firebase.notifications.Notification()
+            //         .setNotificationId(notification.notificationId)
+            //         .setTitle(notification.title)
+            //         .setSubtitle(notification.subtitle)
+            //         .setBody(notification.body)
+            //         .setData(notification.data)
+            //         .ios.setBadge(notification.ios.badge);
+            //
+            //     firebase.notifications()
+            //         .displayNotification(localNotification)
+            //         .catch(err => console.error(err));
+            //
+            // }     
+      
   });
-  this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
+  this.notificationOpenedListener = 
+  firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
       // Get the action triggered by the notification being opened
       const action = notificationOpen.action;
       // Get information about the notification that was opened
       const notification: Notification = notificationOpen.notification;
-      // const notification = new firebase.notifications.Notification({
-      //     sound: 'default',
-      //     show_in_foreground: true,
-      //     show_in_background: true
-      // })
-      //     .setNotificationId(notificationOpen.notification.notificationId)
-      //     .setTitle(notificationOpen.notification.title)
-      //     .setSubtitle(notificationOpen.notification.subtitle)
-      //     .setBody(notificationOpen.notification.body)
-      //     .setData(notificationOpen.notification.data)
-      //     .android.setChannelId('test-channel') // e.g. the id you chose above
-      //     .android.setSmallIcon('ic_launcher') // create this icon in Android Studio
-      //     .android.setColor('#000000') // you can set a color here
-      //     .android.setPriority(firebase.notifications.Android.Priority.High);
-      if (notification.body!==undefined) {
-          alert(notification.body);
-          // var seen = [];
-          // alert(JSON.stringify(notification.data, function(key, val) {
-          //     if (val != null && typeof val == "object") {
-          //         if (seen.indexOf(val) >= 0) {
-          //             return;
-          //         }
-          //         seen.push(val);
-          //     }
-          //     return val;
-          // }));
-      } else {
-          var seen = [];
-          alert(JSON.stringify(notification.data, function(key, val) {
-              if (val != null && typeof val == "object") {
-                  if (seen.indexOf(val) >= 0) {
-                      return;
-                  }
-                  seen.push(val);
+      var seen = [];
+      Alert.alert(
+        notification.title,
+        notification.body,
+        [
+          {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+          {text: 'OK', onPress: () => firebase.notifications().removeDeliveredNotification(notification.notificationId)},
+        ],
+        { cancelable: false }
+      );
+      /*
+      alert(JSON.stringify(notification.body, function(key, val) {
+          if (val != null && typeof val == "object") {
+              if (seen.indexOf(val) >= 0) {
+                  return;
               }
-              return val;
-          }));
-      }
-      firebase.notifications().removeDeliveredNotification(notification.notificationId);
+              seen.push(val);
+          }
+          return val;
+      }));
+      */
+      //firebase.notifications().removeDeliveredNotification(notification.notificationId);
+      
   });
-*/
+
 }
-/*
+
 componentWillUnmount() {
   this.notificationDisplayedListener();
   this.notificationListener();
   this.notificationOpenedListener();
 }
-  */
+  
   static navigationOptions = ({ navigation  }) => {
     return {
     title: 'Home',
@@ -305,8 +276,8 @@ const styles = StyleSheet.create({
   },
 
   wrapper: { 
-    marginLeft: 30,
-    marginRight: 30,
+    marginLeft: 20,
+    marginRight: 20,
   },
   img:{
         flex: 1,
