@@ -5,6 +5,29 @@ import firebase from 'react-native-firebase';
 const bg  = require('../components/assets/drawerBg.png');
 
 class Drawer extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+        authState: 0,
+    }  
+
+  }
+  componentDidMount()
+    {
+        firebase.auth().onAuthStateChanged(user => {
+            //console.log("==>");
+            if (user) {
+                this.setState({ authState: 1 });
+               
+                //this.loadingFavorites(user.uid);
+                //console.log(user.uid);
+            }
+            else
+                this.setState({ authState: 0 });
+        });
+
+
+    }
   toggleDrawer = () => {
     this.props.navigator.toggleDrawer({
       side: 'left'
@@ -24,7 +47,7 @@ class Drawer extends React.Component {
   }
 
   render() {
-    console.log(  this.props.user.uid.length)
+
     return (
       <ImageBackground  
         source={bg} 
@@ -37,7 +60,7 @@ class Drawer extends React.Component {
           </View>
           {
            
-            this.props.user.uid.length > 0 ?
+            this.state.authState === 1 ?
             <View>
               { 
                 /*по email */
