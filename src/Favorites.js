@@ -86,7 +86,7 @@ class Favorites extends React.Component {
           view = <Text></Text>
         }
         else{
-          view = <Text style={styles.textOldPriceStyle}> { parseFloat(iOldPrice).toFixed(2) + " " + this.props.options.chCurrencyCode}  </Text>
+          view = <Text style={styles.textOldPriceStyle}> { parseFloat(iOldPrice).toFixed(2) + " " + this.props.customers.chCurrency}  </Text>
         }
         return view;
     }
@@ -158,8 +158,8 @@ class Favorites extends React.Component {
             if(index !== this.props.favorites.length-1)
             {
                 return(
-                <View style={{ borderBottomColor: '#E2E2E2', borderBottomWidth: 0.5,
-                    width: 295, marginLeft: (width - 40 - 290)/2,
+                <View style={{ borderBottomColor: '#E2E2E2', borderBottomWidth: 1,
+                    width: width - 70, 
                 }}/>
                 )
             }
@@ -175,7 +175,7 @@ class Favorites extends React.Component {
             return (
             <TouchableOpacity
             activeOpacity={1}
-            onPress={() => this.props.navigation.navigate('ProductDetail', { iProduct: resultProduct[0].iProduct, routeGoBack: 'favorites'})}
+            onPress={() => this.props.navigation.navigate('ProductDetailView', { iCategories: resultProduct[0].iCategories, iProduct: resultProduct[0].iProduct, routeGoBack: 'favorites'})}
             style={{ width: this.itemWidth }}>
                 <View style={{ backgroundColor: '#fff', 
                  marginBottom: 5, flexDirection: 'row', padding: 5,}}>
@@ -186,7 +186,7 @@ class Favorites extends React.Component {
                         />
                     </View>
                     <View style={{ flexDirection: 'column', flex: 1,backgroundColor: '#fff',
-                        marginLeft: 20,
+                        marginLeft: 0,
                     }}>
                         <View style={{ flex: 1, }}>
                             <View style={{ flexDirection: 'row', marginTop: 20,}}>
@@ -216,8 +216,10 @@ class Favorites extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-
+                <View style={{flex: 1, alignItems: 'center'}}>
                 {this.renderDivider(index)}
+                </View>
+                
                 
             </TouchableOpacity>
             )
