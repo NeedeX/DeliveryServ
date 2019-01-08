@@ -230,8 +230,8 @@ class Cart extends Component {
                         {this.renderCardInCart()}
                     </View>
                     :
-                    <View style={{ alignItems: "center", justifyContent:'center'}}>
-                        <Text style={ styles.textNoItems }>Ваши товары</Text>
+                    <View style={{ alignItems: "center", justifyContent:'center',}}>
+                        <Text style={ styles.textNoItems }>Корзина пуста</Text>
                         <View style={ [styles.circleIcone, { marginTop: 40, }] }>
                             <Image source={require('../assets/historyIcon.png')} style={ styles.imageIcon } />
                         </View>

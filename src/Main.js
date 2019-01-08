@@ -62,6 +62,15 @@ class Main extends Component {
   };
   signOut = () => {
     firebase.auth().signOut();
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        //this.loadingFavorites(user.uid);
+        //console.log(user.uid);
+        this.props.clearHistory();
+        this.props.clearFavorites();
+
+      }
+    });
   }
   renderStocks(nav){
     return this.props.banners.map((banners, index) => (
@@ -215,6 +224,12 @@ export default connect (
   dispatch => ({
     addUserData: (userData) => {
       dispatch({ type: 'EDIT_USER', payload: userData});
+    },
+    clearHistory: (data) => {
+      dispatch({ type: 'CLEAR_HISTORY', payload: data});
+    },
+    clearFavorites: (data) => {
+      dispatch({ type: 'CLEAR_FAVORITE', payload: data});
     },
   /*
     onAddCategory: (categoryData) => {

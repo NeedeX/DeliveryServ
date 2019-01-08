@@ -17,6 +17,9 @@ export default function HistoryReducer (state = INITIAL_STATE, action) {
             });
             return updatedRootItems;
         break;
+        case "CLEAR_HISTORY":
+        return INITIAL_STATE;
+        break;   
     default:
         return state;
     }
