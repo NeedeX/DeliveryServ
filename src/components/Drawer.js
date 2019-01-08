@@ -1,17 +1,30 @@
 import React from 'react';
 import {StyleSheet, View, ImageBackground, Image, Text, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
 const bg  = require('../components/assets/drawerBg.png');
 
 class Drawer extends React.Component {
-
   toggleDrawer = () => {
     this.props.navigator.toggleDrawer({
       side: 'left'
     });
   };
+  signOut = () => {
+    firebase.auth().signOut();
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        //this.loadingFavorites(user.uid);
+        //console.log(user.uid);
+        this.props.clearHistory();
+        this.props.clearFavorites();
+        this.props.navigation.navigate('Main')
+      }
+    });
+  }
 
   render() {
+    console.log(  this.props.user.uid.length)
     return (
       <ImageBackground  
         source={bg} 
@@ -23,14 +36,42 @@ class Drawer extends React.Component {
             style={{  width: 45, height: 45, }}/>
           </View>
           {
-            1 < 0 ?
-            <View style={{ height: 50, paddingLeft: 20,}}>
-              <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 20 }}>Имя</Text>
-              <Text style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 12 }}>+375 (22) 22-222-222</Text>
+           
+            this.props.user.uid.length > 0 ?
+            <View>
+              { 
+                /*по email */
+                this.props.user.phoneNumber === null ? 
+                <View>
+                  {
+                    this.props.user.displayName === null ?
+                    <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 16, marginTop: 14, marginLeft: 10,}}>{this.props.user.email}</Text>
+                    :
+                    <View style={{ height: 50, paddingLeft: 20,}}>
+                      <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 20 }}>{this.props.user.displayName}</Text>
+                      <Text style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 12 }}>{this.props.user.email}</Text>
+                    </View>
+                  }
+                </View>
+                
+                : /* по телефону */
+                <View>
+                  {
+                    this.props.user.displayName === null ?
+                    <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 16, marginTop: 14, marginLeft: 10,}}>{this.props.user.phoneNumber}</Text>
+                    :
+                    <View style={{ height: 50, paddingLeft: 20,}}>
+                      <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 20 }}>{this.props.user.displayName}</Text>
+                      <Text style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 12 }}>{this.props.user.phoneNumber}</Text>
+                    </View>
+                  }
+                </View>
+              }
             </View>
+            
             :
             <View style={{ height: 50, paddingLeft: 20, paddingTop: 10,}}>
-              <TouchableOpacity  onPress={() => this.props.navigation.navigate('Cart')}>
+              <TouchableOpacity  onPress={() => this.props.navigation.navigate('Phone')}>
                 <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 20 }}>Войти</Text>
               </TouchableOpacity>
             </View>
@@ -121,7 +162,23 @@ class Drawer extends React.Component {
             <Text style={styles.textMenu}>О приложении</Text>
           </View>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+          <View style={{ flexDirection: 'row', marginBottom: 20, }}>
+            <Image source={require('./assets/iconAbout.png')} 
+            style={ styles.iconsMenu }/>
+            <Text style={styles.textMenu}>Войти по e-mail</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() =>  this.signOut() }>
+          <View style={{ flexDirection: 'row', marginBottom: 20, }}>
+            <Image source={require('./assets/iconAbout.png')} 
+            style={ styles.iconsMenu }/>
+            <Text style={styles.textMenu}>Выйти</Text>
+          </View>
+        </TouchableOpacity>
       </ImageBackground>
+
+
     );
   }
 }
@@ -156,6 +213,7 @@ export default connect (
     categories: state.CategoriesReducer,
     products: state.ProductsReducer,
     order: state.OrderReducer,
+    user: state.UserReducer,
   }),
   dispatch => ({
     addCart: (index) => {
@@ -169,7 +227,13 @@ export default connect (
     },
     clearOrder: (orderData) => {
         dispatch({ type: 'CLEAR_ORDER', payload: orderData});
-    }
+    },
+    clearHistory: (data) => {
+      dispatch({ type: 'CLEAR_HISTORY', payload: data});
+    },
+    clearFavorites: (data) => {
+      dispatch({ type: 'CLEAR_FAVORITE', payload: data});
+    },
     /*
     onEditRootCategory: (categoryData) => {
       dispatch({ type: 'EDIT_ROOT_CATEGORY', payload: categoryData});

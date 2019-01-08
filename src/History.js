@@ -279,7 +279,7 @@ class History extends Component {
                     </View>
                     :
                     <View style={{ alignItems: "center", justifyContent:'center'}}>
-                        <Text style={ styles.textNoItems }>Прошлые заказы</Text>
+                        <Text style={ styles.textNoItems }>Вы еще ничего не заказывали</Text>
                         <View style={ [styles.circleIcone, { marginTop: 40, }] }>
                             <Image source={require('../assets/historyIcon.png')} style={ styles.imageIcon } />
                         </View>

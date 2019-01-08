@@ -60,18 +60,6 @@ class Main extends Component {
     ),
     };
   };
-  signOut = () => {
-    firebase.auth().signOut();
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        //this.loadingFavorites(user.uid);
-        //console.log(user.uid);
-        this.props.clearHistory();
-        this.props.clearFavorites();
-
-      }
-    });
-  }
   renderStocks(nav){
     return this.props.banners.map((banners, index) => (
       <TouchableOpacity activeOpacity={0.9} style={{flex: 1, }} key={index} onPress={() => nav('StocksView', { bannersId: banners.iStock, title: banners.chName, desc:banners.sDescriptio,  countInBasket: this.state.countInBasket })}>
@@ -146,36 +134,6 @@ class Main extends Component {
                 ))
               }
               </View>
-              <Button
-                onPress={
-                  () => this.props.navigation.navigate('Login')
-              }
-                title="Login"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
-              />
-              <Button
-                onPress={
-                  () => this.props.navigation.navigate('Phone')
-              }
-                title="Phone"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
-              />
-              <Button
-                onPress={
-                  () => this.props.navigation.navigate('CompletedOrder')
-              }
-                title="CompletedOrder"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
-              />
-              <Button
-            title="Выход"
-            onPress={() =>
-              this.signOut()
-            }
-          />
           </ScrollView>
         
         }
@@ -224,12 +182,6 @@ export default connect (
   dispatch => ({
     addUserData: (userData) => {
       dispatch({ type: 'EDIT_USER', payload: userData});
-    },
-    clearHistory: (data) => {
-      dispatch({ type: 'CLEAR_HISTORY', payload: data});
-    },
-    clearFavorites: (data) => {
-      dispatch({ type: 'CLEAR_FAVORITE', payload: data});
     },
   /*
     onAddCategory: (categoryData) => {
