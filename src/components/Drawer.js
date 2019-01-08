@@ -30,7 +30,7 @@ class Drawer extends React.Component {
             </View>
             :
             <View style={{ height: 50, paddingLeft: 20, paddingTop: 10,}}>
-              <TouchableOpacity  onPress={() => this.props.navigation.navigate('Stocks')}>
+              <TouchableOpacity  onPress={() => this.props.navigation.navigate('Phone')}>
                 <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 20 }}>Войти</Text>
               </TouchableOpacity>
             </View>
@@ -75,20 +75,7 @@ class Drawer extends React.Component {
             <Text style={styles.textMenu}>Избранное</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Addresses')}>
-          <View style={{ flexDirection: 'row', marginBottom: 20, }}>
-            <Image source={require('./assets/iconFavorites.png')} 
-            style={ styles.iconsMenu }/>
-            <Text style={styles.textMenu}>Адреса</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Pickups')}>
-          <View style={{ flexDirection: 'row', marginBottom: 20, }}>
-            <Image source={require('./assets/iconFavorites.png')} 
-            style={ styles.iconsMenu }/>
-            <Text style={styles.textMenu}>Локации</Text>
-          </View>
-        </TouchableOpacity>
+   
         <TouchableOpacity onPress={() => this.props.navigation.navigate('History')}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconHistory.png')} 
