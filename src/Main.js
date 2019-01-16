@@ -18,7 +18,8 @@ class Main extends Component {
     };
     // Build a channel
   }
-///https://github.com/yangnana11/react-native-fcm-demo/blob/master/App.android.js
+  ///https://github.com/yangnana11/react-native-fcm-demo/blob/master/App.android.js
+
   async componentDidMount()
   {
     InteractionManager.runAfterInteractions(() => {
@@ -37,128 +38,102 @@ class Main extends Component {
         //this.checkUser();
       }
     })
-    const notificationOpen: NotificationOpen = await firebase.notifications().getInitialNotification();
-    console.log("notificationOpen = ", notificationOpen);
-  
-    if (notificationOpen) {
-      // Приложение было открыто уведомлением
-      // Получить действие, вызванное открытием уведомления
-      const action = notificationOpen.action;
-      console.log("action = ", action);
-      // Получить информацию об открытии уведомления
-      const notification: Notification = notificationOpen.notification;
-      console.log("notification1 = ", notification);
-      
-      if (notification!==undefined) {
-          alert(notification);
-      } else {
-        var seen = [];
-        alert(JSON.stringify(notification, function(key, val) {
-            if (val != null && typeof val == "object") {
-                if (seen.indexOf(val) >= 0) {
-                    return;
-                }
-                seen.push(val);
-            }
-            return val;
-        }));
-      }
-      //firebase.notifications().removeDeliveredNotification(notification.notificationId);
+
+    this.checkPermission();
+    this.createNotificationListeners();
+
+  }
+  //2
+  async requestPermission() {
+    try {
+        await firebase.messaging().requestPermission();
+        // User has authorised
+        this.getToken();
+    } catch (error) {
+        // User has rejected permissions
+        console.log('permission rejected');
     }
-    const channel = new firebase.notifications.Android.Channel('test-channel', 'Test Channel', firebase.notifications.Android.Importance.Max)
-          .setDescription('My apps test channel');
-    // Создать канал
-    firebase.notifications().android.createChannel(channel);
-    this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification: Notification) => {
-      // Обработайте ваше уведомление как требуется
-      // ANDROID: Удаленные уведомления не содержат идентификатор канала. Вам нужно будет указать это вручную, если вы хотите повторно отобразить уведомление.
+  }
+  componentWillUnmount() {
+    this.getToken();
+    this.notificationListener();
+    this.notificationOpenedListener();
+  }
+  //1
+  async checkPermission() {
+    const enabled = await firebase.messaging().hasPermission();
+    console.log("enabled = ", enabled);
+    
+    if (enabled) {
+        this.getToken();
+    } else {
+        this.requestPermission();
+    }
+  }
+  //3
+  async getToken() {
+    let fcmToken = await AsyncStorage.getItem('fcmToken', value);
+    if (!fcmToken) {
+        fcmToken = await firebase.messaging().getToken();
+        if (fcmToken) {
+            // user has a device token
+            await AsyncStorage.setItem('fcmToken', fcmToken);
+            console.log("fcmToken = ", fcmToken);
+        }
+    }
+  }
+  async createNotificationListeners() {
+    /*
+    * Triggered when a particular notification has been received in foreground
+    Срабатывает, когда определенное уведомление было получено на переднем плане
+    * */
+    this.notificationListener = firebase.notifications().onNotification((notification) => {
+        console.log("notificationListener = ", notification);
+        const { title, body } = notification;
+        this.showAlert(title, body);
     });
-    this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
-      // Обработайте ваше уведомление как требуется
-      console.log("notification2 = ", notification);
-      
-      notification
-          .android.setChannelId('test-channel')
-          .android.setSmallIcon('ic_launcher');
-      firebase.notifications()
-          .displayNotification(notification);
-      if (Platform.OS === 'android') {
-            //
-        const localNotification = new firebase.notifications.Notification({
-          sound: 'default',
-          show_in_foreground: true,
-          show_in_background: true
-        })
-        .setNotificationId(notification.notificationId)
-        .setTitle(notification.title)
-        //.setSubtitle(notification.subtitle)
-        .setBody(notification.body)
-        //.setData(notification.data)
-        .android.setChannelId('test-channel') // например идентификатор, который вы выбрали выше
-        .android.setSmallIcon('ic_launcher') // создать этот значок в Android Studio
-        .android.setColor('#000000') // Вы можете установить цвет здесь
-        .android.setPriority(firebase.notifications.Android.Priority.High);
-        //
-        firebase.notifications()
-        .displayNotification(localNotification)
-        .catch(err => console.error(err));
-            //
-      } 
-      //else if (Platform.OS === 'ios') {
-            //
-            //     const localNotification = new firebase.notifications.Notification()
-            //         .setNotificationId(notification.notificationId)
-            //         .setTitle(notification.title)
-            //         .setSubtitle(notification.subtitle)
-            //         .setBody(notification.body)
-            //         .setData(notification.data)
-            //         .ios.setBadge(notification.ios.badge);
-            //
-            //     firebase.notifications()
-            //         .displayNotification(localNotification)
-            //         .catch(err => console.error(err));
-            //
-            // }     
-      
-  });
-  this.notificationOpenedListener = 
-  firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
-      // Get the action triggered by the notification being opened
-      const action = notificationOpen.action;
-      // Get information about the notification that was opened
-      const notification: Notification = notificationOpen.notification;
-      var seen = [];
-      Alert.alert(
-        notification.title,
-        notification.body,
-        [
-          {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-          {text: 'OK', onPress: () => firebase.notifications().removeDeliveredNotification(notification.notificationId)},
-        ],
-        { cancelable: false }
-      );
-      /*
-      alert(JSON.stringify(notification.body, function(key, val) {
-          if (val != null && typeof val == "object") {
-              if (seen.indexOf(val) >= 0) {
-                  return;
-              }
-              seen.push(val);
-          }
-          return val;
-      }));
-      */
-      //firebase.notifications().removeDeliveredNotification(notification.notificationId);
-      
-  });
-
-}
-
-componentWillUnmount() {
-  this.notificationDisplayedListener();
-  this.notificationListener();
-  this.notificationOpenedListener();
-}
+  
+    /*
+    * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
+    Если ваше приложение работает в фоновом режиме, вы можете прослушивать щелчок / нажатие / открытие уведомления следующим образом:
+    * */
+    this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+        console.log("notificationOpenedListener = ", notification);
+        const { title, body } = notificationOpen.notification;
+        this.showAlert(title, body);
+    });
+  
+    /*
+    * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
+    Если ваше приложение закрыто, вы можете проверить, было ли оно открыто с помощью уведомления / нажатия / открытия следующим образом:
+    * */
+    const notificationOpen = await firebase.notifications().getInitialNotification();
+    if (notificationOpen) {
+        console.log("notificationOpen = ", notificationOpen);
+        
+        const { title, body } = notificationOpen.notification;
+        this.showAlert(title, body);
+    }
+    /*
+    * Triggered for data only payload in foreground
+    * */
+    this.messageListener = firebase.messaging().onMessage((message) => {
+      //process data message
+      //const { title, body } = message._data.body;
+      this.showAlert( message._data.title,  message._data.body);
+      console.log("=> ", message);
+      //console.log(JSON.stringify(message));
+    });
+  }
+  showAlert(title, body) {
+    Alert.alert(
+      title, body,
+      [
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ],
+      { cancelable: false },
+    );
+  }  
   
   static navigationOptions = ({ navigation  }) => {
     return {
