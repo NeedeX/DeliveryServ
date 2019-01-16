@@ -102,7 +102,7 @@ class Main extends Component {
         const { title, body } = notificationOpen.notification;
         this.showAlert(title, body);
     });
-  
+  ////////////////////http://qaru.site/questions/24250/firebase-onmessagereceived-not-called-when-app-in-background/176765#176765
     /*
     * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
     Если ваше приложение закрыто, вы можете проверить, было ли оно открыто с помощью уведомления / нажатия / открытия следующим образом:
