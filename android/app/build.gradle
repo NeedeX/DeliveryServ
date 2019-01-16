@@ -156,6 +156,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-push-notification')
     implementation project(':react-native-firebase')
     implementation project(':react-native-gesture-handler')
 	implementation 'com.firebaseui:firebase-ui-auth:4.0.0'

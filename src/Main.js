@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import {StyleSheet, ImageBackground, Platform,Alert, Dimensions, Button, TouchableHighlight,TouchableOpacity, InteractionManager, ActivityIndicator, Image, Text, View, StatusBar, ScrollView} from 'react-native';
+import {StyleSheet, ImageBackground, Platform, TextInput, Alert, Dimensions, Button, TouchableHighlight,TouchableOpacity, InteractionManager, ActivityIndicator, Image, Text, View, StatusBar, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
 import ButtomCategoryNew from './components/ButtomCategoryNew';
 import Header from './components/Header';
 const { width } = Dimensions.get('window');
 import firebase from 'react-native-firebase';
-import type { Notification, NotificationOpen } from 'react-native-firebase';
-
+import NotifService from './NotifService';
+import appConfig from '../app.json';
 
 class Main extends Component {
   constructor(props) {
@@ -15,11 +15,26 @@ class Main extends Component {
     var {params} = this.props.navigation.state;
     this.state = { 
       didFinishInitialAnimation: false,
+      senderId: appConfig.senderID
     };
-    // Build a channel
+    this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
   }
   ///https://github.com/yangnana11/react-native-fcm-demo/blob/master/App.android.js
+  onRegister(token) {
+    Alert.alert("Registered !", JSON.stringify(token));
+    console.log(token);
+    this.setState({ registerToken: token.token, gcmRegistered: true });
+  }
 
+  onNotif(notif) {
+    console.log(notif);
+    //Alert.alert(notif.title, notif.body);
+    this.notif.localNotif(notif.title, notif.body)
+  }
+
+  handlePerm(perms) {
+    Alert.alert("Permissions", JSON.stringify(perms));
+  }
   async componentDidMount()
   {
     InteractionManager.runAfterInteractions(() => {
@@ -39,102 +54,12 @@ class Main extends Component {
       }
     })
 
-    this.checkPermission();
-    this.createNotificationListeners();
-
-  }
-  //2
-  async requestPermission() {
-    try {
-        await firebase.messaging().requestPermission();
-        // User has authorised
-        this.getToken();
-    } catch (error) {
-        // User has rejected permissions
-        console.log('permission rejected');
-    }
-  }
-  componentWillUnmount() {
-    this.getToken();
-    this.notificationListener();
-    this.notificationOpenedListener();
-  }
-  //1
-  async checkPermission() {
-    const enabled = await firebase.messaging().hasPermission();
-    console.log("enabled = ", enabled);
     
-    if (enabled) {
-        this.getToken();
-    } else {
-        this.requestPermission();
-    }
   }
-  //3
-  async getToken() {
-    let fcmToken = await AsyncStorage.getItem('fcmToken', value);
-    if (!fcmToken) {
-        fcmToken = await firebase.messaging().getToken();
-        if (fcmToken) {
-            // user has a device token
-            await AsyncStorage.setItem('fcmToken', fcmToken);
-            console.log("fcmToken = ", fcmToken);
-        }
-    }
-  }
-  async createNotificationListeners() {
-    /*
-    * Triggered when a particular notification has been received in foreground
-    Срабатывает, когда определенное уведомление было получено на переднем плане
-    * */
-    this.notificationListener = firebase.notifications().onNotification((notification) => {
-        console.log("notificationListener = ", notification);
-        const { title, body } = notification;
-        this.showAlert(title, body);
-    });
-  
-    /*
-    * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
-    Если ваше приложение работает в фоновом режиме, вы можете прослушивать щелчок / нажатие / открытие уведомления следующим образом:
-    * */
-    this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-        console.log("notificationOpenedListener = ", notification);
-        const { title, body } = notificationOpen.notification;
-        this.showAlert(title, body);
-    });
-    ///http://mircoffee.by/deliveryserv/app/test.php?Action=M&t=test_title&m=test_mes&r=d5SCDcSX3rI:APA91bEKrx-tS7YePaAgfuBR6LNhjC23LMenCzWlR-a-6_YqxL6VuhXxVcoZRVs9zUkex-65WVBy4aQeQF72IYk4gV66mXMGd_-QowzU9AMIbc7kXhHYfQjBD76x-lw2HT9n49D8UmKd
-  ////////////////////http://qaru.site/questions/24250/firebase-onmessagereceived-not-called-when-app-in-background/176765#176765
-    /*
-    * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
-    Если ваше приложение закрыто, вы можете проверить, было ли оно открыто с помощью уведомления / нажатия / открытия следующим образом:
-    * */
-    const notificationOpen = await firebase.notifications().getInitialNotification();
-    if (notificationOpen) {
-        console.log("notificationOpen = ", notificationOpen);
-        
-        const { title, body } = notificationOpen.notification;
-        this.showAlert(title, body);
-    }
-    /*
-    * Triggered for data only payload in foreground
-    * */
-    this.messageListener = firebase.messaging().onMessage((message) => {
-      //process data message
-      //const { title, body } = message._data.body;
-      this.showAlert( message._data.title,  message._data.body);
-      console.log("=> ", message);
-      //console.log(JSON.stringify(message));
-    });
-  }
-  showAlert(title, body) {
-    Alert.alert(
-      title, body,
-      [
-          { text: 'OK', onPress: () => console.log('OK Pressed') },
-      ],
-      { cancelable: false },
-    );
-  }  
+
+
+
+
   
   static navigationOptions = ({ navigation  }) => {
     return {
@@ -238,6 +163,32 @@ class Main extends Component {
           </ScrollView>
         
         }
+        <TextInput style={styles.textField} value={this.state.registerToken} placeholder="Register token" />
+        <View style={styles.spacer}></View>
+        <TextInput style={styles.textField} value={this.state.senderId} onChangeText={(e) => {this.setState({ senderId: e })}} placeholder="GCM ID" />
+        <TouchableOpacity style={styles.button} onPress={() => { this.notif.configure(this.onRegister.bind(this), this.onNotif.bind(this), this.state.senderId) }}><Text>Configure Sender ID</Text></TouchableOpacity>
+        {this.state.gcmRegistered && <Text>GCM Configured !</Text>}
+
+        <View style={styles.spacer}></View>
+        {/*}
+        <Text style={styles.title}>Example app react-native-push-notification</Text>
+        <View style={styles.spacer}></View>
+        <TextInput style={styles.textField} value={this.state.registerToken} placeholder="Register token" />
+        <View style={styles.spacer}></View>
+
+        <TouchableOpacity style={styles.button} onPress={() => { this.notif.localNotif() }}><Text>Local Notification (now)</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => { this.notif.scheduleNotif() }}><Text>Schedule Notification in 30s</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => { this.notif.cancelNotif() }}><Text>Cancel last notification (if any)</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => { this.notif.cancelAll() }}><Text>Cancel all notifications</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => { this.notif.checkPermission(this.handlePerm.bind(this)) }}><Text>Check Permission</Text></TouchableOpacity>
+
+        <View style={styles.spacer}></View>
+        <TextInput style={styles.textField} value={this.state.senderId} onChangeText={(e) => {this.setState({ senderId: e })}} placeholder="GCM ID" />
+        <TouchableOpacity style={styles.button} onPress={() => { this.notif.configure(this.onRegister.bind(this), this.onNotif.bind(this), this.state.senderId) }}><Text>Configure Sender ID</Text></TouchableOpacity>
+        {this.state.gcmRegistered && <Text>GCM Configured !</Text>}
+
+        <View style={styles.spacer}></View>
+      */}
       </View>
     );
   }

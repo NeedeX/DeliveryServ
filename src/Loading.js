@@ -14,17 +14,10 @@ class Loading extends Component {
     this.state = { 
       didFinishInitialAnimation: false,
       progress: 0, // прогресс загрузки
-      route: '',
+      route: '', 
     };
 
-    this.loadingOptions();
-
-    this.loadingCustomers(this.props.options.UIDClient, this.props.options.URL);
-    this.loadingBanners(this.props.options.UIDClient, this.props.options.URL);
-    this.loadingCategories(this.props.options.UIDClient, this.props.options.URL);
-    this.loadingProducts(this.props.options.UIDClient, this.props.options.URL);
-    this.loadingTegs(this.props.options.UIDClient, this.props.options.URL);
-    this.loadingLocation(this.props.options.UIDClient, this.props.options.URL);
+    this.props.loadOptions();
     this.loadingUser();
   }
   static navigationOptions = {
@@ -36,9 +29,14 @@ class Loading extends Component {
       this.setState({
         didFinishInitialAnimation: true,
       });
-      
-      
+
     });
+    this.loadingCustomers(this.props.options.UIDClient, this.props.options.URL);
+    this.loadingBanners(this.props.options.UIDClient, this.props.options.URL);
+    this.loadingCategories(this.props.options.UIDClient, this.props.options.URL);
+    this.loadingProducts(this.props.options.UIDClient, this.props.options.URL);
+    this.loadingTegs(this.props.options.UIDClient, this.props.options.URL);
+    this.loadingLocation(this.props.options.UIDClient, this.props.options.URL);
   }
   loadingLocation(UIDClient, URL){
     //loadLocation
@@ -63,7 +61,7 @@ class Loading extends Component {
             progress: state.progress + loagIndex,
           };
         });
-
+      
     })
     .catch((error) => {
       console.error(error);
@@ -76,29 +74,31 @@ class Loading extends Component {
         this.props.loadUser(user);
         this.loadingAddresses(user.uid);
         this.loadingFavorites(user.uid);
-        this.setState({ route: 'Main'})
+        //this.setState({ route: 'Main'})
+        this.state.route = 'Main';
         this.state.didFinishInitialAnimation ?
-        setTimeout(() => {
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [NavigationActions.navigate({ routeName: 'Main' })],
-        });
-        this.props.navigation.dispatch(resetAction);
-      }, 1500)
-      : null
+          setTimeout(() => {
+            const resetAction = StackActions.reset({
+              index: 0,
+              actions: [NavigationActions.navigate({ routeName: 'Main' })],
+            });
+            this.props.navigation.dispatch(resetAction);
+          }, 1500)
+        : null
       }
-      else
-      { this.setState({ route: 'Start'}) 
-      this.state.didFinishInitialAnimation ?
-      setTimeout(() => {
-      const resetAction = StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'Start' })],
-      });
-      this.props.navigation.dispatch(resetAction);
-    }, 1500)
-    : null
-    }
+      else { 
+        //this.setState({ route: 'Start'}) 
+        this.state.route = 'Start';
+        this.state.didFinishInitialAnimation ?
+          setTimeout(() => {
+            const resetAction = StackActions.reset({
+              index: 0,
+              actions: [NavigationActions.navigate({ routeName: 'Start' })],
+            });
+            this.props.navigation.dispatch(resetAction);
+          }, 1500)
+          : null
+      }
     })
   }
   loadingAddresses(chUIDGoogleUser){
@@ -149,13 +149,7 @@ class Loading extends Component {
       console.error(error);
     });
   }
-  loadingOptions()
-  {
-    this.props.loadOptions();
-    console.log("this.props.options", this.props.options);
-    this.setState(state => { return {  progress: state.progress + loagIndex, }; });
-   
-  }
+
   loadingCustomers(UIDClient, URL)
   {
     return fetch(URL+'LoadingCustomers.php',{
