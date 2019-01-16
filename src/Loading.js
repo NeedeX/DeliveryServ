@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import AnimatedBar from "react-native-animated-bar";
 YellowBox.ignoreWarnings(['Require cycle:']);
 
+
 const loagIndex = 0.4;
 
 class Loading extends Component {
@@ -18,19 +19,8 @@ class Loading extends Component {
     };
 
     this.props.loadOptions();
+    console.log("this.props.options = ", this.props.options);
     this.loadingUser();
-  }
-  static navigationOptions = {
-    header: null,
-    headerMode: 'none',
-  };
-  componentDidMount() {
-    InteractionManager.runAfterInteractions(() => {
-      this.setState({
-        didFinishInitialAnimation: true,
-      });
-
-    });
     this.loadingCustomers(this.props.options.UIDClient, this.props.options.URL);
     this.loadingBanners(this.props.options.UIDClient, this.props.options.URL);
     this.loadingCategories(this.props.options.UIDClient, this.props.options.URL);
@@ -38,8 +28,17 @@ class Loading extends Component {
     this.loadingTegs(this.props.options.UIDClient, this.props.options.URL);
     this.loadingLocation(this.props.options.UIDClient, this.props.options.URL);
   }
+  static navigationOptions = {
+    header: null,
+    headerMode: 'none',
+  };
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+      this.setState({ didFinishInitialAnimation: true });
+    });
+    
+  }
   loadingLocation(UIDClient, URL){
-    //loadLocation
     return fetch(URL+'LoadingLocations.php',{
       method: 'POST',
       headers: {
@@ -47,30 +46,23 @@ class Loading extends Component {
         'Accept-Encoding': "gzip, deflate",
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        UIDClient: UIDClient,
-      })
+      body: JSON.stringify({ UIDClient: UIDClient })
     })
     .then((response) => response.json())
     .then((responseJson) => {
-
         this.props.loadLocation(responseJson.locations);
         console.log("this.props.locations = ", this.props.locations);
-        this.setState(state => {
-          return {
-            progress: state.progress + loagIndex,
-          };
+        this.setState(state => { 
+          return { progress: state.progress + loagIndex }; 
         });
-      
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((error) => { 
+      console.error(error); 
     });
   }
   loadingUser() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-
         this.props.loadUser(user);
         this.loadingAddresses(user.uid);
         this.loadingFavorites(user.uid);
@@ -117,14 +109,16 @@ class Loading extends Component {
     .then((responseJson) => {
       this.props.clearAddresses();
       this.props.loadAddresses(responseJson.addresses);
-
       console.log("this.props.addresses = ", this.props.addresses);
-      this.setState(state => { return {  progress: state.progress + loagIndex, }; });
+      this.setState(state => { 
+        return {  progress: state.progress + loagIndex, }; 
+      });
     })
-    .catch((error) => { console.error(error); });
+    .catch((error) => { 
+      console.error(error); 
+    });
   }
-  loadingFavorites(chUIDGoogleUser)
-  {
+  loadingFavorites(chUIDGoogleUser){
     return fetch(this.props.options.URL+'LoadingFavorites.php', {
       method: 'POST',
       headers: {
@@ -165,22 +159,17 @@ class Loading extends Component {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-
         this.props.loadCustomers(responseJson);
         console.log("this.props.customers = ", this.props.customers);
         this.setState(state => {
-          return {
-            progress: state.progress + loagIndex,
-          };
+          return { progress: state.progress + loagIndex, };
         });
-
     })
     .catch((error) => {
       console.error(error);
     });
   }
-  loadingBanners(UIDClient, URL)
-  {
+  loadingBanners(UIDClient, URL){
     return fetch(URL+'LoadingBanners.php',{
       method: 'POST',
       headers: {
@@ -198,7 +187,6 @@ class Loading extends Component {
         this.setState(state => {
           return { progress: state.progress + loagIndex, };
         });
-
     })
     .catch((error) => {
       console.error(error);

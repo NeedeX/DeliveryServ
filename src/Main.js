@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, ImageBackground, Platform, TextInput, Alert, Dimensions, Button, TouchableHighlight,TouchableOpacity, InteractionManager, ActivityIndicator, Image, Text, View, StatusBar, ScrollView} from 'react-native';
+import {StyleSheet, ImageBackground, Platform, YellowBox, TextInput, Alert, Dimensions, Button, TouchableHighlight,TouchableOpacity, InteractionManager, ActivityIndicator, Image, Text, View, StatusBar, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
 import ButtomCategoryNew from './components/ButtomCategoryNew';
@@ -8,7 +8,7 @@ const { width } = Dimensions.get('window');
 import firebase from 'react-native-firebase';
 import NotifService from './NotifService';
 import appConfig from '../app.json';
-
+YellowBox.ignoreWarnings(['Require cycle:']);
 class Main extends Component {
   constructor(props) {
     super(props)
@@ -18,14 +18,38 @@ class Main extends Component {
       senderId: appConfig.senderID
     };
     this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
+
+    
   }
   ///https://github.com/yangnana11/react-native-fcm-demo/blob/master/App.android.js
+  insertRegisterToken(UIDClient, URL, token){
+    return fetch(URL+'InsertRegisterToken.php',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        UIDClient: UIDClient,
+        token: token
+       })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      
+    })
+    .catch((error) => { 
+      console.error(error); 
+    });
+  }
+
   onRegister(token) {
     Alert.alert("Registered !", JSON.stringify(token));
     console.log(token);
     this.setState({ registerToken: token.token, gcmRegistered: true });
+    
   }
-
   onNotif(notif) {
     console.log(notif);
     //Alert.alert(notif.title, notif.body);
@@ -53,14 +77,18 @@ class Main extends Component {
         //this.checkUser();
       }
     })
-
-    
+    firebase.messaging().getToken()
+    .then(fcmToken => {
+      if (fcmToken) {
+        // user has a device token
+        console.log("fcmToken = ", fcmToken);
+        this.insertRegisterToken(this.props.options.UIDClient, this.props.options.URL, fcmToken);
+      } else {
+        // user doesn't have a device token yet
+        console.log("user doesn't have a device token yet");
+      } 
+    });
   }
-
-
-
-
-  
   static navigationOptions = ({ navigation  }) => {
     return {
     title: 'Home',
@@ -163,6 +191,7 @@ class Main extends Component {
           </ScrollView>
         
         }
+        {/*}
         <TextInput style={styles.textField} value={this.state.registerToken} placeholder="Register token" />
         <View style={styles.spacer}></View>
         <TextInput style={styles.textField} value={this.state.senderId} onChangeText={(e) => {this.setState({ senderId: e })}} placeholder="GCM ID" />
@@ -170,7 +199,7 @@ class Main extends Component {
         {this.state.gcmRegistered && <Text>GCM Configured !</Text>}
 
         <View style={styles.spacer}></View>
-        {/*}
+        
         <Text style={styles.title}>Example app react-native-push-notification</Text>
         <View style={styles.spacer}></View>
         <TextInput style={styles.textField} value={this.state.registerToken} placeholder="Register token" />
