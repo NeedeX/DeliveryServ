@@ -64,15 +64,19 @@ class Drawer extends React.Component {
             <View>
               { 
                 /*по email */
-                this.props.user.phoneNumber === null ? 
+                this.props.user._user.phoneNumber === null ? 
                 <View>
                   {
-                    this.props.user.displayName === null ?
-                    <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 16, marginTop: 14, marginLeft: 10,}}>{this.props.user.email}</Text>
+                    this.props.user._user.displayName === null ?
+                    <View>
+                      <TouchableOpacity  onPress={() => this.props.navigation.navigate('Settings')}>
+                        <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 16, marginTop: 14, marginLeft: 10,}}>{this.props.user._user.email}</Text>
+                      </TouchableOpacity>
+                    </View>
                     :
                     <View style={{ height: 50, paddingLeft: 20,}}>
                       <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 20 }}>{this.props.user.displayName}</Text>
-                      <Text style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 12 }}>{this.props.user.email}</Text>
+                      <Text style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 12 }}>{this.props.user._user.email}</Text>
                     </View>
                   }
                 </View>
@@ -80,7 +84,7 @@ class Drawer extends React.Component {
                 : /* по телефону */
                 <View>
                   {
-                    this.props.user.displayName === null ?
+                    this.props.user._user.displayName === null ?
                     <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 16, marginTop: 14, marginLeft: 10,}}>{this.props.user.phoneNumber}</Text>
                     :
                     <View style={{ height: 50, paddingLeft: 20,}}>

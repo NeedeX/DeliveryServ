@@ -60,10 +60,12 @@ class Loading extends Component {
       console.error(error); 
     });
   }
+
   loadingUser() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.props.loadUser(user);
+        this.loadingUserDB(user.uid);
         this.loadingAddresses(user.uid);
         this.loadingFavorites(user.uid);
         //this.setState({ route: 'Main'})
@@ -92,6 +94,33 @@ class Loading extends Component {
           : null
       }
     })
+  }
+
+  loadingUserDB(chUIDGoogleUser){
+    return fetch(this.props.options.URL + 'LoadingUserDB.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chUIDGoogleUser: chUIDGoogleUser,
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log("responseJson = ", responseJson);
+      
+      this.props.editUser(responseJson);
+      console.log("this.props.user = ", this.props.user);
+      this.setState(state => { 
+        return {  progress: state.progress + loagIndex, }; 
+      });
+    })
+    .catch((error) => { 
+      console.error(error); 
+    });
   }
   loadingAddresses(chUIDGoogleUser){
     return fetch(this.props.options.URL + 'LoadingAddresses.php', {
@@ -132,9 +161,6 @@ class Loading extends Component {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      
-      
-      //his.props.clearFavorite();
       this.props.loadFavorites(responseJson.favorite);
       console.log("this.props.favorite = ", this.props.favorite);
       this.setState(state => { return {  progress: state.progress + loagIndex, }; });
@@ -356,6 +382,9 @@ export default connect (
     },
     loadUser: (userData) => {
       dispatch({ type: 'LOAD_USER', payload: userData})
+    },
+    editUser: (userData) => {
+      dispatch({ type: 'EDIT_USER', payload: userData})
     },
     loadAddresses: (index) => {
       dispatch({ type: 'LOAD_ADDERESSES', payload: index})

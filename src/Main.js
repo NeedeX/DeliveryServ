@@ -35,7 +35,7 @@ class Main extends Component {
         token: token
        })
     })
-    .then((response) => response.json())
+    //.then((response) => response.json())
     .then((responseJson) => {
       
     })
@@ -81,7 +81,7 @@ class Main extends Component {
     .then(fcmToken => {
       if (fcmToken) {
         // user has a device token
-        console.log("fcmToken = ", fcmToken);
+        //console.log("fcmToken = ", fcmToken);
         this.insertRegisterToken(this.props.options.UIDClient, this.props.options.URL, fcmToken);
       } else {
         // user doesn't have a device token yet

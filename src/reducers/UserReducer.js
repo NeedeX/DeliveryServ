@@ -8,8 +8,8 @@ export default function UserReducer (state = initialState, action) {
         break; 
       case "EDIT_USER":
         return {
-          ...state,
-          ...action.payload
+        ...state,
+        ...action.payload
         }
         /*     
       case "ADD_CART":
