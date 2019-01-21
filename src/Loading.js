@@ -110,10 +110,10 @@ class Loading extends Component {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log("responseJson = ", responseJson);
+      //console.log("responseJson = ", responseJson);
       
       this.props.editUser(responseJson);
-      console.log("this.props.user = ", this.props.user);
+      //console.log("this.props.user = ", this.props.user);
       this.setState(state => { 
         return {  progress: state.progress + loagIndex, }; 
       });

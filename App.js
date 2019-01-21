@@ -16,7 +16,11 @@ console.disableYellowBox = true;
 */
 
 
-const store = createStore(allReducers);
+//const store = createStore(allReducers);
+const store = createStore(
+  allReducers /* preloadedState, */,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 export default class App extends React.Component {
   render() {

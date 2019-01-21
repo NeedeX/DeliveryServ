@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StatusBar, ActivityIndicator, Dimensions, Image, ScrollView, TouchableOpacity, InteractionManager, ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {StatusBar, ActivityIndicator, Dimensions, TextInput, Image, ScrollView, TouchableOpacity, InteractionManager, ImageBackground, StyleSheet, Text, View} from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 import { Switch } from 'react-native-switch';
@@ -11,6 +11,9 @@ class Settings extends Component {
         var {params} = this.props.navigation.state;
         this.state = { 
           didFinishInitialAnimation: false,
+          switchPushNotification: this.props.user.userDB.iPushNotification,
+
+          name: this.props.user.userDB.chFIO !== "" ? this.props.user.userDB.chFIO : 'Имя', 
         };
     }
     static navigationOptions = ({ navigation  }) => {
@@ -26,25 +29,52 @@ class Settings extends Component {
     };
     componentDidMount()
     {
-    InteractionManager.runAfterInteractions(() => {
-      this.setState({
-        didFinishInitialAnimation: true,
-      });
-    });
-    firebase.auth().onAuthStateChanged(user => {
-      //console.log("==>");
-      if (user) {
-        this.setState({ userEmail: user._user.email});
-        this.setState({ userUid: user._user.uid});
-        //console.log("userEmail = ", this.state.userEmail);
-        //console.log("userUid = ", this.state.userUid);
-        console.log("this.props.user = ", this.props.user);
-        //this.checkUser();
-      }
-    })
-  }
-  divider()
-    {
+        InteractionManager.runAfterInteractions(() => {
+            this.setState({
+                didFinishInitialAnimation: true,
+            });
+        });
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                this.setState({ userEmail: user._user.email});
+                this.setState({ userUid: user._user.uid});
+                //console.log("userEmail = ", this.state.userEmail);
+                //console.log("userUid = ", this.state.userUid);
+            }
+        })
+    }
+    switchPushNotificationInDB(value){
+        var val = value === true ? 1 : 0;
+        fetch(this.props.options.URL + 'SwitchPushNotification.php', 
+        {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Accept-Encoding': "gzip, deflate",
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chUIDGoogleUser: this.props.user.userDB.chUIDGoogleUser,
+                iPushNotification: val,
+            })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+            console.log("responseJson = ",responseJson);
+            if(responseJson === 1)
+                this.props.editPushNotification(value);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+    switchPushNotification(value){
+        //console.log("value = ", value);
+        this.state.switchPushNotification =  value;
+        this.switchPushNotificationInDB(value);
+        console.log("user = ", this.props.user);
+    }
+    divider(){
         return(
         <View style={{
             flex: 1,
@@ -56,7 +86,15 @@ class Settings extends Component {
             alignItems: 'center',
         }} />)
     }
-  render() {
+    chamgeName(val){
+        console.log("name = ", val);
+        
+    }
+    onEndEditingName(){
+        console.log("onEndEditingName = ", onEndEditingName);
+        
+    }
+    render() {
     return (
         <View style={styles.container}>
         <StatusBar
@@ -85,7 +123,15 @@ class Settings extends Component {
                         <Text style={styles.cardTitleStyle}>Аккаунт</Text> 
                     </View>
                     <View style={styles.viewCardStyle}>
-                        <Text style={styles.cardTextStyle}>Имя</Text>
+                        <TextInput
+                            placeholder={'Имя'}
+                            
+                            style={styles.cardTextInputStyle}
+                            editable = {true}
+                            maxLength = {40}
+                            onEndEditing={(name) => this.onEndEditingName(name)}
+                            onChangeText={(name) => this.chamgeName(name)}
+                        />
                         {this.divider()}
                         <Text style={styles.cardTextStyle}>Телефон</Text>
                         {this.divider()}
@@ -107,15 +153,16 @@ class Settings extends Component {
                     <View style={styles.viewCardStyle}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text style={styles.cardTextStyle}>Push сообщения </Text>
-                            <View style={{marginTop: 10, backgroundColor: '#ccc', height: 100,}}>
+                           
+                            <View style={{marginTop: 10, marginRight: 10,}}>
                                 <Switch
                             
-                                    value={true}
-                                    onValueChange={(val) => console.log(val)}
+                                    value={this.state.switchPushNotification}
+                                    onValueChange={(val) => this.switchPushNotification(val)}
                                     disabled={false}
 
-                                    circleSize={30}
-                                    barHeight={20}
+                                    circleSize={25}
+                                    barHeight={15}
                                     useNativeDriver={true}
                                     circleBorderWidth={0}
                                     backgroundActive={'#b49ed0'}
@@ -135,10 +182,7 @@ class Settings extends Component {
                                 />
                             </View>
                         </View>
-                        {this.divider()}
-                        <Text style={styles.cardTextStyle}>{this.props.user._user.email}</Text>
-                        {this.divider()}
-                        <Text style={styles.cardTextStyle}>Дата рождения</Text>
+
                     </View>
                 </View>
             }
@@ -205,6 +249,16 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '#4E4E4E',
         margin: 10,
+    },
+    cardTextInputStyle:{
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: '400',
+        fontSize: 12,
+        color: '#4E4E4E',
+        marginLeft: 10,
+
+        padding: 2,
     }
 });
 
@@ -222,6 +276,9 @@ export default connect (
       customers: state.CustomersReducer,
     }),
     dispatch => ({
+        editPushNotification: (data) => {
+            dispatch({ type: 'EDIT_PUSH', payload: data});
+          },
     /*
       onAddCategory: (categoryData) => {
         dispatch({ type: 'ADD_CATEGORY', payload: categoryData});

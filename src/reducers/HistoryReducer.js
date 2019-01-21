@@ -10,7 +10,7 @@ export default function HistoryReducer (state = INITIAL_STATE, action) {
             // проходим по основному state
             const updatedRootItems = state.map(item => {
                 if(item.idOrder === action.payload.idOrder){
-                    console.log("action.payload.idOrder", action.payload.isView);
+                    //console.log("action.payload.idOrder", action.payload.isView);
                     return {...item, ...action.payload};
                 }
                 return item;

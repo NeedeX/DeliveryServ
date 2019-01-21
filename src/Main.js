@@ -53,7 +53,8 @@ class Main extends Component {
   onNotif(notif) {
     console.log(notif);
     //Alert.alert(notif.title, notif.body);
-    this.notif.localNotif(notif.title, notif.body)
+    if(this.props.user.userDB.iPushNotification === true)
+      this.notif.localNotif(notif.title, notif.body)
   }
 
   handlePerm(perms) {

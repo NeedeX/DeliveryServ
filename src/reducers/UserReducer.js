@@ -11,6 +11,16 @@ export default function UserReducer (state = initialState, action) {
         ...state,
         ...action.payload
         }
+        break; 
+      case "EDIT_PUSH":
+
+        state.userDB.iPushNotification = action.payload;
+        var userDB = state.userDB;
+        return{
+          ...state,
+          userDB
+          };
+        break; 
         /*     
       case "ADD_CART":
        
