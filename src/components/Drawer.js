@@ -85,7 +85,9 @@ class Drawer extends React.Component {
                 <View>
                   {
                     this.props.user._user.displayName === null ?
-                    <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 16, marginTop: 14, marginLeft: 10,}}>{this.props.user.phoneNumber}</Text>
+                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('Settings')}>
+                        <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 16, marginTop: 14, marginLeft: 10,}}>{this.props.user._user.phoneNumber}</Text>
+                    </TouchableOpacity>
                     :
                     <View style={{ height: 50, paddingLeft: 20,}}>
                       <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 20 }}>{this.props.user.displayName}</Text>

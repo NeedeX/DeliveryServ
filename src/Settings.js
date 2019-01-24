@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {StatusBar, ActivityIndicator, Dimensions, TextInput, Image, ScrollView, TouchableOpacity, InteractionManager, ImageBackground, StyleSheet, Text, View} from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
+import DatePicker from 'react-native-datepicker';
 import { Switch } from 'react-native-switch';
 import Header from './components/Header';
 const { width } = Dimensions.get('window');
@@ -12,8 +13,9 @@ class Settings extends Component {
         this.state = { 
           didFinishInitialAnimation: false,
           switchPushNotification: this.props.user.userDB.iPushNotification,
-
-          name: this.props.user.userDB.chFIO !== "" ? this.props.user.userDB.chFIO : 'Имя', 
+          chPhone: this.props.user.userDB.chPhone,
+          chFIO: this.props.user.userDB.chFIO, 
+          chDateOfBirth: this.props.user.userDB.chDateOfBirth
         };
     }
     static navigationOptions = ({ navigation  }) => {
@@ -43,9 +45,12 @@ class Settings extends Component {
             }
         })
     }
+    signOut = () => {
+        firebase.auth().signOut();
+    }
     switchPushNotificationInDB(value){
         var val = value === true ? 1 : 0;
-        fetch(this.props.options.URL + 'SwitchPushNotification.php', 
+        fetch(this.props.options.URL + 'EditSettings.php', 
         {
             method: 'POST',
             headers: {
@@ -54,6 +59,7 @@ class Settings extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                action: 'switchPushNotification',
                 chUIDGoogleUser: this.props.user.userDB.chUIDGoogleUser,
                 iPushNotification: val,
             })
@@ -70,9 +76,9 @@ class Settings extends Component {
     }
     switchPushNotification(value){
         //console.log("value = ", value);
-        this.state.switchPushNotification =  value;
-        this.switchPushNotificationInDB(value);
-        console.log("user = ", this.props.user);
+        this.state.switchPushNotification =  value; // устанавливаем в стейт
+        this.switchPushNotificationInDB(value); // записываем в БД
+        //console.log("user = ", this.props.user);
     }
     divider(){
         return(
@@ -86,13 +92,39 @@ class Settings extends Component {
             alignItems: 'center',
         }} />)
     }
-    chamgeName(val){
-        console.log("name = ", val);
-        
+    chamgeName(name){
+        //console.log("name = ", name);
+        this.setState({chFIO: name})
     }
-    onEndEditingName(){
-        console.log("onEndEditingName = ", onEndEditingName);
-        
+    onEndEditingName(name){
+        //console.log("Закончили ввод onEndEditingName = ", name);
+        //this.props.editName(name);
+        this.setNameInDB(name);
+        console.log("USER = ", this.props.user);
+    }
+    setNameInDB(name){
+        fetch(this.props.options.URL + 'EditSettings.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Accept-Encoding': "gzip, deflate",
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'setName',
+                chUIDGoogleUser: this.props.user.userDB.chUIDGoogleUser,
+                chFIO: name,
+            })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+            //console.log("responseJson = ", responseJson);
+            if(responseJson === 1)
+                this.props.editName(name);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
     }
     render() {
     return (
@@ -122,20 +154,48 @@ class Settings extends Component {
                     <View style={{ marginTop: 10}}>
                         <Text style={styles.cardTitleStyle}>Аккаунт</Text> 
                     </View>
-                    <View style={styles.viewCardStyle}>
+                    <View style={[styles.viewCardStyle, { paddingBottom: 0}]}>
                         <TextInput
                             placeholder={'Имя'}
-                            
+                            value={this.state.chFIO}
                             style={styles.cardTextInputStyle}
                             editable = {true}
                             maxLength = {40}
-                            onEndEditing={(name) => this.onEndEditingName(name)}
+                            onEndEditing={() => this.onEndEditingName(this.state.chFIO)}
                             onChangeText={(name) => this.chamgeName(name)}
                         />
                         {this.divider()}
-                        <Text style={styles.cardTextStyle}>Телефон</Text>
+                        <Text style={styles.cardTextStyle}>{this.state.chPhone}</Text>
                         {this.divider()}
-                        <Text style={styles.cardTextStyle}>Дата рождения</Text>
+                        <View style={{height: 33,}}>
+                        <DatePicker
+                            style={{width: 180, }}
+                            date={this.state.chDateOfBirth}
+                            androidMode="spinner"
+                            mode="date"
+                            placeholder="Дата рождения"
+                            //format="DD-MM-YYYY"
+                            format="DD.MM.YYYY"
+                            minDate={this.state.minDate}
+                            maxDate={this.state.maxDate}
+                            showIcon={false}
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            customStyles={{
+                                dateInput: { marginLeft: 10, height: 20, borderRadius: 5, backgroundColor: '#fff', 
+                                paddingBottom: 0, marginTop: -10, paddingBottom: 0, textAlign: 'right', 
+                                marginBottom: 0, fontFamily: 'Roboto', borderWidth: 0,
+                                fontStyle: 'normal',
+                                fontWeight: '400',
+                                fontSize: 12, 
+                                color: 'red',
+                                margin: 10,
+                                alignItems: 'flex-start'
+                            }
+                            }}
+                            onDateChange={(date) => {this.setState({chDateOfBirth: date})}}
+                        />
+                        </View>
                     </View>
                     <View style={{ marginTop: 10}}>
                         <Text style={styles.cardTitleStyle}>Настройки</Text> 
@@ -183,6 +243,19 @@ class Settings extends Component {
                             </View>
                         </View>
 
+                    </View>
+                    <View style={[styles.viewCardStyle, { marginTop: 10,}]}>
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <TouchableOpacity  onPress={() => this.signOut()}>
+                                <Text style={styles.cardTextStyle}>Выйти из аккаунта</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {this.divider()}
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <TouchableOpacity  onPress={() => this.props.navigation.navigate('Addresses')}>
+                                <Text style={[styles.cardTextStyle, {color: '#EB5757', }]}>Удалить аккаунт</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             }
@@ -237,7 +310,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         fontStyle: 'normal',
         fontWeight: 'bold',
-        fontSize: 14,
+        fontSize: 15,
         color: '#4E4E4E',
         marginLeft: 30,
         marginBottom: 3,
@@ -246,7 +319,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         fontStyle: 'normal',
         fontWeight: '400',
-        fontSize: 12,
+        fontSize: 14,
         color: '#4E4E4E',
         margin: 10,
     },
@@ -254,7 +327,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         fontStyle: 'normal',
         fontWeight: '400',
-        fontSize: 12,
+        fontSize: 14,
         color: '#4E4E4E',
         marginLeft: 10,
 
@@ -279,6 +352,10 @@ export default connect (
         editPushNotification: (data) => {
             dispatch({ type: 'EDIT_PUSH', payload: data});
           },
+        editName: (data) => { 
+            dispatch({ type: 'EDIT_NAME', payload: data});
+        },
+        
     /*
       onAddCategory: (categoryData) => {
         dispatch({ type: 'ADD_CATEGORY', payload: categoryData});
