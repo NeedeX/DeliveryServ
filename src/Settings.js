@@ -3,6 +3,8 @@ import {StatusBar, ActivityIndicator, Dimensions, TextInput, Image, ScrollView, 
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 import DatePicker from 'react-native-datepicker';
+import Dialog from "react-native-dialog";
+import RNRestart from 'react-native-restart'
 import { Switch } from 'react-native-switch';
 import Header from './components/Header';
 const { width } = Dimensions.get('window');
@@ -15,7 +17,8 @@ class Settings extends Component {
           switchPushNotification: this.props.user.userDB.iPushNotification,
           chPhone: this.props.user.userDB.chPhone,
           chFIO: this.props.user.userDB.chFIO, 
-          chDateOfBirth: this.props.user.userDB.chDateOfBirth
+          chDateOfBirth: this.props.user.userDB.chDateOfBirth,
+          visibleDeletedWindow: false,
         };
     }
     static navigationOptions = ({ navigation  }) => {
@@ -62,6 +65,7 @@ class Settings extends Component {
                 action: 'switchPushNotification',
                 chUIDGoogleUser: this.props.user.userDB.chUIDGoogleUser,
                 iPushNotification: val,
+                UIDClient: this.props.options.UIDClient,
             })
         })
         .then((response) => response.json())
@@ -115,6 +119,7 @@ class Settings extends Component {
                 action: 'setName',
                 chUIDGoogleUser: this.props.user.userDB.chUIDGoogleUser,
                 chFIO: name,
+                UIDClient: this.props.options.UIDClient,
             })
         })
         .then((response) => response.json())
@@ -139,6 +144,7 @@ class Settings extends Component {
                 action: 'setDateOfBirth',
                 chUIDGoogleUser: this.props.user.userDB.chUIDGoogleUser,
                 chDateOfBirth: chDateOfBirth,
+                UIDClient: this.props.options.UIDClient,
             })
         })
         .then((response) => response.json())
@@ -155,6 +161,45 @@ class Settings extends Component {
         this.setState({chDateOfBirth: date});
         this.setDateOfBirthInDB(date);
     }
+    deletedAccount(){
+        this.setState({ visibleDeletedWindow: false });
+        fetch(this.props.options.URL + 'EditSettings.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Accept-Encoding': "gzip, deflate",
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'deletedAccount',
+                chUIDGoogleUser: this.props.user.userDB.chUIDGoogleUser,
+                UIDClient: this.props.options.UIDClient,
+            })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+            //console.log("responseJson = ", responseJson);
+            if(responseJson === 1)
+                RNRestart.Restart();
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+    showDialog = () => {
+        this.setState({ visibleDeletedWindow: true });
+    };
+    // отмена
+    handleCancel = () => {
+        this.setState({ visibleDeletedWindow: false });
+    };
+    // да, удалить
+    handleDelete = () => {
+        // The user has pressed the "Delete" button, so here you can do your own logic.
+        //this.setState({ visibleDeletedWindow: false });
+        this.deletedAccount();
+    };
+
     render() {
     return (
         <View style={styles.container}>
@@ -278,9 +323,19 @@ class Settings extends Component {
                         </View>
                         {this.divider()}
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <TouchableOpacity  onPress={() => this.props.navigation.navigate('Addresses')}>
+                            <TouchableOpacity  onPress={this.showDialog}>
                                 <Text style={[styles.cardTextStyle, {color: '#EB5757', }]}>Удалить аккаунт</Text>
                             </TouchableOpacity>
+                        </View>
+                        <View>
+                            <Dialog.Container visible={this.state.visibleDeletedWindow}>
+                            <Dialog.Title>Удалить аккаунт</Dialog.Title>
+                            <Dialog.Description>
+                            Вы хотите удалить учетную запись? Вы не сможете отменить это действие.
+                            </Dialog.Description>
+                            <Dialog.Button label="Отмена" color="#6A3DA1" onPress={this.handleCancel}/>
+                            <Dialog.Button label="Удалить" color="#6A3DA1" onPress={this.handleDelete}/>
+                            </Dialog.Container>
                         </View>
                     </View>
                 </View>
