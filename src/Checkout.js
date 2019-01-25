@@ -14,8 +14,8 @@ class Checkout extends React.Component {
         super(props);
         var {params} = this.props.navigation.state;
         this.state = {
-            chFIO: '',              // имя
-            chPhone:  '',           // телефон
+            chFIO: this.props.user.userDB.chFIO !== "" ? this.props.user.userDB.chFIO : "",              // имя
+            chPhone:  this.props.user.userDB.chPhone !== "" ? this.props.user.userDB.chPhone : "",          // телефон
 
             // доставка
             chDeliveryAddress: '',  // адрес
@@ -567,6 +567,7 @@ class Checkout extends React.Component {
                          <Sae
                             label={'Имя'}
                             autoFocus
+                            value={this.state.chFIO}
                             // TextInput props
                             autoCapitalize={'none'}
                             autoCorrect={false}
@@ -588,6 +589,7 @@ class Checkout extends React.Component {
                         <Sae
                             label={'Телефон'}
                             style={styles.textInputStyleNew}
+                            value={this.state.chPhone}
                             keyboardType={'phone-pad'}
                             // TextInput props
                             autoCapitalize={'none'}

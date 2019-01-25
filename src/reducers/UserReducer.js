@@ -30,6 +30,14 @@ export default function UserReducer (state = initialState, action) {
           userDB
           };
         break;
+      case "EDIT_DateOfBirth":
+        state.userDB.chFIO = action.payload;
+        var userDB = state.userDB;
+        return{
+          ...state,
+          userDB
+          };
+        break;
         /*     
       case "ADD_CART":
        

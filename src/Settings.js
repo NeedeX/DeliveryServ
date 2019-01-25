@@ -102,6 +102,7 @@ class Settings extends Component {
         this.setNameInDB(name);
         console.log("USER = ", this.props.user);
     }
+
     setNameInDB(name){
         fetch(this.props.options.URL + 'EditSettings.php', {
             method: 'POST',
@@ -125,6 +126,34 @@ class Settings extends Component {
         .catch((error) => {
             console.error(error);
         });
+    }
+    setDateOfBirthInDB(chDateOfBirth){
+        fetch(this.props.options.URL + 'EditSettings.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Accept-Encoding': "gzip, deflate",
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'setDateOfBirth',
+                chUIDGoogleUser: this.props.user.userDB.chUIDGoogleUser,
+                chDateOfBirth: chDateOfBirth,
+            })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+            //console.log("responseJson = ", responseJson);
+            if(responseJson === 1)
+                this.props.editDateOfBirth(chDateOfBirth);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+    setDateOfBirth(date){
+        this.setState({chDateOfBirth: date});
+        this.setDateOfBirthInDB(date);
     }
     render() {
     return (
@@ -169,6 +198,7 @@ class Settings extends Component {
                         {this.divider()}
                         <View style={{height: 33,}}>
                         <DatePicker
+        
                             style={{width: 180, }}
                             date={this.state.chDateOfBirth}
                             androidMode="spinner"
@@ -185,15 +215,11 @@ class Settings extends Component {
                                 dateInput: { marginLeft: 10, height: 20, borderRadius: 5, backgroundColor: '#fff', 
                                 paddingBottom: 0, marginTop: -10, paddingBottom: 0, textAlign: 'right', 
                                 marginBottom: 0, fontFamily: 'Roboto', borderWidth: 0,
-                                fontStyle: 'normal',
-                                fontWeight: '400',
-                                fontSize: 12, 
-                                color: 'red',
-                                margin: 10,
-                                alignItems: 'flex-start'
-                            }
+                                fontStyle: 'normal', fontWeight: '400', fontSize: 12, 
+                                color: 'red', margin: 10, alignItems: 'flex-start',
+                                }
                             }}
-                            onDateChange={(date) => {this.setState({chDateOfBirth: date})}}
+                            onDateChange={(date) => {this.setDateOfBirth(date)}}
                         />
                         </View>
                     </View>
@@ -355,7 +381,9 @@ export default connect (
         editName: (data) => { 
             dispatch({ type: 'EDIT_NAME', payload: data});
         },
-        
+        editDateOfBirth: (data) => { 
+            dispatch({ type: 'EDIT_DateOfBirth', payload: data});
+        },
     /*
       onAddCategory: (categoryData) => {
         dispatch({ type: 'ADD_CATEGORY', payload: categoryData});
