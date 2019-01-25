@@ -98,7 +98,6 @@ class Addresses extends Component {
                   </View>
                   
                 </View>
-                
             </View>
             
     }
@@ -124,7 +123,7 @@ class Addresses extends Component {
             :
             <View>
             {
-                this.props.addresses.length >  0 ?
+                this.props.addresses !== null ?
                 this.renderViewListAddresses()
                 :
                 <View style={{ alignItems: "center", justifyContent:'center'}}>

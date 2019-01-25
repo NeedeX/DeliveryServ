@@ -163,6 +163,7 @@ class Settings extends Component {
     }
     deletedAccount(){
         this.setState({ visibleDeletedWindow: false });
+        this.signOut();
         fetch(this.props.options.URL + 'EditSettings.php', {
             method: 'POST',
             headers: {

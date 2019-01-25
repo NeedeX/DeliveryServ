@@ -13,7 +13,34 @@ export default class Login extends React.Component {
           .then(() => this.props.navigation.navigate('Main'))
           .catch(error => this.setState({ errorMessage: error.message }))
     }
-
+    userDB(user)
+    {
+      //console.log("UIDGoogleUser = ", user.uid);
+      //console.log("chPhone = ", user.phoneNumber);
+      //console.log("chUID = ", this.props.options.UIDClient);
+    
+      return fetch(this.props.options.URL+'InsertUser.php',{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Accept-Encoding': "gzip, deflate",
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          UIDGoogleUser: user.uid,
+          chPhone: user.phoneNumber,
+          UIDClient: this.props.options.UIDClient,
+        })
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+  
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  
+    }
     render() {
         return (
         <View style={styles.container}>
