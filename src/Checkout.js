@@ -60,6 +60,7 @@ class Checkout extends React.Component {
             minDate: moment().format("DD-MM-YYYY"),
             maxDate: moment(Number(this.props.customers.iDaysAhead)*86400000 + new Date().getTime()).format("DD-MM-YYYY"),
             //this.props.iDaysAhead+"-05-2018",
+            isErrorName: false,
         
         }
         

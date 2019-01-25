@@ -14,7 +14,7 @@ class History extends Component {
             AuthState: 0,
             didFinishInitialAnimation: false,
         }  
-        this.loadingHistory(this.props.user.uid);
+        this.loadingHistory(this.props.user.userDB.chUIDGoogleUser);
     }
     static navigationOptions = ({ navigation  }) => {
         return {
