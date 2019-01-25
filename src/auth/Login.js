@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import firebase from 'react-native-firebase';
-
-export default class Login extends React.Component {
+import { connect } from 'react-redux';
+class Login extends React.Component {
     state = { email: '', password: '', errorMessage: null }
 
     handleLogin = () => {
@@ -11,7 +11,27 @@ export default class Login extends React.Component {
           .auth()
           .signInWithEmailAndPassword(email, password)
           .then(() => this.props.navigation.navigate('Main'))
-          .catch(error => this.setState({ errorMessage: error.message }))
+          .catch(error => this.setState({ errorMessage: error.message }));
+          //this.loadingUser();
+    }
+    loadingUser() {
+      firebase.auth().onAuthStateChanged(user => {
+          console.log("user = ", user);
+          /*
+          this.props.loadUser(user);
+          //this.loadingUserDB(user.uid);
+          //this.setState({ route: 'Main'})
+          this.userDB(user)
+
+            setTimeout(() => {
+              const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'Main' })],
+              });
+              this.props.navigation.dispatch(resetAction);
+            }, 1500)
+          */
+      })
     }
     userDB(user)
     {
@@ -28,7 +48,7 @@ export default class Login extends React.Component {
         },
         body: JSON.stringify({
           UIDGoogleUser: user.uid,
-          chPhone: user.phoneNumber,
+          chPhone: "",
           UIDClient: this.props.options.UIDClient,
         })
       })
@@ -87,3 +107,58 @@ const styles = StyleSheet.create({
     marginTop: 8
   }
 })
+
+export default connect (
+  state => ({
+    banners: state.BannerReducer,
+    categories: state.CategoriesReducer,
+    products: state.ProductsReducer,
+    user: state.UserReducer,
+    addresses: state.AddressReducer,
+    favorite: state.FavoriteReducer,
+    customers: state.CustomersReducer,
+    options: state.OptionReducer,
+    locations: state.LocationReducer,
+  }),
+  dispatch => ({
+    loadLocation: (data) => {
+      dispatch({ type: 'LOAD_LOCATION', payload: data});
+    },
+    loadBanners: (bannersData) => {
+      dispatch({ type: 'LOAD_BANNERS', payload: bannersData});
+    },
+    loadCustomers: (index) => {
+      dispatch({ type: 'LOAD_CUSTOMERS', payload: index})
+    },
+    loadCategories: (categoriesData) => {
+      dispatch({ type: 'LOAD_CATEGORIES', payload: categoriesData})
+    },
+    loadProducts: (productsData) => {
+      dispatch({ type: 'LOAD_PRODUCTS', payload: productsData})
+    },
+    loadOptions: (optionssData) => {
+      dispatch({ type: 'LOAD_OPTIONS', payload: optionssData})
+    },
+    loadUser: (userData) => {
+      dispatch({ type: 'LOAD_USER', payload: userData})
+    },
+    editUser: (userData) => {
+      dispatch({ type: 'EDIT_USER', payload: userData})
+    },
+    loadAddresses: (index) => {
+      dispatch({ type: 'LOAD_ADDERESSES', payload: index})
+    },
+    loadFavorites: (index) => {
+      dispatch({ type: 'LOAD_FAVORITES', payload: index})
+    },
+    loadTegs: (index) => {
+      dispatch({ type: 'LOAD_TEGS', payload: index})
+    },
+    clearAddresses: (index) => {
+      dispatch({ type: 'CLEAR_ADDRESSES', payload: index});
+    },
+    clearFavorite: (index) => {
+      dispatch( { type: 'CLEAR_FAVORITE', payload:index})
+    }
+  })
+)(Login);

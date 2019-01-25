@@ -106,8 +106,8 @@ class Cart extends Component {
             <ScrollView style={{paddingBottom: 10,}}>
             {
               this.props.cart.map((i, index) => (
-              <View style={{ marginBottom: 5, marginTop: 5,}}>
-                <TouchableOpacity  key={index} underlayColor='rgba(255,255,255,0.1)'
+              <View key={index} style={{ marginBottom: 5, marginTop: 5,}}>
+                <TouchableOpacity underlayColor='rgba(255,255,255,0.1)'
                   onPress={() => this.props.navigation.navigate('ProductDetailView', { iProduct: i.iProduct, idInCart: i.idInCart, routeGoBack: 'inCart', iCategories: i.iCategories})}
                   >
                   <View style={{flexDirection: 'row', backgroundColor: '#fff', justifyContent: 'space-between', flex: 1}}>

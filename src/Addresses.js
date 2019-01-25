@@ -123,7 +123,7 @@ class Addresses extends Component {
             :
             <View>
             {
-                this.props.addresses !== null ?
+                this.props.addresses.length > 0 ?
                 this.renderViewListAddresses()
                 :
                 <View style={{ alignItems: "center", justifyContent:'center'}}>

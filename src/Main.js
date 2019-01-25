@@ -75,6 +75,36 @@ class Main extends Component {
         //console.log("userEmail = ", this.state.userEmail);
         //console.log("userUid = ", this.state.userUid);
         console.log("this.props.user = ", this.props.user);
+
+        //// для авторизации по емаил
+        if(this.props.user._user.phoneNumber === undefined)
+        {
+          //console.log("UIDGoogleUser = ", user.uid);
+          //console.log("chPhone = ", user.phoneNumber);
+          //console.log("chUID = ", this.props.options.UIDClient);
+        
+          return fetch(this.props.options.URL+'InsertUser.php',{
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Accept-Encoding': "gzip, deflate",
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              UIDGoogleUser: user.uid,
+              chPhone: "",
+              UIDClient: this.props.options.UIDClient,
+            })
+          })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            this.props.loadUser(user);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        }
+        //// для авторизации по емаил .................. конец
         //this.checkUser();
       }
     })
@@ -264,6 +294,9 @@ export default connect (
   dispatch => ({
     addUserData: (userData) => {
       dispatch({ type: 'EDIT_USER', payload: userData});
+    },
+    loadUser: (userData) => {
+      dispatch({ type: 'LOAD_USER', payload: userData})
     },
   /*
     onAddCategory: (categoryData) => {

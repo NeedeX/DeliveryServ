@@ -173,7 +173,7 @@ class Favorites extends React.Component {
         if(resultProduct.length > 0)
         {
             return (
-            <TouchableOpacity
+            <TouchableOpacity key={index}
             activeOpacity={1}
             onPress={() => this.props.navigation.navigate('ProductDetailView', { iCategories: resultProduct[0].iCategories, iProduct: resultProduct[0].iProduct, routeGoBack: 'favorites'})}
             style={{ width: this.itemWidth }}>
@@ -182,7 +182,8 @@ class Favorites extends React.Component {
                     <View style={{ flex: 0.5, backgroundColor: '#fff', marginTop: 5, marginLeft: 5}}>
                         <Image
                         style={{width: 80, height: 80, zIndex: 0}}
-                        source={{ uri: resultProduct[0].chMainImage }}
+                        source={ resultProduct[0].chMainImage === "" ? require('../assets/noImage.jpg') : { uri: resultProduct[0].chMainImage } }
+            
                         />
                     </View>
                     <View style={{ flexDirection: 'column', flex: 1,backgroundColor: '#fff',

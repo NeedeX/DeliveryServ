@@ -154,7 +154,7 @@ class ProductDetailView extends React.Component {
   addToFavorite(iProduct){
     firebase.auth().onAuthStateChanged(user => {
       if(user){  
-        this.addInDB(iProduct, this.props.user.uid)
+        this.addInDB(iProduct, this.props.user.userDB.chUIDGoogleUser)
       }
       else {
         this.showDialog();
@@ -281,7 +281,7 @@ class ProductDetailView extends React.Component {
     {
       return this.state.ing.map((i, index) => (
         
-        <View style={{flexDirection: 'row',}}>
+        <View key={index} style={{flexDirection: 'row',}}>
           <Text style={{ marginTop: 3,}}>{i.chName}</Text>
           <Switch
             onValueChange={ (value) => this.addIngredient( value, i.idIngredients, i.chPriceChange, index)}
@@ -316,7 +316,7 @@ class ProductDetailView extends React.Component {
         this.state.viewLeftRigthCount = this.state.viewLeftRigthCount + 1
         // вывод кнопок первого ряда, с индексами 0 и 1
         // у TouchableOpacity свойство alignItems: 'flex-start', потому что первый ряд начинается слева
-        return <View style={styles.viewBtnIng}>
+        return <View key={index} style={styles.viewBtnIng}>
         {
           this.renderOneRowBtnIng(this.state.ing[index].value, this.state.ing[index].idIngredients,  this.state.ing[index].chPriceChange,  index, this.state.ing[index].chName)}
             
@@ -332,7 +332,7 @@ class ProductDetailView extends React.Component {
         if(index%2 === 0)
         {
           this.state.viewLeftRigthCount = this.state.viewLeftRigthCount + 1;
-          return <View style={styles.viewBtnIng}>
+          return <View key={index} style={styles.viewBtnIng}>
               <TouchableOpacity style={{elevation: 3, flex: 1,  marginTop: 10,
           alignItems: this.state.viewLeftRigthCount%2 === 0 ? 'flex-end' : 'flex-start',
           marginRight: this.state.ing.length === index+1 ? 150 : 0,  }}  
@@ -419,14 +419,14 @@ class ProductDetailView extends React.Component {
           <View>
             <Image
               style={{width: 360, height: 232, zIndex: 0}}
-              source={{ uri: result[0].chMainImage }}
+              source={ result[0].chMainImage === "" ? require('../assets/noImage.jpg') : { uri: result[0].chMainImage } }
             />
            
               {
                 result[0].tegs.length > 0 ?
                 <View style={{zIndex: 10, marginTop: result[0].tegs.length > 1 ? -80 : -40}}>
-                {result[0].tegs.map(t =>(
-                  <View style={{backgroundColor:  "#"+this.props.tegs.find(tf => tf.idTag === t.iTag).chColor,
+                {result[0].tegs.map((t, index) =>(
+                  <View key={index} style={{backgroundColor:  "#"+this.props.tegs.find(tf => tf.idTag === t.iTag).chColor,
                     width: 58, height: 19, marginLeft: 20, borderBottomEndRadius: 5,
                     borderTopRightRadius: 5, marginBottom: 10, }}>
                     <Text style={{color: '#FFFFFF', textAlign: 'center', fontSize: 10,
