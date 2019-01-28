@@ -16,6 +16,7 @@ class Loading extends Component {
       didFinishInitialAnimation: false,
       progress: 0, // прогресс загрузки
       route: '', 
+      isAuth: false,
     };
 
     this.props.loadOptions();
@@ -27,6 +28,15 @@ class Loading extends Component {
     this.loadingProducts(this.props.options.UIDClient, this.props.options.URL);
     this.loadingTegs(this.props.options.UIDClient, this.props.options.URL);
     this.loadingLocation(this.props.options.UIDClient, this.props.options.URL);
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) { this.state.isAuth = true;
+        this.props.loadUser(user);
+        this.loadingUserDB(user.uid);
+        this.loadingAddresses(user.uid);
+        this.loadingFavorites(user.uid);
+      }
+      else {this.state.isAuth = false}
+    })
   }
   static navigationOptions = {
     header: null,
@@ -35,14 +45,8 @@ class Loading extends Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.setState({ didFinishInitialAnimation: true });
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          this.props.loadUser(user);
-          this.loadingUserDB(user.uid);
-          this.loadingAddresses(user.uid);
-          this.loadingFavorites(user.uid);
-          //this.setState({ route: 'Main'})
-          this.state.route = 'Main';
+        if (this.state.isAuth) {
+          
           this.state.didFinishInitialAnimation ?
             setTimeout(() => {
               const resetAction = StackActions.reset({
@@ -54,8 +58,6 @@ class Loading extends Component {
           : null
         }
         else { 
-          //this.setState({ route: 'Start'}) 
-          this.state.route = 'Start';
           this.state.didFinishInitialAnimation ?
             setTimeout(() => {
               const resetAction = StackActions.reset({
@@ -65,8 +67,7 @@ class Loading extends Component {
               this.props.navigation.dispatch(resetAction);
             }, 1500)
             : null
-        }
-      })
+          }
     });
 
          
