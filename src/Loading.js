@@ -20,7 +20,7 @@ class Loading extends Component {
 
     this.props.loadOptions();
     //console.log("this.props.options = ", this.props.options);
-    this.loadingUser();
+    //this.loadingUser();
     this.loadingCustomers(this.props.options.UIDClient, this.props.options.URL);
     this.loadingBanners(this.props.options.UIDClient, this.props.options.URL);
     this.loadingCategories(this.props.options.UIDClient, this.props.options.URL);
@@ -35,7 +35,41 @@ class Loading extends Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.setState({ didFinishInitialAnimation: true });
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.props.loadUser(user);
+          this.loadingUserDB(user.uid);
+          this.loadingAddresses(user.uid);
+          this.loadingFavorites(user.uid);
+          //this.setState({ route: 'Main'})
+          this.state.route = 'Main';
+          this.state.didFinishInitialAnimation ?
+            setTimeout(() => {
+              const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'Main' })],
+              });
+              this.props.navigation.dispatch(resetAction);
+            }, 1500)
+          : null
+        }
+        else { 
+          //this.setState({ route: 'Start'}) 
+          this.state.route = 'Start';
+          this.state.didFinishInitialAnimation ?
+            setTimeout(() => {
+              const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'Start' })],
+              });
+              this.props.navigation.dispatch(resetAction);
+            }, 1500)
+            : null
+        }
+      })
     });
+
+         
     
   }
   loadingLocation(UIDClient, URL){

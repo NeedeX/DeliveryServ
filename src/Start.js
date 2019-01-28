@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ImageBackground, StyleSheet, Image, StatusBar, TouchableHighlight, Text, View} from 'react-native';
+import { NavigationActions, StackActions } from 'react-navigation';
 
 class Start extends Component {
     constructor(props) {
@@ -18,7 +19,15 @@ class Start extends Component {
     };
 
     componentDidMount() {
-
+      
+    }
+    resetRoute(){
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'Main' })],
+      });
+      this.props.navigation.dispatch(resetAction);
+      this.props.navigation.navigate('Main', {animation: 'SlideFromLeft', animationDuration: 500 })
     }
 
     render() {
@@ -52,7 +61,7 @@ class Start extends Component {
             </View>
             <TouchableHighlight underlayColor='rgba(255,255,255,0.1)'
                 style={{marginTop: 130,}}
-                onPress={() => this.props.navigation.navigate('Main', {animation: 'SlideFromLeft', animationDuration: 500 })}>
+                onPress={() => this.resetRoute()}>
                     <Text style={{color: '#F2F2F2'}}> ПРОПУСТИТЬ </Text>
             </TouchableHighlight>
         </ImageBackground>
