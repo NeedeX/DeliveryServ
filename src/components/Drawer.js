@@ -48,17 +48,7 @@ class Drawer extends React.Component {
     });
   }
   phoneOpen(chPhone){
-    Linking.canOpenURL(chPhone)
-    .then(supported => {
-      console.log(supported);
-      
-    if (!supported) {
-        Alert.alert('Phone number is not available');
-      } else {
-        return Linking.openURL(chPhone);
-      }
-    })
-    .catch(err => console.log(err));
+    Linking.openURL('tel:'+chPhone)
  
     ///Linking.openURL(chPhone).catch((err) => console.error('An error occurred', err));
   }
@@ -69,12 +59,9 @@ class Drawer extends React.Component {
     
       return (
         <Dialog
-          onTouchOutside={() => {
-            this.setState({ dialogSelectPhone: false });
-          }}
+          onTouchOutside={() => { this.setState({ dialogSelectPhone: false }); }}
           width={0.9}
           visible={this.state.dialogSelectPhone}
-
           dialogTitle={
             <DialogTitle
               title="Выберите телефон"

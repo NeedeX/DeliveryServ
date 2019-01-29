@@ -156,8 +156,73 @@ class Main extends Component {
       )
     );
   }
+  getTodayDayName(){
+    var weekday=new Array(7);
+    var d=new Date();
+    weekday[0]="Понедельник";
+    weekday[1]="Вторник";
+    weekday[2]="Среда";
+    weekday[3]="Четверг";
+    weekday[4]="Пятница";
+    weekday[5]="Суббота";
+    weekday[6]="Воскресенье";
+    //console.log("Сегодня " + weekday[d.getDay()]);
+    return weekday[d.getDay() - 1];
+  }
+  
+  getWork()
+  {
+    const dayName = this.getTodayDayName(); // получаем название дня недели
+    //console.log("dayName = ", dayName);
+    this.props.locations.map((w, i) =>{ // парсим массив
+      const worksTime = w.arrOperationMode; /// получаем массив с графиком работы
+
+      workTimeToday = worksTime.filter(work => work.chDay === dayName);
+      //console.log("workTimeToday = ", workTimeToday);
+      if(workTimeToday.blDayOff === true){ console.log("Мы закрыты"); }
+      else {
+        var hours = new Date().getHours(); console.log("hours = ", hours);
+        var min = new Date().getMinutes(); //console.log("min = ", min);
+        //console.log(workTimeToday[0].time);
+        workTimeToday[0].time.map((t, i) => {
+          tEndTime = t.tEndTime; //console.log(t.tEndTime);
+          tStartTime = t.tStartTime; //console.log(t.tStartTime);
+        })
+        // открыты 
+        const splitStartTime = tStartTime.split(':');
+        const splitEndTime = tEndTime.split(':');
+        hStart = splitStartTime[0]; console.log("h = ", splitStartTime[0]);
+        mStart = splitStartTime[1]; //console.log("m = ", splitStartTime[1]);
+        hEnd = splitEndTime[0]; console.log("h = ", splitEndTime[0]);
+        mEnd = splitEndTime[1]; //console.log("m = ", splitEndTime[1]);
+
+
+
+        if(hours >= hEnd)
+        { 
+        // если час до окрытия, проверяем минуты
+          console.log(" МЫ закрыты");
+        }
+        else 
+        { 
+          /*
+          if(hours+1 === hStart) {
+            if(min < this.props.customers.iFirstOrder)
+            { console.log(" МЫ закрыты"); }
+          }*/
+          if(hours === hEnd-1) {
+            if(min > 60-this.props.customers.iLastOrder)
+            { console.log(" МЫ закрыты"); }
+          }
+        }
+      }
+
+    })
+  }
   render() {
     var {navigate} = this.props.navigation;
+    this.getTodayDayName();
+    this.getWork();
     return (
       <View style={styles.container}>
         <StatusBar
@@ -290,6 +355,7 @@ export default connect (
     addresses: state.AddressReducer,
     tegs: state.TegsReducer,
     customers: state.CustomersReducer,
+    locations: state.LocationReducer,
   }),
   dispatch => ({
     addUserData: (userData) => {
