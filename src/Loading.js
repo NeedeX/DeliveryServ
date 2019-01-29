@@ -20,8 +20,7 @@ class Loading extends Component {
     };
 
     this.props.loadOptions();
-    //console.log("this.props.options = ", this.props.options);
-    //this.loadingUser();
+
     this.loadingCustomers(this.props.options.UIDClient, this.props.options.URL);
     this.loadingBanners(this.props.options.UIDClient, this.props.options.URL);
     this.loadingCategories(this.props.options.UIDClient, this.props.options.URL);
@@ -175,7 +174,7 @@ class Loading extends Component {
     .then((responseJson) => {
       //this.props.clearAddresses();
       this.props.loadAddresses(responseJson.addresses);
-      console.log("responseJson.addresses = ", responseJson.addresses);
+      //console.log("responseJson.addresses = ", responseJson.addresses);
       console.log("this.props.addresses = ", this.props.addresses);
       this.setState(state => { 
         return {  progress: state.progress + loagIndex, }; 
@@ -209,8 +208,7 @@ class Loading extends Component {
     });
   }
 
-  loadingCustomers(UIDClient, URL)
-  {
+  loadingCustomers(UIDClient, URL){
     return fetch(URL+'LoadingCustomers.php',{
       method: 'POST',
       headers: {

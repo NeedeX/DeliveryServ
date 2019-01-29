@@ -1,7 +1,8 @@
 import React from 'react';
-import {StyleSheet, View, ImageBackground, Image, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, ImageBackground, Image, Text, Linking, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
+import Dialog, { DialogTitle, DialogContent,  DialogButton, } from 'react-native-popup-dialog';
 const bg  = require('../components/assets/drawerBg.png');
 
 class Drawer extends React.Component {
@@ -9,6 +10,7 @@ class Drawer extends React.Component {
     super(props);
     this.state = {
         authState: 0,
+        dialogSelectPhone: false,
     }  
 
   }
@@ -45,15 +47,74 @@ class Drawer extends React.Component {
       }
     });
   }
+  //********** */ обработчики диалогового окна 
+  showDialogSort = () => { this.setState({ dialogSelectPhone: true }); };
+  renderDialogSort()
+    {
+      arr = [{"iPhone":"1","chPhone":"333333"},{"iPhone":"2","chPhone":"22222"}];
+      return (
+        <Dialog
+          onTouchOutside={() => {
+            this.setState({ dialogSelectPhone: false });
+          }}
+          width={0.9}
+          visible={this.state.dialogSelectPhone}
 
+          dialogTitle={
+            <DialogTitle
+              title="Выберите телефон"
+              hasTitleBar={false}
+              align='left'
+              textStyle={{ color: '#F2F2F2', padding: 0, marginLeft: 10,}}
+              style={{ backgroundColor: '#6A3DA1', padding: 10, margin: 0, borderRadius: 6,}}
+            />
+          }
+          actions={[
+            <DialogButton
+              text="Отмена"
+              textStyle={{ color: 'rgba(0, 0, 0, 0.38)', 
+              fontFamily: 'Roboto',
+              fontSize: 14,
+              lineHeight: 16,
+            }}
+              onPress={() => { this.setState({ dialogSelectPhone: false }); }}
+              key="button-1"
+            />,
+          ]}
+        >
+          <DialogContent>
+            <View>
+              {
+                
+                this.props.locations.length > 0 ?
+    
+                this.props.locations.map((i, index) => (
+                  i.arrPhones.map((p, index) => (
+ 
+                    <Text key={index} onPress={ ()=>{ Linking.openURL(p.chPhone) }}>
+                      {p.chPhone}
+                    </Text>
+                  ))
+                ))
+                :
+                null
+              }
+            </View>
+          </DialogContent>
+        </Dialog>
+      )
+    }
+    
   render() {
 
     return (
+      
       <ImageBackground  
         source={bg} 
         style={{ flex: 1, width: 318,}} 
         imageStyle={{ resizeMode: 'stretch' }}>
         <View style={{flexDirection: 'row', paddingTop: 20, paddingLeft: 20,}}>
+        
           <View style={{ width: 50, height: 50,}}>
             <Image source={ require('./assets/iconAvatar.png')} 
             style={{  width: 45, height: 45, }}/>
@@ -177,7 +238,8 @@ class Drawer extends React.Component {
               marginBottom: 20,
             }}
           />
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Stocks')}>
+        {this.renderDialogSort()}
+        <TouchableOpacity onPress={() => this.showDialogSort()}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconOperator.png')} 
             style={ styles.iconsMenu }/>
@@ -243,6 +305,7 @@ export default connect (
     products: state.ProductsReducer,
     order: state.OrderReducer,
     user: state.UserReducer,
+    locations: state.LocationReducer,
   }),
   dispatch => ({
     addCart: (index) => {
