@@ -47,11 +47,26 @@ class Drawer extends React.Component {
       }
     });
   }
+  phoneOpen(chPhone){
+    Linking.canOpenURL(chPhone)
+    .then(supported => {
+      console.log(supported);
+      
+    if (!supported) {
+        Alert.alert('Phone number is not available');
+      } else {
+        return Linking.openURL(chPhone);
+      }
+    })
+    .catch(err => console.log(err));
+ 
+    ///Linking.openURL(chPhone).catch((err) => console.error('An error occurred', err));
+  }
   //********** */ обработчики диалогового окна 
   showDialogSort = () => { this.setState({ dialogSelectPhone: true }); };
   renderDialogSort()
     {
-      arr = [{"iPhone":"1","chPhone":"333333"},{"iPhone":"2","chPhone":"22222"}];
+    
       return (
         <Dialog
           onTouchOutside={() => {
@@ -91,7 +106,10 @@ class Drawer extends React.Component {
                 this.props.locations.map((i, index) => (
                   i.arrPhones.map((p, index) => (
  
-                    <Text key={index} onPress={ ()=>{ Linking.openURL(p.chPhone) }}>
+                    <Text key={index} onPress={ ()=>{  
+                      this.phoneOpen(p.chPhone)
+                      //Linking.openURL(p.chPhone) 
+                      }}>
                       {p.chPhone}
                     </Text>
                   ))
