@@ -15,11 +15,15 @@ class Main extends Component {
     var {params} = this.props.navigation.state;
     this.state = { 
       didFinishInitialAnimation: false,
-      senderId: appConfig.senderID
+      senderId: appConfig.senderID,
+      countOpenLocation: 0, /// кол-во открытых заведений в данный момент
     };
     this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
 
     
+  }
+  componentWillMount(){
+    this.getWork();
   }
   ///https://github.com/yangnana11/react-native-fcm-demo/blob/master/App.android.js
   insertRegisterToken(UIDClient, URL, token){
@@ -79,10 +83,6 @@ class Main extends Component {
         //// для авторизации по емаил
         if(this.props.user._user.phoneNumber === undefined)
         {
-          //console.log("UIDGoogleUser = ", user.uid);
-          //console.log("chPhone = ", user.phoneNumber);
-          //console.log("chUID = ", this.props.options.UIDClient);
-        
           return fetch(this.props.options.URL+'InsertUser.php',{
             method: 'POST',
             headers: {
@@ -169,60 +169,101 @@ class Main extends Component {
     //console.log("Сегодня " + weekday[d.getDay()]);
     return weekday[d.getDay() - 1];
   }
-  
+
+  closeMessage()
+  {
+    console.log("Мы закрыты");
+    
+    Alert.alert(
+      'Уведомление',
+      'Мы закрыты',
+      [
+        //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+        /*{
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+  },*/
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ],
+      {cancelable: false},
+    );
+  }
+
   getWork()
   {
     const dayName = this.getTodayDayName(); // получаем название дня недели
     //console.log("dayName = ", dayName);
     this.props.locations.map((w, i) =>{ // парсим массив
       const worksTime = w.arrOperationMode; /// получаем массив с графиком работы
-
       workTimeToday = worksTime.filter(work => work.chDay === dayName);
-      //console.log("workTimeToday = ", workTimeToday);
-      if(workTimeToday.blDayOff === true){ console.log("Мы закрыты"); }
+      if(workTimeToday[0].blDayOff === true){ 
+        console.log("Мы закрыты"); 
+        this.closeMessage();
+      }
       else {
-        var hours = new Date().getHours(); console.log("hours = ", hours);
-        var min = new Date().getMinutes(); //console.log("min = ", min);
-        //console.log(workTimeToday[0].time);
-        workTimeToday[0].time.map((t, i) => {
-          tEndTime = t.tEndTime; //console.log(t.tEndTime);
-          tStartTime = t.tStartTime; //console.log(t.tStartTime);
-        })
-        // открыты 
-        const splitStartTime = tStartTime.split(':');
-        const splitEndTime = tEndTime.split(':');
-        hStart = splitStartTime[0]; console.log("h = ", splitStartTime[0]);
-        mStart = splitStartTime[1]; //console.log("m = ", splitStartTime[1]);
-        hEnd = splitEndTime[0]; console.log("h = ", splitEndTime[0]);
-        mEnd = splitEndTime[1]; //console.log("m = ", splitEndTime[1]);
+        var bStart = new Date(
+          new Date().getFullYear(),
+          new Date().getMonth(),
+          new Date().getDate(),
+          workTimeToday[0].time.tStartTime[0],
+          workTimeToday[0].time.tStartTime[1],
+          0); // 
+        var bEnd = new Date(
+          new Date().getFullYear(),
+          new Date().getMonth(),
+          new Date().getDate(),
+          workTimeToday[0].time.tEndTime[0], 
+          workTimeToday[0].time.tEndTime[1],
+          0); // 
 
+        //миллисекунд в одной минуте
+        var msOneMinut=1000*60; 
 
+        // Convert both dates to milliseconds 
+        var tStartTime_ms = bStart.getTime(); // время открытия в миллисекндах
+        var tEndTime_ms = bEnd.getTime();
+        var currentTime_ms = new Date(); // текущее врмя в миллисекундах
+        var iFirstOrder_ms = this.props.customers.iFirstOrder * msOneMinut;
+        var iLastOrder_ms = this.props.customers.iLastOrder * msOneMinut;
 
-        if(hours >= hEnd)
-        { 
-        // если час до окрытия, проверяем минуты
-          console.log(" МЫ закрыты");
+        // Calculate the difference in milliseconds 
+        var differenceStart_ms = tStartTime_ms - iFirstOrder_ms - currentTime_ms; 
+        var differenceEnd_ms = tEndTime_ms - iLastOrder_ms - currentTime_ms; 
+        intervalStart = Math.round(differenceStart_ms/msOneMinut);
+        intervalEnd = Math.round(differenceEnd_ms/msOneMinut);
+        // Convert back to days and return 
+        console.log("intervalStart >> ", intervalStart);
+        console.log("intervalEnd >> ", intervalEnd);
+      
+        if(intervalStart >= 0 && intervalEnd < 0)
+        {
+          this.closeMessage();
         }
-        else 
-        { 
-          /*
-          if(hours+1 === hStart) {
-            if(min < this.props.customers.iFirstOrder)
-            { console.log(" МЫ закрыты"); }
-          }*/
-          if(hours === hEnd-1) {
-            if(min > 60-this.props.customers.iLastOrder)
-            { console.log(" МЫ закрыты"); }
+        else
+        {
+          console.log("открыто");
+          this.setState({countOpenLocation: this.state.countOpenLocation + 1});
+
+          var val = {
+            countOpenLocation: this.state.countOpenLocation,
           }
+          this.props.addOptionCounrOpenLoc(val);
         }
+  
       }
 
     })
   }
+  /// сравнивает время и выводит сообщение при отрицательном результате
+  checkWortTime(currentTime, startOrEndTime){
+
+    //this.closeMessage();
+  }
   render() {
     var {navigate} = this.props.navigation;
-    this.getTodayDayName();
-    this.getWork();
+    //this.getTodayDayName();
+    
     return (
       <View style={styles.container}>
         <StatusBar
@@ -230,6 +271,7 @@ class Main extends Component {
           backgroundColor="#583286"
           barStyle="default"
         />
+        
         {
           this.state.didFinishInitialAnimation === false ?
           <ActivityIndicator size="large" color="#583286" />
@@ -364,6 +406,9 @@ export default connect (
     loadUser: (userData) => {
       dispatch({ type: 'LOAD_USER', payload: userData})
     },
+    addOptionCounrOpenLoc: (optionData) => {
+      dispatch({ type: 'ADD_OPTION', payload: optionData})
+    }
   /*
     onAddCategory: (categoryData) => {
       dispatch({ type: 'ADD_CATEGORY', payload: categoryData});
