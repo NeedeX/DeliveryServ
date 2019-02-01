@@ -8,34 +8,28 @@ import Card from './components/CardProduct';
 import Header from './components/Header';
 const { width } = Dimensions.get('window');
 class CategoryView extends Component {
-    constructor(props){
-        super(props);
-        var {params} = this.props.navigation.state;
-        
-        this.state = {
-            iCategories: params.iCategories,
-            isActionButtonVisible: true, // показываеть или нет, строку поиска и кнопки
-            filtered: false,  // запущен ли поиск по имени
-            searchText: '',// текст поиска по имени
-            textIngridients: '', // текст поиска по ингридиенту
-            dialogVisibleSort: false, // вкл.-откл диалога сортировки
-            dialogVisibleFilter: false, // вкл.-откл диалога ФИЛЬТР
-            products:  this.props.products,
-            iSort: 3, // value выбранного по умолчанию элемента сортировки
-            didFinishInitialAnimation: false,
+  constructor(props){
+    super(props);
+    var {params} = this.props.navigation.state;
+    this.state = {
+      iCategories: params.iCategories,
+      isActionButtonVisible: true, // показываеть или нет, строку поиска и кнопки
+      filtered: false,  // запущен ли поиск по имени
+      searchText: '',// текст поиска по имени
+      textIngridients: '', // текст поиска по ингридиенту
+      dialogVisibleSort: false, // вкл.-откл диалога сортировки
+      dialogVisibleFilter: false, // вкл.-откл диалога ФИЛЬТР
+      products:  this.props.products,
+      iSort: 3, // value выбранного по умолчанию элемента сортировки
+      didFinishInitialAnimation: false,
 
-            
-            //height: new Animated.Value(40),
-        }  
-       offset = 0;
-       this.onScroll = this.onScroll.bind(this);
-       this.height = new Animated.Value(40);
-
-       
-    }
-    static navigationOptions = ({ navigation }) => {
-
-      return {
+    }  
+    offset = 0;
+    this.onScroll = this.onScroll.bind(this);
+    this.height = new Animated.Value(40);
+  }
+  static navigationOptions = ({ navigation }) => {
+    return {
       headerTintColor: '#fff',
       headerTitleStyle: {
         fontWeight: 'bold',
@@ -51,23 +45,23 @@ class CategoryView extends Component {
       ),
     };
   };
-    
-    // Lifecycle methods
-    componentDidMount() {
-      InteractionManager.runAfterInteractions(() => {
-        this.setState({
-          didFinishInitialAnimation: true,
-        });
+
+  // Lifecycle methods
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+      this.setState({
+        didFinishInitialAnimation: true,
       });
-    }
-    generateKey = () => {
-        return `${ new Date().getTime() }`;
-    }
-    renderProducts(){
-        return (
-          <View>
-          {
-            this.state.products.map((item, index) => (
+    });
+  }
+  generateKey = () => {
+    return `${ new Date().getTime() }`;
+  }
+  renderProducts(){
+    return (
+      <View>
+      {
+        this.state.products.map((item, index) => (
               item.iCategories === this.state.iCategories ?
             <Card
               key={index}
@@ -88,7 +82,7 @@ class CategoryView extends Component {
           }
           </View>
         );
-    }
+  }
      
     onScroll(event) {
         var currentOffset = event.nativeEvent.contentOffset.y;
@@ -234,7 +228,35 @@ class CategoryView extends Component {
       // обработчик подтверждения в диалоговом окне 
     handleSort = () => { this.setState({ dialogVisibleSort: false }); };
     //********************************************************* */
+    sortByTegs(idTag, chTag){
 
+    }
+    renderCheckBox(chColor, chTag, idTag){
+      return (
+        <View>
+        <CheckBox 
+          style={{flex: 1, padding: 10}}
+          onClick={()=>{
+            this.sortByTegs(idTag, chTag)
+            //this.setState({ variable:!this.state.isCheckedNew })
+          }}
+          isChecked={this.state.isCheckedNew}
+          rightText={chTag}
+          uncheckedCheckBoxColor='rgba(0, 0, 0, 0.54)'
+                checkedCheckBoxColor='#6A3DA1'
+                rightTextStyle={{
+                    fontFamily: 'Roboto',
+                    fontWeight: '400',
+                    fontSize: 14,
+                    lineHeight: 24,
+                    textalign: 'left',
+                    color: '#4E4E4E',
+                }}
+            />
+            <Text>{chTag}</Text>
+            </View>
+      )
+    }
     renderDialogFilter()
     {
       return (
@@ -315,6 +337,14 @@ class CategoryView extends Component {
                 color: '#4E4E4E',
                 marginTop: 5,
             }}>Поиск по тегу </Text>
+            { console.log("this.props.tegs = ", this.props.tegs)}
+          {
+            this.props.tegs.map((t, i) => {
+              this.renderCheckBox(t.chColor, t.chTag, t.idTag);
+            })
+            
+          }
+            {/*
             <CheckBox 
                 style={{flex: 1, padding: 10}}
                 onClick={()=>{
@@ -375,6 +405,7 @@ class CategoryView extends Component {
                     color: '#4E4E4E',
                 }}
             />
+              */}
           </DialogContent>
         </Dialog>
       )
