@@ -11,6 +11,12 @@ class CategoryView extends Component {
   constructor(props){
     super(props);
     var {params} = this.props.navigation.state;
+    //var valTegs = [];
+    /*
+    this.props.tegs.map((t, i) => (
+      valTegs[t.idTag] = false
+    ))
+    */
     this.state = {
       iCategories: params.iCategories,
       isActionButtonVisible: true, // показываеть или нет, строку поиска и кнопки
@@ -22,8 +28,11 @@ class CategoryView extends Component {
       products:  this.props.products,
       iSort: 3, // value выбранного по умолчанию элемента сортировки
       didFinishInitialAnimation: false,
+      isCheckedTeg: {},
 
     }  
+    console.log("this.state.isCheckedTeg = ", this.state.isCheckedTeg);
+    
     offset = 0;
     this.onScroll = this.onScroll.bind(this);
     this.height = new Animated.Value(40);
@@ -230,17 +239,23 @@ class CategoryView extends Component {
     //********************************************************* */
     sortByTegs(idTag, chTag){
 
+     this.state.isCheckedTeg[idTag] = !this.state.isCheckedTeg[idTag];
+      //this.setState({ isCheckedTeg: val});
+      console.log(">", this.state.isCheckedTeg);
+      
     }
-    renderCheckBox(chColor, chTag, idTag){
+    renderCheckBox(chColor, chTag, idTag, index){
+   
       return (
-        <View>
+
         <CheckBox 
           style={{flex: 1, padding: 10}}
           onClick={()=>{
             this.sortByTegs(idTag, chTag)
             //this.setState({ variable:!this.state.isCheckedNew })
           }}
-          isChecked={this.state.isCheckedNew}
+          key={index}
+          isChecked={this.state.isCheckedTeg.length === 0 ? false : this.state.isCheckedTeg[idTag]}
           rightText={chTag}
           uncheckedCheckBoxColor='rgba(0, 0, 0, 0.54)'
                 checkedCheckBoxColor='#6A3DA1'
@@ -249,12 +264,11 @@ class CategoryView extends Component {
                     fontWeight: '400',
                     fontSize: 14,
                     lineHeight: 24,
-                    textalign: 'left',
+                    
                     color: '#4E4E4E',
                 }}
             />
-            <Text>{chTag}</Text>
-            </View>
+
       )
     }
     renderDialogFilter()
@@ -338,12 +352,36 @@ class CategoryView extends Component {
                 marginTop: 5,
             }}>Поиск по тегу </Text>
             { console.log("this.props.tegs = ", this.props.tegs)}
+            <View>
           {
-            this.props.tegs.map((t, i) => {
-              this.renderCheckBox(t.chColor, t.chTag, t.idTag);
-            })
+            this.props.tegs.map((t, i) => (
+              this.renderCheckBox(t.chColor, t.chTag, t.idTag, i)
+              
+             /*<CheckBox 
+                style={{flex: 1, padding: 10}}
+                onClick={()=>{
+                  this.sortByTegs(t.idTag, t.chTag)
+                  //this.setState({ variable:!this.state.isCheckedNew })
+                }}
+                isChecked={this.state.isCheckedNew}
+                rightText={t.chTag}
+                uncheckedCheckBoxColor='rgba(0, 0, 0, 0.54)'
+                      checkedCheckBoxColor='#6A3DA1'
+                      rightTextStyle={{
+                          fontFamily: 'Roboto',
+                          fontWeight: '400',
+                          fontSize: 14,
+                          lineHeight: 24,
+                          textalign: 'left',
+                          color: '#4E4E4E',
+                      }}
+                  />
+
+                  */
+            ))
             
           }
+          </View>
             {/*
             <CheckBox 
                 style={{flex: 1, padding: 10}}
