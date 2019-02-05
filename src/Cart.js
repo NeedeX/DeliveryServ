@@ -18,8 +18,8 @@ class Cart extends Component {
       title: 'Home',
             headerTintColor: '#fff',
             headerTitleStyle: {
-                fontWeight: 'bold',
-                textAlign: 'center',
+              fontWeight: 'bold',
+              textAlign: 'center',
             },
             header: (props) => <Header title={'Корзина'} nav={ navigation } {...props} />,
         };

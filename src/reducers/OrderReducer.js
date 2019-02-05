@@ -1,4 +1,7 @@
-const INITIAL_STATE = [];
+const INITIAL_STATE = {
+  addressPickup: 0,
+  addressDelivery: 0,
+};
 
 
 export default function OrderReducer (state = INITIAL_STATE, action) {
@@ -8,7 +11,13 @@ export default function OrderReducer (state = INITIAL_STATE, action) {
           ...state,
           action.payload
         ]
-        break;      
+        break;   
+      case "ADD_ITEM":{
+          return {
+            ...state,
+            ...action.payload,
+          }
+      }   
       case "ADD_ORDER":  
         return [
           ...state,

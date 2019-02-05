@@ -185,17 +185,24 @@ class CheckoutConfirm extends React.Component {
             this.props.navigation.navigate('CompletedOrder', {animation: 'SlideFromLeft', animationDuration: 500 });
    
         })
-        .catch((error) => {
-             console.error(error);
-        });
+        .catch((error) => { console.error(error); });
 
     }
-
+    selectedAddresOrPickup(){
+        if(this.props.options.addressPickup !== undefined){
+            const newLoc = this.props.locations.filter((el) => el.idLocations === this.props.options.addressPickup );
+            console.log("newLoc = ", newLoc);
+            
+            this.setState({chTypeDeliveryText: "Cf"})
+        }
+    }
     render() {
         if(this.state.index === 0)
         {
             this.props.navigation.navigate('Addresses', {animation: 'SlideFromLeft', animationDuration: 500 });
         }
+        console.log("options = ", this.props.options);
+        
         var {navigate} = this.props.navigation;
         var {params} = this.props.navigation.state;
         return (
@@ -203,7 +210,7 @@ class CheckoutConfirm extends React.Component {
             style={{ flex: 1, width: width, height: 170, marginTop:0, alignItems: 'center', justifyContent: 'flex-start'}}
             imageStyle={{ resizeMode: 'cover' }}
             source={require('../assets/main.png')}
-          >
+            >
         {
             this.state.didFinishInitialAnimation === false ?
             <ActivityIndicator size="large" color="#583286" />
@@ -213,15 +220,15 @@ class CheckoutConfirm extends React.Component {
                 <ScrollView >
                     <Text style={styles.textTitleStyle}> 1. Контактная информация </Text>
                     <Text style={styles.textTitleStyle2}>Имя</Text>
-                        <Text style={styles.textStyleValue}>{params.chFIO}</Text>
+                        <Text style={styles.textStyleValue}>{this.props.order.chFIO}</Text>
                         <Text style={styles.textTitleStyle2}>Телефон</Text>
                         <Text style={styles.textStyleValue}>{params.chPhone}</Text>
-                        <Text style={styles.textTitleStyle2}>Адрес</Text>
+                        <Text style={styles.textTitleStyle2}>{this.props.order.addressDelivery === 0 ? "Самовывоз" : "Адрес"}</Text>
                         {
-                            params.chDeliveryAddress !== "" ?
-                            <Text style={styles.textStyleValue}>{params.chDeliveryAddress}</Text>
+                            this.props.order.addressDelivery === 0 ?
+                            <Text style={styles.textStyleValue}>{this.props.order.addressPickup}</Text>
                             :
-                            <Text style={styles.textStyleValue}>{params.chCity}, ул.{params.chStreet}, {params.chNumHome}{params.chHousing === '' ? '' : '/'}{params.chHousing}, подъезд {params.chEntrance}, кв.{params.chApartment}</Text>
+                            <Text style={styles.textStyleValue}>{this.props.order.addressDelivery}</Text>
                         
                         }
                         <View
@@ -230,10 +237,12 @@ class CheckoutConfirm extends React.Component {
                         <Text style={styles.textTitleStyle}>
                             2. Детали
                         </Text>
-                        <Text style={styles.textTitleStyle2}>Время доставки</Text>
+                        <Text style={styles.textTitleStyle2}>{this.props.order.addressDelivery === 0 ? "К какому времени" : "Время доставки"}</Text>
+                        
                         <Text style={styles.textStyleValue}>{params.chDeliveryTime === '' ? 'Как можно скорее' : params.chDeliveryTime}</Text>
                         <Text style={styles.textTitleStyle2}>Способ оплаты</Text>
                         <Text style={styles.textStyleValue}>{params.chPayDescription}</Text>
+
                         <View style={{ borderBottomColor: '#E4E4E4', borderBottomWidth: 1,
                                 marginTop: 3, marginBottom: 3, }} />
                         {
@@ -420,6 +429,7 @@ export default connect (
     user: state.UserReducer,
     options: state.OptionReducer,
     customers: state.CustomersReducer,
+    locations: state.LocationReducer,
   }),
   dispatch => ({
     addCart: (index) => {

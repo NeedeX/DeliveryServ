@@ -31,7 +31,7 @@ class CategoryView extends Component {
       isCheckedTeg: {},
 
     }  
-    console.log("this.state.isCheckedTeg = ", this.state.isCheckedTeg);
+    //console.log("this.state.isCheckedTeg = ", this.state.isCheckedTeg);
     
     offset = 0;
     this.onScroll = this.onScroll.bind(this);
@@ -144,12 +144,9 @@ class CategoryView extends Component {
     {
       return (
         <Dialog
-          onTouchOutside={() => {
-            this.setState({ dialogVisibleSort: false });
-          }}
+          onTouchOutside={() => { this.setState({ dialogVisibleSort: false }); }}
           width={0.9}
           visible={this.state.dialogVisibleSort}
-
           dialogTitle={
             <DialogTitle
               title="Сортировка"
@@ -167,33 +164,28 @@ class CategoryView extends Component {
               fontSize: 14,
               lineHeight: 16,
             }}
-              onPress={() => {
-                this.setState({ dialogVisibleSort: false });
-              }}
+              onPress={() => { this.setState({ dialogVisibleSort: false }); }}
               key="button-1"
             />,
             <DialogButton
               text="Принять"
               textStyle={{ color: '#6A3DA1',
-              fontFamily: 'Roboto',
-              fontSize: 14,
-              lineHeight: 16,}}
+              fontFamily: 'Roboto', fontSize: 14, lineHeight: 16,}}
               onPress={() => {
                 this.setState({ dialogVisibleSort: false });
                 this.sorting(this.state.iSort);
-                console.log(this.state.iSort);
-                
+                //console.log(this.state.iSort);
               }}
               key="button-2"
             />,
           ]}
-        >
+          >
           <DialogContent>
           <RadioGroup 
-                        selectedIndex={this.state.iSort - 1}
-                        color='#6A3DA1'
-                        style={{ marginTop: 15,}}
-                        onSelect = {(index, value) => this.onSelectSort(index, value)} >
+            selectedIndex={this.state.iSort - 1}
+            color='#6A3DA1'
+            style={{ marginTop: 15,}}
+            onSelect = {(index, value) => this.onSelectSort(index, value)} >
                         {/* По цене  */}
                         <RadioButton value={1}>
                             <Text style={styles.textStyle}>По цене </Text>
@@ -204,9 +196,6 @@ class CategoryView extends Component {
                         </RadioButton>
                         <RadioButton value={3}>
                             <Text style={styles.textStyle}>По популярности</Text>
-                        </RadioButton>
-                        <RadioButton value={4}>
-                            <Text style={styles.textStyle}>По новизне</Text>
                         </RadioButton>
 
                 </RadioGroup>
@@ -240,6 +229,10 @@ class CategoryView extends Component {
     sortByTegs(idTag, chTag){
 
      this.state.isCheckedTeg[idTag] = !this.state.isCheckedTeg[idTag];
+     const newIsCheckedTeg = this.state.isCheckedTeg.map((item, index) =>{
+
+     })
+     this.setState({ isCheckedTeg: !this.state.isCheckedTeg[idTag] });
       //this.setState({ isCheckedTeg: val});
       console.log(">", this.state.isCheckedTeg);
       
@@ -342,6 +335,7 @@ class CategoryView extends Component {
 
                 onChangeText={ (textIngridients) =>  this.setState({ textIngridients: textIngridients  })
                 }/>
+                {/*
             <Text style={{
                 fontFamily: 'Roboto',
                 fontWeight: '400',
@@ -351,9 +345,6 @@ class CategoryView extends Component {
                 color: '#4E4E4E',
                 marginTop: 5,
             }}>Поиск по тегу </Text>
-            { console.log("this.props.tegs = ", this.props.tegs)}
-            <View>
-          {
             this.props.tegs.map((t, i) => (
               this.renderCheckBox(t.chColor, t.chTag, t.idTag, i)
               
@@ -368,82 +359,20 @@ class CategoryView extends Component {
                 uncheckedCheckBoxColor='rgba(0, 0, 0, 0.54)'
                       checkedCheckBoxColor='#6A3DA1'
                       rightTextStyle={{
-                          fontFamily: 'Roboto',
-                          fontWeight: '400',
-                          fontSize: 14,
-                          lineHeight: 24,
-                          textalign: 'left',
-                          color: '#4E4E4E',
+                        fontFamily: 'Roboto',
+                        fontWeight: '400',
+                        fontSize: 14,
+                        lineHeight: 24,
+                        textalign: 'left',
+                        color: '#4E4E4E',
                       }}
                   />
-
                   */
+                 /*
             ))
-            
+            */
           }
-          </View>
-            {/*
-            <CheckBox 
-                style={{flex: 1, padding: 10}}
-                onClick={()=>{
-                  this.setState({
-                    isCheckedNew:!this.state.isCheckedNew
-                  })
-                }}
-                isChecked={this.state.isCheckedNew}
-                rightText={"New (Новинка)"}
-                uncheckedCheckBoxColor='rgba(0, 0, 0, 0.54)'
-                checkedCheckBoxColor='#6A3DA1'
-                rightTextStyle={{
-                    fontFamily: 'Roboto',
-                    fontWeight: '400',
-                    fontSize: 14,
-                    lineHeight: 24,
-                    textalign: 'left',
-                    color: '#4E4E4E',
-                }}
-            />
-            <CheckBox 
-                style={{flex: 1, padding: 10}}
-                onClick={()=>{
-                  this.setState({
-                    isCheckedHit:!this.state.isCheckedHit
-                  })
-                }}
-                isChecked={this.state.isCheckedHit}
-                rightText={"Hit (Популярное) "}
-                uncheckedCheckBoxColor='rgba(0, 0, 0, 0.54)'
-                checkedCheckBoxColor='#6A3DA1'
-                rightTextStyle={{
-                    fontFamily: 'Roboto',
-                    fontWeight: '400',
-                    fontSize: 14,
-                    lineHeight: 24,
-                    textalign: 'left',
-                    color: '#4E4E4E',
-                }}
-            />
-            <CheckBox 
-                style={{flex: 1, padding: 10}}
-                onClick={()=>{
-                  this.setState({
-                    isCheckedSale:!this.state.isCheckedSale
-                  })
-                }}
-                isChecked={this.state.isCheckedSale}
-                rightText={"Sale (Скидка)"}
-                uncheckedCheckBoxColor='rgba(0, 0, 0, 0.54)'
-                checkedCheckBoxColor='#6A3DA1'
-                rightTextStyle={{
-                    fontFamily: 'Roboto',
-                    fontWeight: '400',
-                    fontSize: 14,
-                    lineHeight: 24,
-                    textalign: 'left',
-                    color: '#4E4E4E',
-                }}
-            />
-              */}
+
           </DialogContent>
         </Dialog>
       )

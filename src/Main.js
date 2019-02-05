@@ -198,7 +198,7 @@ class Main extends Component {
       const worksTime = w.arrOperationMode; /// получаем массив с графиком работы
       workTimeToday = worksTime.filter(work => work.chDay === dayName);
       if(workTimeToday[0].blDayOff === true){ 
-        console.log("Мы закрыты"); 
+        //console.log("Мы закрыты"); 
         this.closeMessage();
       }
       else {
@@ -233,8 +233,8 @@ class Main extends Component {
         intervalStart = Math.round(differenceStart_ms/msOneMinut);
         intervalEnd = Math.round(differenceEnd_ms/msOneMinut);
         // Convert back to days and return 
-        console.log("intervalStart >> ", intervalStart);
-        console.log("intervalEnd >> ", intervalEnd);
+        //console.log("intervalStart >> ", intervalStart);
+        //console.log("intervalEnd >> ", intervalEnd);
       
         if(intervalStart >= 0 && intervalEnd < 0)
         {
@@ -242,7 +242,7 @@ class Main extends Component {
         }
         else
         {
-          console.log("открыто");
+          //console.log("открыто");
           this.setState({countOpenLocation: this.state.countOpenLocation + 1});
 
           var val = {

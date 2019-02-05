@@ -33,16 +33,16 @@ class Pickups extends Component {
     {
       //console.log(id);
       const tempArrLoc = this.props.locations.find(i => i.idLocations === id);
-      //console.log(tempArrLoc);
+      console.log("tempArrLoc = ", tempArrLoc);
       
       var val = {
-        //idPickup: id,
-        addressPickup: id,
-        addressSelect: undefined,
+        addressPickup: '"'+tempArrLoc.chName+'"' + " " + tempArrLoc.chAddress,
+        addressDelivery: 0,
       }
-      this.props.addOption(val);
-      //console.log("this.props.options = ", this.props.options);
-      this.props.navigation.navigate(routeGoBack)
+      //this.props.addOption(val);
+      this.props.addItemOrder(val);
+      console.log("this.props.order = ", this.props.order);
+      this.props.navigation.navigate(routeGoBack);
     }
     render() {
     ///console.log( this.props.navigation.state.params.routeGoBack);
@@ -68,7 +68,7 @@ class Pickups extends Component {
                     {
 
                       this.props.locations.map((item, index) => (
-                        <RadioButton value={item.idLocations}>
+                        <RadioButton key={index} value={item.idLocations}>
                           <View style={styles.arrowRightView}>
                             <Text>"{item.chName}" {item.chAddress}</Text>
                           </View>
@@ -124,14 +124,14 @@ export default connect (
     customers: state.CustomersReducer,
     options: state.OptionReducer,
     locations: state.LocationReducer,
+    order: state.OrderReducer,
   }),
   dispatch => ({
-    /*
-    loadLocation: (data) => {
-      dispatch({ type: 'LOAD_LOCATION', payload: data});
-    },*/
     addOption: (index) => {
       dispatch({ type: 'ADD_OPTION', payload: index});
     },
+    addItemOrder: (orderData) => {
+      dispatch({ type: 'ADD_ITEM', payload: orderData});
+  },
   })
 )(Pickups);
