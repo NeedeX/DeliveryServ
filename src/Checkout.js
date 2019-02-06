@@ -19,75 +19,28 @@ class Checkout extends React.Component {
             chFIO: this.props.user.length !== 0 ? this.props.user.userDB.chFIO : "",    // имя
             chPhone:  this.props.user.length !== 0 ? this.props.user.userDB.chPhone : "",   // телефон
 
-
-
-            // доставка
-            chDeliveryAddress: '',  // адрес
+            /// поля ввода адреса
             chCity: this.props.options.CITY,      // город
-            chStreet: '',           // улица
-            chNumHome: '',          /// дом
-            chHousing: '',          // корпус
-            chEntrance: '', // подъезд
-            chFloor: '', // этаж
-            chApartment: '', // квартира
+            chStreet: '', /// улица
+            chNumHome: '', // номер дома
+            chHousing: '', // корпус
+            chEntrance: '', /// подъезд
+            chFloor: '', /// этаж
+            chApartment: '', /// квартира
+            /////////////////////////////
+            chDeliveryTime: '', // время доставки
+            isViewInputDeliveryTimeVisible: false, /// скрывает показывает выбор времени доставки
+            isViewInputAdressVisible: false, /// скрывает-показывает поля ввода адреса
 
-            chTypeDelivery: '1',
-            chTypeDeliveryText: 'Доставка',
-
-            // время доставки
-            chTypeDeliveryTime: 1, // выбор типа времени "как можно скорее или к определенному времени"
-            chDeliveryTime: '', //"2016-05-15 12:00",  время доставки
-
-            // отлата
-            chSumma: '', // сумма с которой дать сдачу
-            chPay: 1, // метод оплаты (Наличными курьеру)
-            chPayDescription: 'Наличными курьеру',
-            // подътверждение
-            chConfirm: 2, // метод подътверждения  1- sms (по умолчанию)
-            chConfirmText: 'SMS Сообщение',
-            chComments: '',
-
-            ////////////////////////////////////////////////////////////
-            isChildVisible: false,
-            isChildVisibleSumma: true,
-            isViewInputAdressVisible: true,
-            selectStyleDeliveryTime: styles.viewCardStyleNoTime,
-            selectStyleMetodPay: styles.viewCardStyle,
-            selectStyleDeliveryAdress: styles.viewCardStyle,
-            selectStyleArrowAddress: styles.arrowRightSelectAddress,
-
-            addressView: 'Выбрать из моих адресов',
-            addressViewPickup: "Самовывоз",
             didFinishInitialAnimation: false,
-
             /// минимальная и максимальная дата для заказа
             minDate: moment().format("DD-MM-YYYY"),
             maxDate: moment(Number(this.props.customers.iDaysAhead)*86400000 + new Date().getTime()).format("DD-MM-YYYY"),
-            //this.props.iDaysAhead+"-05-2018",
             isErrorName: false,
             isErrorPhone: false,
         
         }
-        
-        //this.props.options.addressSelect = "";
-        this.onSelectDeliveryAddress = this.onSelectDeliveryAddress.bind(this);
-        this.onSelectTimeDelivery = this.onSelectTimeDelivery.bind(this);
-        this.focusNextField = this.focusNextField.bind(this);
         this.inputs = {};
-
-        /// если только самовывоз 
-        if(this.props.customers.blPickup == 1 && this.props.customers.blDelivery == 0)
-        {
-            this.state.isViewInputAdressVisible = false;
-            this.state.selectStyleDeliveryAdress = styles.viewCardStyleDeliveryOnlyPickup;
-        }
-        /// если нельзя выбрать к какому времени доставить
-        if(this.props.customers.blLater == 0)
-        {
-            this.state.isChildVisible = false;
-            this.state.chDeliveryTime = '';
-            this.state.selectStyleDeliveryTime = styles.viewCardStyleNoTimeNoSelectTime;
-        }
     }
 
     getNameFromDB() {
@@ -100,15 +53,12 @@ class Checkout extends React.Component {
             this.props.addItemOrder(val)
         }
         console.log("getNameFromDB order = ", this.props.order);
-        
         return name;
     }
     // Lifecycle methods
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-        this.setState({
-            didFinishInitialAnimation: true,
-        });
+            this.setState({ didFinishInitialAnimation: true, });
         });
     }
     static navigationOptions = ({ navigation  }) => {
@@ -122,284 +72,10 @@ class Checkout extends React.Component {
           header: (props) => <Header title={'Оформить заказ'} nav={ navigation } {...props} />,
         };
     };
-    onGoFocus() {
-        // when you call getElement method, the instance of native TextInput will returned.
-        this.inputs['Имя'].focus();
-    }
-
-
-    selectAddressPickup(){
-        /*
-        if(this.props.order.addressPickup !== undefined )
-        {
-            this.state.addressView = "Выбрать из моих адресов";
-            this.state.chDeliveryAddress = '';
-            this.state.addressViewPickup = this.props.order.addressPickup;
-            
-            this.state.selectStyleArrowAddress = styles.arrowRightSelectAddress;
-            if(this.state.isViewInputAdressVisible === true) {
-                this.state.addressViewPickup = "Самовывоз";
-                this.state.addressView = "Выбрать из моих адресов";
-                this.state.selectStyleArrowAddress = styles.arrowRightNoSelectAddress;
-                this.state.chDeliveryAddress = '';
-            }
-        }
-        else {
-            this.state.addressViewPickup = "Самовывоз";
-            this.state.addressView = "Выбрать из моих адресов";
-            this.state.selectStyleArrowAddress = styles.arrowRightNoSelectAddress;
-            this.state.chDeliveryAddress = '';
-        }
-
-        */
-        var text = "Самовывоз";
-        if(this.props.order.addressPickup !== 0 )
-        {
-            text = this.props.order.addressPickup;
-        }
-        else text = "Самовывоз"
-        return ( <Text style={{color:'#4E4E4E'}}>{text}</Text> )
-    }
-    getSelectAddress()
-    {
-        ///console.log("addres  = ", this.props.options.addressSelect);
-        
-        // 
-        if(this.props.options.addressSelect !== undefined )
-        {
-            this.state.addressViewPickup = "Самовывоз";
-            let result = this.props.addresses.filter(x => x.idAddress === this.props.options.addressSelect);
-
-            var chHousing = result[0].chHousing ? "/"+result[0].chHousing : ""; // корпус
-            var chEntrance = result[0].chEntrance ? ", подъезд "+result[0].chEntrance : ""; // подъезд
-            var chFloor = result[0].chFloor ? ", этаж "+result[0].chFloor : ""; // этаж
-            var chApartment = result[0].chApartment ? ", кв. "+result[0].chApartment : "" // кв
-            var addressText = "г. "+result[0].chCity+", ул."+result[0].chStreet +" "+result[0].chNumHome+chHousing+chEntrance+chFloor+chApartment;
-            this.state.chDeliveryAddress = addressText;
-            var lengthaddress = addressText.length;
-
-            if(lengthaddress > 37) {
-                var length = addressText.length - 37;
-                addressText = addressText.substr(0, addressText.length - length)+"...";
-            }
-            
-            this.state.addressView = addressText;
-            
-            this.state.selectStyleArrowAddress = styles.arrowRightSelectAddress;
-            if(this.state.isViewInputAdressVisible === true) {
-                this.state.addressView = "Выбрать из моих адресов";
-                this.state.addressViewPickup = "Самовывоз";
-                this.state.selectStyleArrowAddress = styles.arrowRightNoSelectAddress;
-                this.state.chDeliveryAddress = '';
-            }
-        }
-        else {
-            this.state.addressView = "Выбрать из моих адресов";
-            this.state.addressViewPickup = "Самовывоз";
-            this.state.selectStyleArrowAddress = styles.arrowRightNoSelectAddress;
-            this.state.chDeliveryAddress = '';
-        }
-        return ( <Text style={{color:'#4E4E4E'}}>{this.state.addressView}</Text> )
-    }
-    focusNextField(id) {
-        this.inputs[id].focus();
-    }
-    generateKey = () => {
-        return `${ new Date().getTime() }`;
-    }
-
-    /// срабатывает по нажатию на радобатон выбора доставки
-    onSelectDeliveryAddress(index, value){
-
-        if(value === 2){
-            /*
-            this.setState({ isViewInputAdressVisible: true, });
-            this.setState({ selectStyleDeliveryAdress: styles.viewCardStyle, });
-            this.state.chDeliveryAddress = '';
-            this.setState({ chTypeDeliveryText: 'Доставка'});
-            */
-           var val = {
-            addressPickup: 0,
-            addressDelivery: 0,
-          }
-          //this.props.addOption(val);
-          this.props.addItemOrder(val);
-        }
-        /*
-        // ввод вручную адреса доставки
-        this.setState({ chTypeDelivery: value});
-        if(value === 2){
-            this.setState({ isViewInputAdressVisible: true, });
-            this.setState({ selectStyleDeliveryAdress: styles.viewCardStyle, });
-            this.state.chDeliveryAddress = '';
-            this.setState({ chTypeDeliveryText: 'Доставка'});
-        }
-        /// выбор адреса доставки
-        if(value ===  1){
-            this.setState({ selectStyleDeliveryAdress: this.props.customers.blPickup == 1 ? styles.viewCardStyleDeliveryNoAdressAndPickup : styles.viewCardStyleDeliveryNoAdress, });
-            this.setState({ isViewInputAdressVisible: false, });
-            this.setState({ chTypeDeliveryText: 'Доставка'});
-            this.props.navigation.navigate('Addresses', {routeGoBack: 'Checkout',})                 
-        }
-        /// выбор замовывоза
-        if(value ===  3)
-        {
-            // если только самовывоз
-            if(this.props.customers.blPickup == 1 && this.props.customers.blDelivery == 0)
-            {
-                this.state.isViewInputAdressVisible = false; /// скрываем поля ввода адреса доставки
-                this.setState({ chTypeDeliveryText: 'Самовывоз'});
-                this.state.selectStyleDeliveryAdress = styles.viewCardStyleDeliveryOnlyPickup;
-                this.props.navigation.navigate('Pickups', {routeGoBack: 'Checkout',})
-            }
-            // если и самовывоз и доставка
-            else 
-            { 
-                // 
-                this.setState({ selectStyleDeliveryAdress: this.props.customers.blPickup == 1 ? styles.viewCardStyleDeliveryNoAdressAndPickup : styles.viewCardStyleDeliveryNoAdress, });
-                this.setState({ isViewInputAdressVisible: false, });
-                this.setState({ chTypeDeliveryText: 'Самовывоз'});
-                this.props.navigation.navigate('Pickups', {routeGoBack: 'Checkout',})
-            }
-        }
-        
-        this.setState({ chDeliveryAddress: index,});
-
-        */
-    }
-
-    // время доставки
-    onSelectTimeDelivery(index, value)
-    {
-        this.setState({ chTypeDeliveryTime: value, });
-        /// если разрешен выбор времени доставки.
-        if(this.props.customers.blLater == 1)
-        {
-            if(value === 2)
-            {
-                this.setState({ isChildVisible: true, });
-                this.setState({ selectStyleDeliveryTime: styles.viewCardStyle, });
-            }
-            else
-            {
-                this.setState({ isChildVisible: false, });
-                this.setState({chDeliveryTime: ''});
-                this.setState({ selectStyleDeliveryTime: styles.viewCardStyleNoTime, });
-            }
-        }
-        /// нельзя выбрать время доставки
-        else 
-        {
-            this.setState({ isChildVisible: false, });
-            this.setState({chDeliveryTime: ''});
-            this.setState({ selectStyleDeliveryTime: styles.viewCardStyleNoTimeNoSelectTime, });
-        }
-        
-    }
-    onSelectPay(index, value){
-        this.setState({chPay: value,});
-        if(value === 1)
-        {
-            this.setState({ chPayDescription: 'Наличными курьеру'});
-            this.setState({ isChildVisibleSumma: true, });
-            this.setState({ selectStyleMetodPay: styles.viewCardStyle, });
-        }
-        if(value === 2)
-        {
-            this.setState({ chPayDescription: 'Банковской картой'});
-            this.setState({ isChildVisibleSumma: false, });
-            this.setState({ selectStyleMetodPay: styles.viewCardStyleNoSumma, });
-            this.setState({ chSumma: ''});
-        }
-        if(value === 3)
-        {
-            this.setState({ chPayDescription: 'Картой курьеру'});
-            this.setState({ isChildVisibleSumma: false, });
-            this.setState({ selectStyleMetodPay: styles.viewCardStyleNoSumma, });
-            this.setState({ chSumma: ''});
-        }
-        
-    }
-    onSelectConfirm(index, value){
-        this.setState({ chConfirm: value,  });
-        if(value === 1)
-            this.setState({ chConfirmText: 'Звонок оператора', }); 
-        if(value === 2)
-            this.setState({ chConfirmText: 'SMS cообщение', }); 
-
-    }
-    validePurchase()
-    {
-/*
-        if(this.state.chFIO.length <= 0){
-            this.setState({errorName:"Вы не ввели имя"});
-            this.focusNextField('Имя');
-            this.onGoFocus();
-        }
-        else
-        {
-            this.setState({error: false})
-            if(this.state.chPhone.length <= 0){
-                this.setState({errorPhone:"Вы не ввели номер телефона"})
-            }
-            else{
-                */
-                var val = {
-                    chFIO: this.state.chFIO,
-                    chPhone: this.state.chPhone,
-                    chCity: this.state.chCity,
-                    chStreet: this.state.chStreet,
-                    chNumHome: this.state.chNumHome,
-                    chHousing: this.state.chHousing,
-                    chEntrance: this.state.chEntrance,
-                    chFloor: this.state.chFloor,
-                    chApartment: this.state.chApartment,
-                    chDeliveryAddress: this.state.chDeliveryAddress,
-                    chTypeDeliveryTime: this.state.chTypeDeliveryTime, //  время доставки
-                    chDeliveryTime: this.state.chDeliveryTime,
-                    chSumma: this.state.chSumma,
-                    chPay: this.state.chPay, // метод оплаты
-                    chPayDescription: this.state.chPayDescription, // текст метода оплаты
-                    chConfirm: this.state.chConfirm, // метод подътверждения
-                    chConfirmText: this.state.chConfirmText,
-                    chComments: this.state.chComments,
-                    chTypeDeliveryText: this.state.chTypeDeliveryText,
-                    chTypeDelivery: this.state.chTypeDelivery,
-                    addressViewPickup: this.state.addressViewPickup,
-    
-                }
-                console.log("val = ", val);
-                
-                
-                this.props.navigation.navigate('CheckoutConfirm', 
-                {   
-                    chFIO: this.state.chFIO, 
-                    chPhone: this.state.chPhone,
-                    chCity: this.state.chCity,
-                    chStreet: this.state.chStreet,
-                    chNumHome: this.state.chNumHome,
-                    chHousing: this.state.chHousing,
-                    chEntrance: this.state.chEntrance,
-                    chFloor: this.state.chFloor,
-                    chApartment: this.state.chApartment,
-                    chDeliveryAddress: this.state.chDeliveryAddress,
-                    chTypeDeliveryTime: this.state.chTypeDeliveryTime, //  время доставки
-                    chDeliveryTime: this.state.chDeliveryTime,
-                    chSumma: this.state.chSumma,
-                    chPay: this.state.chPay, // метод оплаты
-                    chPayDescription: this.state.chPayDescription, // текст метода доставки
-                    chConfirm: this.state.chConfirm, // метод подътверждения
-                    chConfirmText: this.state.chConfirmText,
-                    chComments: this.state.chComments,
-                    chTypeDeliveryText: this.state.chTypeDeliveryText,
-                    chTypeDelivery: this.state.chTypeDelivery,
-                    addressViewPickup: this.state.addressViewPickup,
-                });
-      /*      }
-        }*/
-
-    }
-
+    onGoFocus() { this.inputs['Имя'].focus(); }
+    focusNextField(id) { this.inputs[id].focus(); }
+    generateKey = () => { return `${ new Date().getTime() }`; }
+    divider(){ return( <View style={ styles.divider } />) }
     validateName(text)
     {
         let reg = /^[A-zА-яЁё]+$/i ;
@@ -412,9 +88,6 @@ class Checkout extends React.Component {
         }
         else {
             this.setState({chFIO:text});
-            
-            
-            //console.log("Имя is Correct");
             this.setState({errorName: ''})
         }
         var val = {
@@ -423,68 +96,43 @@ class Checkout extends React.Component {
         this.props.addItemOrder(val)
         console.log("validateName order = ", this.props.order);
     }
-    validatePhone(text)
-    {
-        let reg = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
-        if(reg.test(text) === false) {
-            this.setState({chPhone: text});
-            this.setState({errorPhone:"Не верный номер телефона"})
-            this.setState({isErrorPhone: true});
-        }
-        else {
-            this.setState({chPhone: text});
-            this.setState({errorPhone: ''})
-            this.setState({isErrorPhone: false});
-        }
-        var val = {
-            chPhone: text
-        };
-        this.props.addItemOrder(val)
-        console.log("validatePhone order = ", this.props.order);
-    }
-    divider()
-    {
+    //   
+    renderSelectDeliveryMetod(){
         return(
-        <View style={{
-            flex: 1,
-            borderBottomColor: '#E2E2E2',
-            borderBottomWidth: 1,
-            marginLeft: 10,
-            marginRight: 10,
-            justifyContent: 'center', 
-            alignItems: 'center',
-        }} />)
-    }
-    selectDeliveryMetod()
-    {
-        // если есть самовывоз
-        if(this.props.customers.blPickup == 1)
-        {
-            /// если есть доставка
-            if(this.props.customers.blDelivery == 1)
+            <RadioGroup selectedIndex={2} color='#6A3DA1' onSelect = {(index, value) => this.onSelectDeliveryAddress(index, value)} >
             {
-                return(
-                    /// самовывоз
-                    <RadioGroup selectedIndex={2} color='#6A3DA1'
-                    onSelect = {(index, value) => this.onSelectDeliveryAddress(index, value)} >
-                    <RadioButton value={3}>
-                        <View style={styles.arrowRightView}>
-                            {this.selectAddressPickup()}
-                            <Image style={this.state.selectStyleArrowAddress} 
-                                source={require('../assets/arrowRight.png')} />
-                        </View>
-                    </RadioButton>
-                    {/** выбор из сохр */}
+                <RadioButton value={3}>
+                    <View style={styles.arrowRightView}>
+                        {
+                            this.props.order.addressPickup !== 0 ?
+                            <Text style={{color:'#4E4E4E'}}>{this.props.order.addressPickup}</Text> :
+                            <Text style={{color:'#4E4E4E'}}>Самовывоз</Text>
+                        }
+                        <Image style={styles.arrowBottom} 
+                            source={require('../assets/arrowRight.png')} />
+                    </View>
+                </RadioButton>
+            }
+            {
+                /// если есть доставка
+                this.props.customers.blDelivery == 1 ? 
                     <RadioButton value={1}>
                         <View style={styles.arrowRightView}>
-                            {this.getSelectAddress()}
+                            {
+                                this.props.order.addressDelivery !== 0 ?
+                                <Text style={{color:'#4E4E4E'}}>{this.props.order.addressDelivery}</Text> :
+                                <Text style={{color:'#4E4E4E'}}>Выбрать адрес</Text>
+                            }
                             <Image
-                            style={this.state.selectStyleArrowAddress} 
+                            style={styles.arrowBottom} 
                             source={require('../assets/arrowRight.png')} />
                         </View>
                     </RadioButton>
-                    {/** ввести адрес */}
-                    <RadioButton value={2} style={{  marginBottom: 15, }}>
+                    : null
+            }
+            {
+                this.props.customers.blDelivery == 1 ?
+                <RadioButton value={2}>
                     <View style={styles.arrowRightView}>
                         <Text style={{color:'#4E4E4E'}}>Ввести адрес вручную</Text>
                         <Image
@@ -492,127 +140,76 @@ class Checkout extends React.Component {
                         source={ !this.state.isViewInputAdressVisible ? require('../assets/arrowBottom.png') : require('../assets/arrowTop.png')} 
                         />
                     </View>
-                    </RadioButton>
-                </RadioGroup>
-                )
-            }
-            else
-            {
-                // только самовывоз
-                return(
-                <RadioGroup color='#6A3DA1'
-                    onSelect = {(index, value) => this.onSelectDeliveryAddress(index, value)}>
-                    <RadioButton value={3}>
-                        <View style={styles.arrowRightView}>
-                            <Text style={{color:'#4E4E4E'}}>Самовывоз</Text>
-                            <Image style={this.state.selectStyleArrowAddress} 
-                                source={require('../assets/arrowRight.png')} />
-                        </View>
-                    </RadioButton>
-   
-                </RadioGroup>
-                )
-            }
-        }
-        else /// нет самовывоза
-        {
-            return(
-                <RadioGroup selectedIndex={1} color='#6A3DA1'
-                onSelect = {(index, value) => this.onSelectDeliveryAddress(index, value)} >
-                {/* выбор сохраненного адреса */}
-                <RadioButton value={1}>
-                    <View style={styles.arrowRightView}>
-                        {this.getSelectAddress()}
-                        <Image
-                        style={this.state.selectStyleArrowAddress} 
-                        source={require('../assets/arrowRight.png')} />
-                    </View>
-                </RadioButton>
-                {/* ввод адреса вручную */}
-                <RadioButton value={2} style={{  marginBottom: 15, }}>
-                <View style={styles.arrowRightView}>
-                    <Text style={{color:'#4E4E4E'}}>Ввести адрес вручную</Text>
-                    <Image
-                    style={styles.arrowBottom} 
-                    source={ !this.state.isViewInputAdressVisible ? require('../assets/arrowBottom.png') : require('../assets/arrowTop.png')} 
-                    />
-                </View>
-                </RadioButton>
+                </RadioButton> 
+                : null
+            }  
             </RadioGroup>
-            )
+        )
+    }
+    //
+    onSelectDeliveryAddress(index, value){
+        console.log("value = ", value);
+        if(value === 3) {
+            this.state.isViewInputAdressVisible = false; /// скрываем поля ввода адреса доставки
+            this.props.navigation.navigate('Pickups', {routeGoBack: 'Checkout',})
+        }
+        /// ввод адреса
+        if(value === 2) {
+            this.setState({ isViewInputAdressVisible: true, });
+            var val = {
+                addressPickup: 0,
+            };
+            this.props.addItemOrder(val)
+        }
+        /// выбор адреса доставки
+        if(value ===  1) {
+            this.setState({ isViewInputAdressVisible: false, });
+            this.setState({ chTypeDeliveryText: 'Доставка'});
+            this.props.navigation.navigate('Addresses', {routeGoBack: 'Checkout',})
+            var val = {
+                addressPickup: 0,
+            };
+            this.props.addItemOrder(val)            
         }
     }
-    radioDeliveryTime()
+    /// выбор времени доставки
+    renderDeliveryTime()
     {   
-        if(this.props.customers.blLater == 1) {
-            return(
-                <RadioGroup selectedIndex={0} color='#6A3DA1'
-                    onSelect = {(index, value) => this.onSelectTimeDelivery(index, value)} >
-                    {/* как можно скорее */}
-                    <RadioButton value={1}>
-                        <Text style={styles.textStyle}>Как можно скорее</Text>
-                    </RadioButton>
-                    {/* указать время */}
+        return(
+            <RadioGroup selectedIndex={0} color='#6A3DA1' onSelect = {(index, value) => this.onSelectTimeDelivery(index, value)} >
+                {/* как можно скорее */}
+                <RadioButton value={1}>
+                    <Text style={styles.textStyle}>Как можно скорее</Text>
+                </RadioButton>
+                {
+                    /// если разрешен заказ на потом
+                    this.props.customers.blLater == 1 ?
                     <RadioButton value={2}>
                         <View style={styles.arrowRightView}>
                             <Text style={styles.textStyle}>Ко времени</Text>
                             <Image style={styles.arrowBottom}  source={require('../assets/arrowBottom.png')} />
                         </View>
                     </RadioButton>
-                </RadioGroup>
-            )
-        }
-        else
+                    : null
+                }
+            </RadioGroup>
+        )
+    }
+    onSelectTimeDelivery(index, value){
+        console.log("value time = ", value);
+        if(value === 1)
         {
-            return(
-                <RadioGroup selectedIndex={0} color='#6A3DA1'
-                    onSelect = {(index, value) => this.onSelectTimeDelivery(index, value)} >
-                    {/* как можно скорее */}
-                    <RadioButton value={1}>
-                        <Text style={styles.textStyle}>Как можно скорее</Text>
-                    </RadioButton>
-                </RadioGroup>
-            )
+            this.setState({isViewInputDeliveryTimeVisible: false});
+            var val = { deliveryTime: "Как можно скорее" }
+            this.props.addItemOrder(val);
+        }
+        if(value === 2)
+        {
+            this.setState({isViewInputDeliveryTimeVisible: true});
         }
     }
-    /*
-    validateName(text){
-        if(text.length === 0) { 
-            this.setState({errorName: 'Вы не ввели имя'});
-            this.setState({isErrorName: true})
-        }
-        else { 
-            this.setState({errorName: ''});
-            this.setState({isErrorName: false});
-            this.setState({chFIO:text}) 
-        }
-    }
-    /*
-    validatePhone(text)
+    render() 
     {
-        if(this.state.chFIO.length === 0) { 
-            this.setState({errorName: 'Вы не ввели имя'});
-            this.setState({isErrorName: true}) 
-        }
-        else { 
-            this.setState({errorName: ''});
-            this.setState({isErrorName: false}) 
-        }
-
-        //console.log(text);
-        let reg = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
-        if(reg.test(text) === false) {
-            this.setState({errorPhone:"Не верный номер телефона"})
-            this.setState({isErrorPhone: true});
-        }
-        else {
-            this.setState({chPhone: text})
-            this.setState({errorPhone: ''})
-            this.setState({isErrorPhone: false});
-        }
-    }
-*/
-    render() {
         if(this.state.index === 0)
         {
             this.props.navigation.navigate('Addresses', {animation: 'SlideFromLeft', animationDuration: 500 });
@@ -674,13 +271,14 @@ class Checkout extends React.Component {
                     
                 </View>
                 <Text style={styles.textTitleStyle}>2. Адрес </Text>
-                <View style={this.state.selectStyleDeliveryAdress}>
+                <View style={styles.viewCardStyle}>
                     {/*Адрес доставки*/}
-                    { this.selectDeliveryMetod() }
+                    { this.renderSelectDeliveryMetod() }
                     <AnimatedHideView
                         visible={this.state.isViewInputAdressVisible}
                         style={{ padding: 0, }}
                         duration={200}
+                        unmountOnHide={true}
                         >
                         <View style={{ flex: 1, marginTop: -15,}}>
                             <Sae
@@ -692,7 +290,11 @@ class Checkout extends React.Component {
                                 blurOnSubmit={ false }
                                 onSubmitEditing={() => { this.focusNextField('Улица'); }}
                                 ref={ input => { this.inputs['Город'] = input; }}
-                                onChangeText={ (chCity) => this.setState({chCity: chCity}) }
+                                onChangeText={ (chCity) => {
+                                    this.setState({chCity: chCity});
+                                    var val = { chCity: "г. "+chCity };
+                                    this.props.addItemOrder(val);
+                                }}
                             /> 
                             {this.divider()}
                             <Sae
@@ -703,7 +305,13 @@ class Checkout extends React.Component {
                                 blurOnSubmit={ false }
                                 onSubmitEditing={() => { this.focusNextField('Дом'); }}
                                 ref={ input => { this.inputs['Улица'] = input; }}
-                                onChangeText={ (chStreet) => this.setState({chStreet: chStreet}) }
+                                onChangeText={ (chStreet) => 
+                                {
+                                    this.setState({chStreet: chStreet});
+                                    var val = { chStreet: "ул. "+chStreet };
+                                    this.props.addItemOrder(val);
+                                }
+                            }
                             /> 
                             {this.divider()}
                             <Sae
@@ -714,8 +322,13 @@ class Checkout extends React.Component {
                                 blurOnSubmit={ false }
                                 onSubmitEditing={() => { this.focusNextField('Корпус'); }}
                                 ref={ input => { this.inputs['Дом'] = input; }}
-                                onChangeText={ (chNumHome) => this.setState({chNumHome: chNumHome}) }
-                            /> 
+                                onChangeText={ (chNumHome) => 
+                                {
+                                    this.setState({chNumHome: chNumHome}) ;
+                                    var val = { chNumHome: chNumHome };
+                                    this.props.addItemOrder(val);
+                                }
+                            } /> 
                             {this.divider()}
                             <Sae
                                 label={'Корпус'}
@@ -725,8 +338,13 @@ class Checkout extends React.Component {
                                 blurOnSubmit={ false }
                                 onSubmitEditing={() => { this.focusNextField('Подъезд'); }}
                                 ref={ input => { this.inputs['Корпус'] = input; }}
-                                onChangeText={ (chHousing) => this.setState({chHousing: chHousing}) }
-                            /> 
+                                onChangeText={ (chHousing) => 
+                                {
+                                    this.setState({chHousing: chHousing});
+                                    var val = { chHousing: "'\'" + chHousing };
+                                    this.props.addItemOrder(val);
+                                }
+                            } /> 
                             {this.divider()}
                             <Sae
                                 label={'Подъезд'}
@@ -736,8 +354,13 @@ class Checkout extends React.Component {
                                 blurOnSubmit={ false }
                                 onSubmitEditing={() => { this.focusNextField('Этаж'); }}
                                 ref={ input => { this.inputs['Подъезд'] = input; }}
-                                onChangeText={ (chEntrance) => this.setState({chEntrance: chEntrance}) }
-                            /> 
+                                onChangeText={ (chEntrance) => 
+                                {
+                                    this.setState({chEntrance: chEntrance});
+                                    var val = { chEntrance: ", подъезд " + chEntrance };
+                                    this.props.addItemOrder(val);
+                                }
+                            } /> 
                             {this.divider()}
                             <Sae
                                 label={'Этаж'}
@@ -747,8 +370,13 @@ class Checkout extends React.Component {
                                 blurOnSubmit={ false }
                                 onSubmitEditing={() => { this.focusNextField('Квартира'); }}
                                 ref={ input => { this.inputs['Этаж'] = input; }}
-                                onChangeText={ (chFloor) => this.setState({chFloor: chFloor}) }
-                            /> 
+                                onChangeText={ (chFloor) => 
+                                {
+                                    this.setState({chFloor: chFloor}) ;
+                                    var val = { chFloor: ", этаж " + chFloor };
+                                    this.props.addItemOrder(val);
+                                }
+                            }/> 
                             {this.divider()}
                             <Sae
                                 label={'Квартира'}
@@ -756,16 +384,23 @@ class Checkout extends React.Component {
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 blurOnSubmit={ false }
-                                onChangeText={ (chApartment) => this.setState({chApartment: chApartment}) }
-                            />               
+                                onChangeText={ (chApartment) =>  
+                                {
+                                    this.setState({chApartment: chApartment});
+                                    var val = { chApartment: ", кв." + chApartment };
+                                    this.props.addItemOrder(val);
+                                }
+                            }/>               
                         </View>
                     </AnimatedHideView> 
                 </View>
                 <Text style={styles.textTitleStyle}>3. Время доставки </Text>
-                <View style={this.state.selectStyleDeliveryTime}>
+                <View style={styles.viewCardStyle}>
                     {/* время доставки*/}
-                    {this.radioDeliveryTime()}
-                    <AnimatedHideView visible={this.state.isChildVisible} style={{ padding: 0, }} duration={200}>
+                    {
+                        this.renderDeliveryTime()
+                    }
+                    <AnimatedHideView visible={this.state.isViewInputDeliveryTimeVisible} unmountOnHide={true} style={{ padding: 0, }} duration={200}>
                         <View>
                         <DatePicker
                             style={{width: 180,}}
@@ -781,13 +416,19 @@ class Checkout extends React.Component {
                             cancelBtnText="Cancel"
                             customStyles={{
                                 dateIcon: { position: 'absolute', left: 0, top: 4, marginLeft: 0 },
-                                dateInput: { marginLeft: 10, borderRadius: 5, }
+                                dateInput: { marginLeft: 10, borderRadius: 5, marginBottom: 10,}
                             }}
-                            onDateChange={(date) => {this.setState({chDeliveryTime: date})}}
+                            onDateChange={(date) => 
+                            {
+                                this.setState({chDeliveryTime: date})
+                                var val = { chDeliveryTime: date };
+                                this.props.addItemOrder(val);
+                            }
+                        }
                         />
                         </View>
                     </AnimatedHideView>
-                    <Text style={styles.text}>{this.state.timeDeliveryText}</Text>
+                
                 </View>
                 <Text style={styles.textTitleStyle}>4. Способ оплаты </Text>
                 <View style={this.state.selectStyleMetodPay}>
@@ -1037,6 +678,15 @@ const styles = StyleSheet.create({
         marginLeft: 0,
         marginRight: 3,
     },
+    divider: {
+        flex: 1,
+        borderBottomColor: '#E2E2E2',
+        borderBottomWidth: 1,
+        marginLeft: 10,
+        marginRight: 10,
+        justifyContent: 'center', 
+        alignItems: 'center',
+    }
 });
   
 export default connect (

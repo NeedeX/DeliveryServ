@@ -234,12 +234,10 @@ class Main extends Component {
         intervalEnd = Math.round(differenceEnd_ms/msOneMinut);
         // Convert back to days and return 
         //console.log("intervalStart >> ", intervalStart);
-        //console.log("intervalEnd >> ", intervalEnd);
+        console.log("intervalEnd >> ", intervalEnd);
       
         if(intervalStart >= 0 && intervalEnd < 0)
-        {
-          this.closeMessage();
-        }
+        {  this.closeMessage();  }
         else
         {
           //console.log("открыто");
@@ -250,9 +248,7 @@ class Main extends Component {
           }
           this.props.addOptionCounrOpenLoc(val);
         }
-  
       }
-
     })
   }
   /// сравнивает время и выводит сообщение при отрицательном результате
@@ -326,6 +322,9 @@ class Main extends Component {
                 ))
               }
               </View>
+              <TouchableOpacity style={styles.button} 
+              onPress={() => { this.props.navigation.navigate('Checkout') }}>
+              <Text>Checkout</Text></TouchableOpacity>
           </ScrollView>
         
         }
