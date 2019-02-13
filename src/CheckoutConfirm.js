@@ -11,7 +11,7 @@ class CheckoutConfirm extends React.Component {
         var {params} = this.props.navigation.state;
         this.state = {
             UIDClient: this.props.options.UIDClient,
-            chFIO: params.chFIO,
+            /*chFIO: params.chFIO,
             chPhone: params.chPhone,
 
             chCity: params.chCity,
@@ -33,6 +33,7 @@ class CheckoutConfirm extends React.Component {
             chTypeDelivery: params.chTypeDelivery,
 
             chConfirmText: params.chConfirmText,
+            */
             allPriceCart: 0,
             didFinishInitialAnimation: false,
         }
@@ -85,19 +86,21 @@ class CheckoutConfirm extends React.Component {
       return parseFloat(allPriceCart).toFixed(2) +" " + this.props.customers.chCurrency;
     }
     validePurchase(){
+        var address = '';
+
         var val ={
             UIDClient: this.state.UIDClient,
             UIDGoogleUser: this.props.user.length === 0 ? null : this.props.user.uid, // UID пользователя приложения
-            chFIO: this.state.chFIO,
-            chPhone: this.state.chPhone,
-            chCity: this.state.chCity,
+            chFIO: this.props.order.chFIO,
+            chPhone: this.props.order.chPhone,
+            chCity: this.props.order.chCity,
             chStreet: this.state.chStreet,
             chNumHome: this.state.chNumHome,
             chHousing: this.state.chHousing,
-                chEntrance: this.state.chEntrance,
-                chFloor: this.state.chFloor,
-                chApartment: this.state.chApartment,
-                chDeliveryAddress: this.state.chDeliveryAddress,
+            chEntrance: this.state.chEntrance,
+            chFloor: this.state.chFloor,
+            chApartment: this.state.chApartment,
+            chDeliveryAddress: this.state.chDeliveryAddress,
                 chTypeDeliveryTime: this.state.chTypeDeliveryTime, //  время доставки
                 chDeliveryTime: this.state.chDeliveryTime,
                 chSumma: this.state.chSumma,
@@ -222,14 +225,22 @@ class CheckoutConfirm extends React.Component {
                     <Text style={styles.textTitleStyle2}>Имя</Text>
                         <Text style={styles.textStyleValue}>{this.props.order.chFIO}</Text>
                         <Text style={styles.textTitleStyle2}>Телефон</Text>
-                        <Text style={styles.textStyleValue}>{params.chPhone}</Text>
-                        <Text style={styles.textTitleStyle2}>{this.props.order.addressDelivery === 0 ? "Самовывоз" : "Адрес"}</Text>
+                        <Text style={styles.textStyleValue}>{this.props.order.chPhone}</Text>
+                        <Text style={styles.textTitleStyle2}>{this.props.order.addressPickup !== 0  ? "Самовывоз" : "Адрес"}</Text>
                         {
-                            this.props.order.addressDelivery === 0 ?
+                            this.props.order.addressPickup !== 0 ?
                             <Text style={styles.textStyleValue}>{this.props.order.addressPickup}</Text>
-                            :
+                            : null
+                        }
+                        {
+                            this.props.order.addressDelivery !== 0 ?
                             <Text style={styles.textStyleValue}>{this.props.order.addressDelivery}</Text>
-                        
+                            : null
+                        }
+                        {
+                            this.props.order.addressDeliveryInput !== 0 ?
+                            <Text style={styles.textStyleValue}>{this.props.order.addressDeliveryInput}</Text>
+                            : null
                         }
                         <View
                             style={{  borderBottomColor: '#E4E4E4',
@@ -237,11 +248,16 @@ class CheckoutConfirm extends React.Component {
                         <Text style={styles.textTitleStyle}>
                             2. Детали
                         </Text>
-                        <Text style={styles.textTitleStyle2}>{this.props.order.addressDelivery === 0 ? "К какому времени" : "Время доставки"}</Text>
+                        <Text style={styles.textTitleStyle2}>Время доставки</Text>
+                        <Text style={styles.textStyleValue}>{this.props.order.chDeliveryTime}</Text>
                         
-                        <Text style={styles.textStyleValue}>{params.chDeliveryTime === '' ? 'Как можно скорее' : params.chDeliveryTime}</Text>
+                       {/* <Text style={styles.textStyleValue}>{params.chDeliveryTime === '' ? 'Как можно скорее' : params.chDeliveryTime}</Text> */}
+
                         <Text style={styles.textTitleStyle2}>Способ оплаты</Text>
-                        <Text style={styles.textStyleValue}>{params.chPayDescription}</Text>
+                        <View style={{ flexDirection: 'row'}}>
+                        <Text style={styles.textStyleValue}>{this.props.order.chMethodPay}</Text>
+                        <Text style={ [styles.textTitleStyle2, { marginTop: -2,}]}>({this.props.order.chPayGiveChange !== 0 ? "сдача с: "+this.props.order.chPayGiveChange+" "+this.props.customers.chCurrency : null})</Text>
+                        </View>
 
                         <View style={{ borderBottomColor: '#E4E4E4', borderBottomWidth: 1,
                                 marginTop: 3, marginBottom: 3, }} />
