@@ -94,12 +94,18 @@ class CheckoutConfirm extends React.Component {
             chFIO: this.props.order.chFIO,
             chPhone: this.props.order.chPhone,
             chCity: this.props.order.chCity,
+            addressDeliveryInput: this.props.order.addressDeliveryInput,
+            addressPickup: this.props.order.addressPickup,
+            addressDelivery: this.props.order.addressDelivery,
+
+            /*
             chStreet: this.state.chStreet,
             chNumHome: this.state.chNumHome,
             chHousing: this.state.chHousing,
             chEntrance: this.state.chEntrance,
             chFloor: this.state.chFloor,
             chApartment: this.state.chApartment,
+            
             chDeliveryAddress: this.state.chDeliveryAddress,
                 chTypeDeliveryTime: this.state.chTypeDeliveryTime, //  время доставки
                 chDeliveryTime: this.state.chDeliveryTime,
@@ -110,13 +116,23 @@ class CheckoutConfirm extends React.Component {
                 chTypeDeliveryText: this.state.chTypeDeliveryText,
                 chTypeDelivery: this.state.chTypeDelivery,
                 chConfirmText: this.state.chConfirmText,
-                chComments: this.state.chComments,
-                allPriceCart: this.state.allPriceCart,
-                cart: this.props.cart,
+            */
+            chTypeDeliveryText: this.props.order.chTypeDeliveryText,
+            chDeliveryTime: this.props.order.chDeliveryTime, // время доставки
+            chMethodPay:this.props.order.chMethodPay, /// метод оплаты 
+            chPayGiveChange: this.props.order.chPayGiveChange, // сумма с которой надо дать сдачу
+            chMethodConfirm: this.props.order.chMethodConfirm, /// метод подътверждения
+            chComments: this.props.order.chComments, /// комментарий к заказу
+
+
+            chComments: this.props.order.chComments,
+            allPriceCart: this.state.allPriceCart,
+            cart: this.props.cart,
         }
         console.log(val);
         
 
+        /*
         fetch('http://mircoffee.by/deliveryserv/app/InsertOrder.php', 
         {
             method: 'POST',
@@ -189,14 +205,14 @@ class CheckoutConfirm extends React.Component {
    
         })
         .catch((error) => { console.error(error); });
-
+*/
     }
     selectedAddresOrPickup(){
         if(this.props.options.addressPickup !== undefined){
             const newLoc = this.props.locations.filter((el) => el.idLocations === this.props.options.addressPickup );
             console.log("newLoc = ", newLoc);
             
-            this.setState({chTypeDeliveryText: "Cf"})
+            this.setState({chTypeDeliveryText: ""})
         }
     }
     render() {
@@ -226,7 +242,7 @@ class CheckoutConfirm extends React.Component {
                         <Text style={styles.textStyleValue}>{this.props.order.chFIO}</Text>
                         <Text style={styles.textTitleStyle2}>Телефон</Text>
                         <Text style={styles.textStyleValue}>{this.props.order.chPhone}</Text>
-                        <Text style={styles.textTitleStyle2}>{this.props.order.addressPickup !== 0  ? "Самовывоз" : "Адрес"}</Text>
+                        <Text style={styles.textTitleStyle2}>{this.props.order.addressPickup !== 0  ? "Самовывоз" : "Доставка  "}</Text>
                         {
                             this.props.order.addressPickup !== 0 ?
                             <Text style={styles.textStyleValue}>{this.props.order.addressPickup}</Text>

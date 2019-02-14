@@ -38,6 +38,7 @@ class Pickups extends Component {
       var val = {
         addressPickup: '"'+tempArrLoc.chName+'"' + " " + tempArrLoc.chAddress,
         addressDelivery: 0,
+        addressDeliveryInput: 0,
       }
       //this.props.addOption(val);
       this.props.addItemOrder(val);
