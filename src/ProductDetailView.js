@@ -416,7 +416,7 @@ class ProductDetailView extends React.Component {
           <View>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <Image
-              style={{width: 360, height: 232, zIndex: 0, al: 'center'}}
+              style={{width: 360, height: 232, zIndex: 0,}}
               source={ result[0].chMainImage === "" ? require('../assets/noImage.jpg') : { uri: result[0].chMainImage } }
             />
            </View>

@@ -124,7 +124,7 @@ class History extends Component {
                 <ScrollView style={{paddingBottom: 10,}}>
             {
                 this.props.history.map((item, index) => (
-                <View style={{ marginBottom: 5, marginTop: 5,}}>
+                <View key={index} style={{ marginBottom: 5, marginTop: 5,}}>
                     <TouchableOpacity  key={index} underlayColor='rgba(255,255,255,0.1)'
                       style={{ borderRadius: 10, elevation: 1, backgroundColor: '#F2F2F2', height: 50, }} onPress={() =>  this.hideView(item.idOrder) }>
                         <View style={{flexDirection: 'row', backgroundColor: '#F2F2F2', justifyContent: 'space-between', flex: 1}}>
