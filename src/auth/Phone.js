@@ -158,7 +158,7 @@ class PhoneAuth extends Component {
       </View>
     );
   }
-  userDB(user)
+  userDB()
   {
     //console.log("UIDGoogleUser = ", user.uid);
     //console.log("chPhone = ", user.phoneNumber);
@@ -172,9 +172,9 @@ class PhoneAuth extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        UIDGoogleUser: user.uid,
-        chPhone: user.phoneNumber,
-        UIDClient: this.props.options.UIDClient,
+        UIDGoogleUser: this.props.user._user.uid,
+        chPhone: this.props.user._user.phoneNumber,
+        UIDClient: this.props.options.chUIDClient,
       })
     })
     .then((response) => response.json())
@@ -201,8 +201,7 @@ class PhoneAuth extends Component {
         {this.renderMessage()}
         {!user && confirmResult && this.renderVerificationCodeInput()}
         {user && (
-          <View style={{ padding: 15, justifyContent: 'center',
-              alignItems: 'center', flex: 1, }} >
+          <View style={{ padding: 15, justifyContent: 'center', alignItems: 'center', flex: 1, }} >
           {this.props.loadUser(user)}
           {this.userDB(user)}
           {this.props.navigation.navigate('Main')}
