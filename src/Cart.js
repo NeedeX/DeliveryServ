@@ -50,8 +50,8 @@ class Cart extends Component {
         this.state.ingPrice = this.state.ingPrice + Number(i.chPriceChange)
       ))
         */
-      return ingridientes.map(i => (
-        <View style={{flexDirection: 'row', marginLeft: 0, fontSize: 10,}}>
+      return ingridientes.map((i, index) => (
+        <View key={index} style={{flexDirection: 'row', marginLeft: 0, fontSize: 10,}}>
           <Text style={styles.texOptionStyle}>{i.chName}</Text>
           <Text style={styles.texOptionStyle}> +{parseFloat(i.chPriceChange).toFixed(2) +" " + this.props.customers.chCurrency}</Text>
         </View>

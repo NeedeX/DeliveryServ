@@ -32,7 +32,7 @@ class CardProductInConfirm extends Component {
         if(iOldPrice === "" || iOldPrice === undefined){
           view = <Text></Text>
         }
-        else{
+        else {
           view = <Text style={styles.textOldPriceStyle}> { parseFloat(iOldPrice).toFixed(2)+" " + this.props.customers.chCurrency} </Text>
         }
         return view;
@@ -40,8 +40,8 @@ class CardProductInConfirm extends Component {
     renderIng(ingridientes){
         if(this.props.ing &&  ingridientes.length > 0)
         {
-            return ingridientes.map(i => (
-                <View style={{flexDirection: 'row', marginLeft: 10, fontSize: 10,}}>
+            return ingridientes.map((i, index) => (
+                <View key={index} style={{flexDirection: 'row', marginLeft: 10, fontSize: 10,}}>
                     <Text style={{fontSize: 10,}}>{i.chName}</Text>
                     <Text style={{fontSize: 10,}}> +{parseFloat(i.chPriceChange).toFixed(2) +" " + this.props.customers.chCurrency}</Text>
 
@@ -53,7 +53,7 @@ class CardProductInConfirm extends Component {
        
         return (
             <View>
-                <View style={{ flexDirection: 'row', flex: 1,}}>
+                <View  style={{ flexDirection: 'row', flex: 1,}}>
                     <View style={{ padding: 10, }}>
                         <Image
                         style={{width: 80, height: 80, zIndex: 0}}
@@ -62,8 +62,8 @@ class CardProductInConfirm extends Component {
                         <View style={{zIndex: 10, marginTop: this.props.tegsProduct.length > 1 ? -50 : -20}}>
                         {
                             this.props.tegsProduct.length > 0 ?
-                            this.props.tegsProduct.map(t =>(
-                                <View style={{backgroundColor:  "#"+this.props.tegs.find(tf => tf.idTag === t.iTag).chColor,
+                            this.props.tegsProduct.map((t, index) =>(
+                                <View key={index} style={{backgroundColor:  "#"+this.props.tegs.find(tf => tf.idTag === t.iTag).chColor,
                                 width: 58, height: 19, marginLeft: -10, borderBottomEndRadius: 5,
                                 borderTopRightRadius: 5, marginBottom: 5,  
                                 }}>

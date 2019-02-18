@@ -9,31 +9,9 @@ class CheckoutConfirm extends React.Component {
     constructor(props){
         super(props);
         var {params} = this.props.navigation.state;
+        console.log("this.props.order = ", this.props.order);
         this.state = {
             UIDClient: this.props.options.UIDClient,
-            /*chFIO: params.chFIO,
-            chPhone: params.chPhone,
-
-            chCity: params.chCity,
-            chStreet: params.chStreet,
-            chNumHome: params.chNumHome,
-            chHousing: params.chHousing,
-            chEntrance: params.chEntrance,
-            chFloor: params.chFloor,
-            chApartment: params.chApartment,
-            chTypeDeliveryTime: params.chTypeDeliveryTime, //  время доставки
-            chDeliveryTime: params.chDeliveryTime,
-            chSumma: params.chSumma, // сумма с которой дать сдачу
-            chPay: params.chPay, // метод оплаты
-            chConfirm: params.chConfirm, // метод подътверждения
-            chComments: params.chComments,
-            chDeliveryAddress: params.chDeliveryAddress,
-            chPayDescription: params.chPayDescription, // текст метода доставки
-            chTypeDeliveryText: params.chTypeDeliveryText,
-            chTypeDelivery: params.chTypeDelivery,
-
-            chConfirmText: params.chConfirmText,
-            */
             allPriceCart: 0,
             didFinishInitialAnimation: false,
         }
@@ -97,42 +75,19 @@ class CheckoutConfirm extends React.Component {
             addressDeliveryInput: this.props.order.addressDeliveryInput,
             addressPickup: this.props.order.addressPickup,
             addressDelivery: this.props.order.addressDelivery,
-
-            /*
-            chStreet: this.state.chStreet,
-            chNumHome: this.state.chNumHome,
-            chHousing: this.state.chHousing,
-            chEntrance: this.state.chEntrance,
-            chFloor: this.state.chFloor,
-            chApartment: this.state.chApartment,
-            
-            chDeliveryAddress: this.state.chDeliveryAddress,
-                chTypeDeliveryTime: this.state.chTypeDeliveryTime, //  время доставки
-                chDeliveryTime: this.state.chDeliveryTime,
-                chSumma: this.state.chSumma,
-                chPay: this.state.chPay, // метод оплаты
-                chPayDescription: this.state.chPayDescription, // текст метода доставки
-                chConfirm: this.state.chConfirm, // метод подътверждения
-                chTypeDeliveryText: this.state.chTypeDeliveryText,
-                chTypeDelivery: this.state.chTypeDelivery,
-                chConfirmText: this.state.chConfirmText,
-            */
             chTypeDeliveryText: this.props.order.chTypeDeliveryText,
             chDeliveryTime: this.props.order.chDeliveryTime, // время доставки
             chMethodPay:this.props.order.chMethodPay, /// метод оплаты 
             chPayGiveChange: this.props.order.chPayGiveChange, // сумма с которой надо дать сдачу
             chMethodConfirm: this.props.order.chMethodConfirm, /// метод подътверждения
             chComments: this.props.order.chComments, /// комментарий к заказу
-
-
-            chComments: this.props.order.chComments,
             allPriceCart: this.state.allPriceCart,
             cart: this.props.cart,
         }
-        console.log(val);
+        console.log("val =", val);
         
 
-        /*
+        
         fetch('http://mircoffee.by/deliveryserv/app/InsertOrder.php', 
         {
             method: 'POST',
@@ -144,26 +99,18 @@ class CheckoutConfirm extends React.Component {
             body: JSON.stringify({
                 UIDClient: this.state.UIDClient,
                 UIDGoogleUser: this.props.user.length === 0 ? null : this.props.user.uid, // UID пользователя приложения
-                chFIO: this.state.chFIO,
-                chPhone: this.state.chPhone,
-                chCity: this.state.chCity,
-                chStreet: this.state.chStreet,
-                chNumHome: this.state.chNumHome,
-                chHousing: this.state.chHousing,
-                chEntrance: this.state.chEntrance,
-                chFloor: this.state.chFloor,
-                chApartment: this.state.chApartment,
-                chDeliveryAddress: this.state.chDeliveryAddress,
-                chTypeDeliveryTime: this.state.chTypeDeliveryTime, //  время доставки
-                chDeliveryTime: this.state.chDeliveryTime,
-                chSumma: this.state.chSumma,
-                chPay: this.state.chPay, // метод оплаты
-                chPayDescription: this.state.chPayDescription, // текст метода доставки
-                chConfirm: this.state.chConfirm, // метод подътверждения
-                chTypeDeliveryText: this.state.chTypeDeliveryText,
-                chTypeDelivery: this.state.chTypeDelivery,
-                chConfirmText: this.state.chConfirmText,
-                chComments: this.state.chComments,
+                chFIO: this.props.order.chFIO,
+                chPhone: this.props.order.chPhone,
+                chCity: this.props.order.chCity,
+                addressDeliveryInput: this.props.order.addressDeliveryInput,
+                addressPickup: this.props.order.addressPickup,
+                addressDelivery: this.props.order.addressDelivery,
+                chTypeDeliveryText: this.props.order.chTypeDeliveryText,
+                chDeliveryTime: this.props.order.chDeliveryTime, // время доставки
+                chMethodPay:this.props.order.chMethodPay, /// метод оплаты 
+                chPayGiveChange: this.props.order.chPayGiveChange, // сумма с которой надо дать сдачу
+                chMethodConfirm: this.props.order.chMethodConfirm, /// метод подътверждения
+                chComments: this.props.order.chComments, /// комментарий к заказу
                 allPriceCart: this.state.allPriceCart,
                 cart: this.props.cart,
             })
@@ -175,37 +122,35 @@ class CheckoutConfirm extends React.Component {
             val = {
                 key: this.generateKey(), 
                 idOrder: responseJson.toString(),
-                chFIO: this.state.chFIO,
-                chPhone: this.state.chPhone,
-                chCity: this.state.chCity,
-                chStreet: this.state.chStreet,
-                chNumHome: this.state.chNumHome,
-                chHousing: this.state.chHousing,
-                chEntrance: this.state.chEntrance,
-                chFloor: this.state.chFloor,
-                chApartment: this.state.chApartment,
-                chDeliveryAddress: this.state.chDeliveryAddress, // адрес доставки
-                chTypeDeliveryTime: this.state.chTypeDeliveryTime, //  время доставки
-                chDeliveryTime: this.state.chDeliveryTime, // к какому времени выполнить доставку
-                chSumma: this.state.chSumma, /// суммма с которой нужно дать сдачу
-                chPay: this.state.chPay, // метод оплаты
-                chPayDescription: this.state.chPayDescription, // текст метода доставки
-                chConfirm: this.state.chConfirm, // метод подътверждения
-                chTypeDeliveryText: this.state.chTypeDeliveryText, // описание способа доставки
-                chTypeDelivery: this.state.chTypeDelivery, // id типа доставки
-                chConfirmText: this.state.chConfirmText, // описание способа подътверждения
-                chComments: this.state.chComments,
+                UIDClient: this.state.UIDClient,
+                UIDGoogleUser: this.props.user.length === 0 ? null : this.props.user.uid, // UID пользователя приложения
+                chFIO: this.props.order.chFIO,
+                chPhone: this.props.order.chPhone,
+                chCity: this.props.order.chCity,
+                addressDeliveryInput: this.props.order.addressDeliveryInput,
+                addressPickup: this.props.order.addressPickup,
+                addressDelivery: this.props.order.addressDelivery,
+                chTypeDeliveryText: this.props.order.chTypeDeliveryText,
+                chDeliveryTime: this.props.order.chDeliveryTime, // время доставки
+                chMethodPay:this.props.order.chMethodPay, /// метод оплаты 
+                chPayGiveChange: this.props.order.chPayGiveChange, // сумма с которой надо дать сдачу
+                chMethodConfirm: this.props.order.chMethodConfirm, /// метод подътверждения
+                chComments: this.props.order.chComments, /// комментарий к заказу
+                allPriceCart: this.state.allPriceCart,
                 cart: this.props.cart,
             };
-            this.props.onAddOrder(val);
+
+            /*this.props.onAddOrder(val);
             console.log(this.props.order);
+            */
+           console.log("===>> ", val)
             this.props.clearCart();  
    
             this.props.navigation.navigate('CompletedOrder', {animation: 'SlideFromLeft', animationDuration: 500 });
    
         })
         .catch((error) => { console.error(error); });
-*/
+
     }
     selectedAddresOrPickup(){
         if(this.props.options.addressPickup !== undefined){
@@ -220,7 +165,7 @@ class CheckoutConfirm extends React.Component {
         {
             this.props.navigation.navigate('Addresses', {animation: 'SlideFromLeft', animationDuration: 500 });
         }
-        console.log("options = ", this.props.options);
+        //console.log("options = ", this.props.options);
         
         var {navigate} = this.props.navigation;
         var {params} = this.props.navigation.state;
@@ -267,39 +212,43 @@ class CheckoutConfirm extends React.Component {
                         <Text style={styles.textTitleStyle2}>Время доставки</Text>
                         <Text style={styles.textStyleValue}>{this.props.order.chDeliveryTime}</Text>
                         
-                       {/* <Text style={styles.textStyleValue}>{params.chDeliveryTime === '' ? 'Как можно скорее' : params.chDeliveryTime}</Text> */}
+                        {/* <Text style={styles.textStyleValue}>{params.chDeliveryTime === '' ? 'Как можно скорее' : params.chDeliveryTime}</Text> */}
 
                         <Text style={styles.textTitleStyle2}>Способ оплаты</Text>
                         <View style={{ flexDirection: 'row'}}>
-                        <Text style={styles.textStyleValue}>{this.props.order.chMethodPay}</Text>
-                        <Text style={ [styles.textTitleStyle2, { marginTop: -2,}]}>({this.props.order.chPayGiveChange !== 0 ? "сдача с: "+this.props.order.chPayGiveChange+" "+this.props.customers.chCurrency : null})</Text>
+                            <Text style={styles.textStyleValue}>{this.props.order.chMethodPay}</Text>
+                            <Text style={ [styles.textTitleStyle2, { marginTop: -2,}]}>{this.props.order.chPayGiveChange !== '' ? "(сдача с: "+this.props.order.chPayGiveChange+" "+this.props.customers.chCurrency+")" : null}</Text>
                         </View>
+                        <Text style={styles.textTitleStyle2}>Способ подътверждения</Text>
+                        <Text style={styles.textStyleValue}>{this.props.order.chMethodConfirm}</Text>
+                        <Text style={styles.textTitleStyle2}>Комментарий к заказу</Text>
+                        <Text style={styles.textStyleValue}>{this.props.order.chComments}</Text>
 
                         <View style={{ borderBottomColor: '#E4E4E4', borderBottomWidth: 1,
                                 marginTop: 3, marginBottom: 3, }} />
                         {
-                        this.props.cart.map((item, index) => (
-                    
-                          <Card
-                          key={index}
-                          id={item.id}
-                          idInCart={item.idInCart}                       
-                          chName={item.chName}
-                          chMainImage={item.chMainImage}
-                          chPrice={item.chPrice}
-                          chOldPrice={item.chOldPrice}
-                          optionsId={item.optionsId}
-                          optionsName={item.optionsName}
-                          optionsPrice={item.optionsPrice}
-                          ing={item.ing}
-                          tegsProduct={item.tegsProduct}
-                          nav={this.props.navigation}
-                          index={index}
-                              
-                          />
+                            this.props.cart.map((item, index) => (
+                        
+                            <Card
+                            key={index}
+                            id={item.id}
+                            idInCart={item.idInCart}                       
+                            chName={item.chName}
+                            chMainImage={item.chMainImage}
+                            chPrice={item.chPrice}
+                            chOldPrice={item.chOldPrice}
+                            optionsId={item.optionsId}
+                            optionsName={item.optionsName}
+                            optionsPrice={item.optionsPrice}
+                            ing={item.ing}
+                            tegsProduct={item.tegsProduct}
+                            nav={this.props.navigation}
+                            index={index}
+                                
+                            />
+                                )
                             )
-                        )
-                    }
+                        }
                     <View style={{ flex: 1,  flexDirection: 'row', alignItems: 'flex-start',
                                     justifyContent: 'flex-start', margin: 15, marginBottom: 10, }}>
                         <Text style={{fontSize: 14, fontFamily: 'Roboto', color: '#828282',}}>Стоимость товаров:</Text>

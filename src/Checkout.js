@@ -13,7 +13,7 @@ class Checkout extends React.Component {
     constructor(props){
         super(props);
         var {params} = this.props.navigation.state;
-        console.log("order = ", this.props.order);
+        console.log("customers = ", this.props.customers);
         
         this.state = {
             chFIO: this.props.user.length !== 0 ? this.props.user.userDB.chFIO : "",    // имя
@@ -28,9 +28,12 @@ class Checkout extends React.Component {
             chFloor: '', /// этаж
             chApartment: '', /// квартира
             /////////////////////////////
+            addressPickup: this.props.order.addressPickup,
+            addressDelivery: this.props.order.addressDelivery,
+
             chDeliveryTime: 'Как можно скорее', // время доставки
             chTypeDeliveryText: 'Доставка',
-            chMethodPay: 'Наличными курьеру', /// метод оплаты 
+            chMethodPay: 'Наличными', /// метод оплаты 
             chPayGiveChange: '', // сумма с которой надо дать сдачу
             chMethodConfirm: 'Звонок оператора', /// метод подътверждения
             chComments: '', /// комментарий к заказу
@@ -62,7 +65,7 @@ class Checkout extends React.Component {
             };
             this.props.addItemOrder(val)
         }
-        console.log("getNameFromDB order = ", this.props.order);
+        //console.log("getNameFromDB order = ", this.props.order);
         return name;
     }
     // Lifecycle methods
@@ -100,11 +103,12 @@ class Checkout extends React.Component {
             this.setState({chFIO:text});
             this.setState({errorName: ''})
         }
-        
+        /*
         var val = {
             chFIO: text
         };
         this.props.addItemOrder(val)
+        */
        // console.log("validateName order = ", this.props.order);
     }
     validatePhone(text)
@@ -120,11 +124,10 @@ class Checkout extends React.Component {
             this.setState({errorPhone: ''})
             this.setState({isErrorPhone: false});
         }
-        var val = {
-            chPhone: text
-        };
-        this.props.addItemOrder(val)
-        console.log("validatePhone order = ", this.props.order);
+        /*
+        var val = { chPhone: text };
+        this.props.addItemOrder(val)*/
+        //console.log("validatePhone order = ", this.props.order);
     }
     renderSelectDeliveryMetod(){
         return(
@@ -157,7 +160,7 @@ class Checkout extends React.Component {
                             source={require('../assets/arrowRight.png')} />
                         </View>
                     </RadioButton>
-                    : null
+                : null
             }
             {
                 this.props.customers.blDelivery == 1 ?
@@ -177,7 +180,7 @@ class Checkout extends React.Component {
     }
     //
     onSelectDeliveryAddress(index, value){
-        console.log("value = ", value);
+        //console.log("value = ", value);
         /// Самовывоз
         if(value === 3) {
             this.setState({ isViewInputAdressVisible: false, }); /// скрываем поля ввода адреса доставки
@@ -185,17 +188,19 @@ class Checkout extends React.Component {
             this.setState({ chTypeDeliveryText: 'Самовывоз'});
             this.setState({isViewInputSumma: false});
             this.setState({chPayGiveChange: ''}); // сумма с которой надо дать сдачу
+            
             var val = {
-                addressDelivery: 0,
-                addressDeliveryInput: 0,
-                chTypeDeliveryText: 'Самовывоз',
+                addressDelivery: 0, // сброс выбранного адреса доставки
+                addressDeliveryInput: 0, // сброс введенного адреса
+                chTypeDeliveryText: 'Самовывоз', 
             };
             this.props.addItemOrder(val)
         }
         /// ввод адреса
         if(value === 2) {
-            this.setState({ isViewInputAdressVisible: true, });
+            this.setState({ isViewInputAdressVisible: true, }); 
             this.setState({ chTypeDeliveryText: 'Доставка'});
+            
             var val = {
                 addressPickup: 0,
                 addressDelivery: 0,
@@ -207,13 +212,14 @@ class Checkout extends React.Component {
         if(value ===  1) {
             this.setState({ isViewInputAdressVisible: false, });
             this.setState({ chTypeDeliveryText: 'Доставка'});
-            this.props.navigation.navigate('Addresses', {routeGoBack: 'Checkout',})
+            this.props.navigation.navigate('Addresses', {routeGoBack: 'Checkout',});
             var val = {
                 addressPickup: 0,
                 addressDeliveryInput: 0,
                 chTypeDeliveryText: 'Доставка',
             };
             this.props.addItemOrder(val)            
+            
         }
     }
     /// выбор времени доставки
@@ -240,42 +246,64 @@ class Checkout extends React.Component {
         )
     }
     onSelectTimeDelivery(index, value){
-        console.log("value time = ", value);
+        //console.log("value time = ", value);
         if(value === 1)
         {
             this.setState({isViewInputDeliveryTimeVisible: false});
             this.setState({chDeliveryTime: "Как можно скорее"});
-            var val = { chDeliveryTime: "Как можно скорее" }
-            this.props.addItemOrder(val);
+            /*var val = { chDeliveryTime: "Как можно скорее" }
+            this.props.addItemOrder(val);*/
         }
         if(value === 2)
         {
             var d = new Date(); // текущая дата
             var minutes = d.setMinutes(d.getMinutes() + 30); // прибавляем 30 минут
             var newDate = new Date(minutes); // получаем новую дату
-            month = "0" + (newDate.getMonth() + 1); // форматируем номер месяца
+            var hours = newDate.getHours()<10 ? "0" + newDate.getHours(): newDate.getHours()
+            var month = (newDate.getMonth() + 1)<10 ? "0" + (newDate.getMonth() + 1): (newDate.getMonth() + 1);// форматируем номер месяца
+       
+            var minute = newDate.getMinutes()<10 ? "0" + newDate.getMinutes(): newDate.getMinutes();
 
-            bStart = newDate.getDate()+"." +month+"."+newDate.getFullYear()+" "+ newDate.getHours()+":" + newDate.getMinutes();
+            bStart = newDate.getDate()+"." +month+"."+newDate.getFullYear()+" "+ hours +":" + minute;
             this.setState({chDeliveryTime: bStart});
             this.setState({isViewInputDeliveryTimeVisible: true});
-
+/*
             var val = { chDeliveryTime: bStart }
-            this.props.addItemOrder(val);
+            this.props.addItemOrder(val);*/
         }
     }
     onSelectPay(index, value){
         // оплата наличными
-        if(value === 1){
-        
+        if(value === 1) {
+            // если выбран самовывоз, скрывать поле ввода суммы, с которой надо дать сдачу, 
+            // даже если выбрана оплата наличными. В кассе всегда должна быть сдача 
             this.setState({isViewInputSumma: this.props.order.addressPickup === 0 ? true : false});
-            this.setState({chMethodPay: 'Наличными'+ this.props.order.addressPickup === 0 ? 'курьеру' : ""});
-            // isViewInputSumma
+            // устанавливаем значение, что выбрано оплата "наличными" и в зависимости замовывоз или нет, то нужно ли слово "курьеру" 
+            this.setState({chMethodPay: `Наличными ${this.props.order.addressPickup === 0 ? 'курьеру' : ""}`});
+            // создаем массив, для сохранения в редаксе
+           /* var val = {
+                chMethodPay: 'Наличными'+ this.props.order.addressPickup === 0 ? 'курьеру' : "",
+                chPayGiveChange: '',
+            };
+            // записываем в редакс
+            this.props.addItemOrder(val);*/
+            console.log("===> ", this.state.chMethodPay);
+             
         }
-        // кртой
-        if(value === 3){
+        // картой
+        if(value === 3) {
+            // скрываем поле, с какой суммы надо дать сдачу
             this.setState({isViewInputSumma: false});
-            this.setState({chMethodPay: 'Картой' + this.props.order.addressPickup === 0 ? 'курьеру' : ""});
+            // устанавливаем значение, что выбрано оплата "Картой" и в зависимости замовывоз или нет, то нужно ли слово "курьеру" 
+            this.setState({chMethodPay: `Картой ${this.props.order.addressPickup === 0 ? 'курьеру' : ""}`});
+            // обнуляем значение с котороо надо дать сдачу
             this.setState({chPayGiveChange: ''})
+            /*
+            var val = {
+                chMethodPay: 'Картой' + this.props.order.addressPickup === 0 ? 'курьеру' : "",
+                chPayGiveChange: '',
+            };
+            this.props.addItemOrder(val);*/
         }
     }
     onSelectConfirm(index, value){
@@ -287,43 +315,35 @@ class Checkout extends React.Component {
         }
     }
     nextConfirm(){
-        var chAdress = "ул. "+this.state.chStreet+" "+this.state.chNumHome;
-        var chHousing = this.state.chHousing !== '' ? "/"+this.state.chHousing+", " : ", ";
-        var chEntrance = this.state.chEntrance !== '' ? "под."+this.state.chEntrance+", " : '';
-        var chFloor = this.state.chFloor !== '' ? "этаж "+this.state.chFloor+", " : '';
-        var chApartment = this.state.chApartment !== '' ? "кв. "+this.state.chApartment : '';
-        chAdress = chAdress + chHousing + chEntrance + chFloor + chApartment;
-
-        var val = {
+        var chAdress = 0;
+        if( this.props.order.addressPickup === 0 && this.props.order.addressDelivery === 0)
+        {
+            chAdress = "ул. "+this.state.chStreet+" "+this.state.chNumHome;
+            var chHousing = this.state.chHousing !== '' ? "/"+this.state.chHousing+", " : ", ";
+            var chEntrance = this.state.chEntrance !== '' ? "под."+this.state.chEntrance+", " : '';
+            var chFloor = this.state.chFloor !== '' ? "этаж "+this.state.chFloor+", " : '';
+            var chApartment = this.state.chApartment !== '' ? "кв. "+this.state.chApartment : '';
+            chAdress = chAdress + chHousing + chEntrance + chFloor + chApartment;
+        }
+        console.log(" this.state.chMethodPay = ", this.state.chMethodPay);
+        
+        var values = {
             chFIO: this.state.chFIO,    // имя
             chPhone:  this.state.chPhone,   // телефон
-
+            chCity: this.state.chCity,      // город
             chTypeDeliveryText: this.state.chTypeDeliveryText, /// текст типа доставки (доставка или самовывоз)
-            addressDeliveryInput: this.props.order.addressPickup !== 0 && this.props.order.addressDelivery !== 0 ? 0 : chAdress,
-            chCity: this.props.options.CITY,      // город
+            addressDeliveryInput: chAdress,
+            
             addressPickup: this.props.order.addressPickup,
-            addressDelivery: this.props.order.addressDelivery,
+            addressDelivery: this.state.addressDelivery,
 
-            /*
-            /// поля ввода адреса
-            chCity: this.props.options.CITY,      // город
-            chStreet: this.state.chStreet, /// улица
-            chNumHome: this.state.chNumHome, // номер дома
-            chHousing: this.state.chHousing, // корпус
-            chEntrance: this.state.chEntrance, /// подъезд
-            chFloor: this.state.chFloor, /// этаж
-            chApartment: this.state.chApartment, /// квартира*/
-            /////////////////////////////
             chDeliveryTime: this.state.chDeliveryTime, // время доставки
             chMethodPay: this.state.chMethodPay, /// метод оплаты 
             chPayGiveChange: this.state.chPayGiveChange, // сумма с которой надо дать сдачу
             chMethodConfirm: this.state.chMethodConfirm, /// метод подътверждения
             chComments: this.state.chComments, /// комментарий к заказу
         }
-        this.props.addItemOrder(val) 
-              
-        console.log("this.props.order = ", this.props.order);
-        
+        this.props.addItemOrder(values) 
         this.props.navigation.navigate('CheckoutConfirm');
     }
     render() 
@@ -539,8 +559,8 @@ class Checkout extends React.Component {
                             onDateChange={(date) => 
                             {
                                 this.setState({chDeliveryTime: date})
-                                var val = { chDeliveryTime: date };
-                                this.props.addItemOrder(val);
+                                /*var val = { chDeliveryTime: date };
+                                this.props.addItemOrder(val);*/
                             }
                         }
                         />
@@ -551,18 +571,42 @@ class Checkout extends React.Component {
                 <Text style={styles.textTitleStyle}>4. Способ оплаты </Text>
                 <View style={styles.viewCardStyle}>
                     <RadioGroup 
-                        selectedIndex={1}
+
                         color='#6A3DA1'
                         onSelect = {(index, value) => this.onSelectPay(index, value)} >
-                        {/* <RadioButton value={2}>
-                            <Text>Банковской картой</Text>
-                        </RadioButton> */}
-                        <RadioButton value={3}>
-                            <Text style={styles.textStyle}>Картой {this.props.order.addressPickup === 0 ? 'курьеру' : ""}</Text>
-                        </RadioButton>
-                        <RadioButton value={1}>
-                            <Text style={styles.textStyle}>Наличными {this.props.order.addressPickup === 0 ? 'курьеру' : ""}</Text>
-                        </RadioButton>
+                        {// оплата наличными
+                            //1 blCashCourier - Оплата наличными курьеру
+                            //2 blCashPickup - Оплата наличными при самовывозе
+
+                            //3 blCardCourier - Оплата банковской карточкой курьеру 
+                            //4 blCardPickup - Оплата банковской карточкой при самовывозе 
+                            
+                            // выбрана доставка
+                        }
+
+                        {
+                            /// карта
+                            this.props.order.addressPickup === 0 ? // доставка
+                            <RadioButton value={3} disabled={this.props.customers.blCardCourier === "1" ? false : true}>
+                                <Text style={styles.textStyle}>Картой курьеру</Text>
+                            </RadioButton>
+                            :/// самовывоз
+                            <RadioButton value={3} disabled={this.props.customers.blCardPickup == "1" ? false : true}>
+                                <Text style={styles.textStyle}>Картой</Text>
+                            </RadioButton>
+
+                        }
+                        {   /// налик
+                            this.props.order.addressPickup === 0 ? // доставка
+                            <RadioButton value={1} disabled={this.props.customers.blCashCourier === "1" ? false : true}>
+                                <Text style={styles.textStyle}>Наличными курьеру</Text>
+                            </RadioButton>
+                            : /// самовывоз
+                            <RadioButton value={1} disabled={this.props.customers.blCashPickup == "1" ? false : true}>
+                                <Text style={styles.textStyle}>Наличными</Text>
+                            </RadioButton>
+
+                        }
                     </RadioGroup>
                     <AnimatedHideView
                         visible={this.state.isViewInputSumma}
@@ -575,14 +619,21 @@ class Checkout extends React.Component {
                                 placeholder = "Укажите с какой суммы потребуется сдача"
                                 placeholderTextColor = "#828282"
                                 autoCapitalize = "none"
-                                onChangeText={(chPayGiveChange) => this.setState({chPayGiveChange})}
+                                onChangeText={(chPayGiveChange) => {
+                                        this.setState({chPayGiveChange});
+                                        /*var val = {
+                                            chPayGiveChange: chPayGiveChange,
+                                        }
+                                        this.props.addItemOrder(val);*/
+                                    }
+                                }
                                 value={this.state.chPayGiveChange}/> 
                     </AnimatedHideView>
                 </View>
                 <Text style={styles.textTitleStyle}>5. Подтверждение заказа</Text>
                 <View style={styles.viewCardStyle}>
                     <RadioGroup 
-                        selectedIndex={1}
+                        selectedIndex={0}
                         color='#6A3DA1'
                         onSelect = {(index, value) => this.onSelectConfirm(index, value)} >
                        <RadioButton value={1}>
@@ -825,6 +876,8 @@ export default connect (
         dispatch({ type: 'ADD_CART', payload: index})
     },
     addItemOrder: (orderData) => {
+        console.log("orderData = ", orderData);
+        
         dispatch({ type: 'ADD_ITEM', payload: orderData});
     },
     clearCart: (orderData) => {

@@ -322,9 +322,12 @@ class Main extends Component {
                 ))
               }
               </View>
+              {/*
               <TouchableOpacity style={styles.button} 
               onPress={() => { this.props.navigation.navigate('Checkout') }}>
               <Text>Checkout</Text></TouchableOpacity>
+              */}
+              
           </ScrollView>
         
         }

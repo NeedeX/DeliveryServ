@@ -1,6 +1,7 @@
 const INITIAL_STATE = {
   addressPickup: 0,
   addressDelivery: 0,
+  addressDeliveryInput: 0,
 };
 
 
