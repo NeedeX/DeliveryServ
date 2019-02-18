@@ -464,7 +464,7 @@ class CategoryView extends Component {
                     </View>
                     <View style={{ height: 40, width: 240}}>
                     <TextInput style={styles.textInputStyle}
-                            placeholder = "Search"
+                            placeholder = "Поиск"
                             placeholderTextColor = "rgba(0, 0, 0, 0.24)"
                             autoCapitalize = "none"
                             value={this.state.chFIO}
@@ -492,7 +492,6 @@ class CategoryView extends Component {
                         />
                     </View>
                     </TouchableOpacity>
-            
                 </Animated.View> 
                 : null
             }
@@ -511,7 +510,7 @@ class CategoryView extends Component {
                       <Button
                         onPress={() => this.props.navigation.goBack()}
                         title="НАЗАД"
-                        color="#583286"
+                        color="#666"
                       />
                     </View>
                     :

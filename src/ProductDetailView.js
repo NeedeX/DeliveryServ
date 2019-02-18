@@ -306,9 +306,6 @@ class ProductDetailView extends React.Component {
     // если есть ингридиенты у этого товара, то выводим кнопки
     if(this.state.ing.length > 0)
     {
-      //ingView = this.state.ingInCart.filter(cart => cart.idIngredients ===  id).value;
-      //console.log(this.state.ingInCart.find(cart => cart.idIngredients ===  id).value);
-      
       // первый проход с индексом 0 и если ингр. больше 1, сразу выводим и второй
       if(index === 0)
       {
@@ -417,11 +414,12 @@ class ProductDetailView extends React.Component {
           </View>
           {/* отображение главной картинки продукта */}
           <View>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <Image
-              style={{width: 360, height: 232, zIndex: 0}}
+              style={{width: 360, height: 232, zIndex: 0, al: 'center'}}
               source={ result[0].chMainImage === "" ? require('../assets/noImage.jpg') : { uri: result[0].chMainImage } }
             />
-           
+           </View>
               {
                 result[0].tegs.length > 0 ?
                 <View style={{zIndex: 10, marginTop: result[0].tegs.length > 1 ? -80 : -40}}>
