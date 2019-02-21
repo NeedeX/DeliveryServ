@@ -226,7 +226,7 @@ class Drawer extends React.Component {
             <Text style={styles.textMenu}>Акции</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Stocks')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('DeliveryAndPays')}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconDelivery.png')} 
             style={ styles.iconsMenu }/>

@@ -18,6 +18,7 @@ import CheckoutConfirm from './CheckoutConfirm';
 import CompletedOrder from './CompletedOrder';
 import History from './History';
 import Settings from './Settings';
+import DeliveryAndPays from './DeliveryAndPays';
 
 // drawer 
 import DrawerMenu from './components/Drawer';
@@ -72,6 +73,7 @@ const AppNavigator = createStackNavigator({
   Favorites: { screen: Favorites},
   History: { screen: History},
   Settings: { screen: Settings},
+  DeliveryAndPays: { screen: DeliveryAndPays},
   /// auth
   LoadingAuth : { screen: Loading },
   Login : { screen: Login },

@@ -1,13 +1,15 @@
 import React from 'react';
 import { ListView, 
-  StyleSheet, Dimensions, Text, View, Button, TouchableOpacity,Image, ScrollView, ImageBackground} from 'react-native';
+  StyleSheet, Dimensions, Text, View, InteractionManager, ActivityIndicator, Image, ScrollView, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
 import Header from './components/Header';
 
 class Stocks extends React.Component {
   constructor(props){
     super(props);
-    
+    this.state = { 
+      didFinishInitialAnimation: false,
+    };
   }
   static navigationOptions = ({ navigation  }) => {
     return {
@@ -21,12 +23,22 @@ class Stocks extends React.Component {
     
     };
   };
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+      this.setState({
+        didFinishInitialAnimation: true,
+      });
+    });
+  }
   render() {
     var {navigate} = this.props.navigation;
     var {params} = this.props.navigation.state;
     return (
       <View style={{backgroundColor: '#FAFAFA'}}> 
-
+      {
+        this.state.didFinishInitialAnimation === false ?
+        <ActivityIndicator size="large" color="#583286" />
+        :
         <ScrollView>
             <View style={{flex: 1, opacity: 1,}}>
                 <Image source={{ uri: this.props.banners.find(x => x.iStock ===  params.bannersId).sImage }} style={styles.img}/> 
@@ -42,6 +54,7 @@ class Stocks extends React.Component {
             </View>
             
         </ScrollView>
+      }
       </View>
     );
   }

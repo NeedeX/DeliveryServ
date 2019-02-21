@@ -16,7 +16,7 @@ class Main extends Component {
     this.state = { 
       didFinishInitialAnimation: false,
       senderId: appConfig.senderID,
-      countOpenLocation: 0, /// кол-во открытых заведений в данный момент
+      countClosesLocation: 0, /// кол-во открытых заведений в данный момент
     };
     this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
 
@@ -199,7 +199,9 @@ class Main extends Component {
       workTimeToday = worksTime.filter(work => work.chDay === dayName);
       if(workTimeToday[0].blDayOff === true){ 
         //console.log("Мы закрыты"); 
-        this.closeMessage();
+        //this.closeMessage();
+
+        this.setState({countClosesLocation: ++this.state.countClosesLocation}); 
       }
       else {
         var bStart = new Date(
@@ -222,32 +224,46 @@ class Main extends Component {
 
         // Convert both dates to milliseconds 
         var tStartTime_ms = bStart.getTime(); // время открытия в миллисекндах
-        var tEndTime_ms = bEnd.getTime();
+        var tEndTime_ms = bEnd.getTime(); // время закрытия 
         var currentTime_ms = new Date(); // текущее врмя в миллисекундах
-        var iFirstOrder_ms = this.props.customers.iFirstOrder * msOneMinut;
-        var iLastOrder_ms = this.props.customers.iLastOrder * msOneMinut;
+        var iFirstOrder_ms = this.props.customers.iFirstOrder * msOneMinut; // за сколько можно заказываеть до открытия
+        var iLastOrder_ms = this.props.customers.iLastOrder * msOneMinut; // за сколько можно заказываеть до закрытия
 
-        // Calculate the difference in milliseconds 
+        // Рассчитайте разницу в миллисекундах
         var differenceStart_ms = tStartTime_ms - iFirstOrder_ms - currentTime_ms; 
         var differenceEnd_ms = tEndTime_ms - iLastOrder_ms - currentTime_ms; 
         intervalStart = Math.round(differenceStart_ms/msOneMinut);
         intervalEnd = Math.round(differenceEnd_ms/msOneMinut);
         // Convert back to days and return 
-        //console.log("intervalStart >> ", intervalStart);
+        console.log("intervalStart >> ", intervalStart);
         console.log("intervalEnd >> ", intervalEnd);
       
-        if(intervalStart >= 0 && intervalEnd < 0)
-        {  this.closeMessage();  }
+
+
+        if(intervalStart >= 0 || intervalEnd < 0)
+        {  
+         
+          console.log("вошли в интервал");
+          
+          ///this.closeMessage();  
+          this.setState({countClosesLocation: ++this.state.countClosesLocation});
+        }
+        /*
         else
         {
           //console.log("открыто");
-          this.setState({countOpenLocation: this.state.countOpenLocation + 1});
 
           var val = {
             countOpenLocation: this.state.countOpenLocation,
           }
           this.props.addOptionCounrOpenLoc(val);
-        }
+        }*/
+      }
+      console.log("countClosesLocation = ", this.state.countClosesLocation);
+      
+      if(this.state.countClosesLocation === this.props.locations.length)
+      {
+        this.closeMessage();
       }
     })
   }

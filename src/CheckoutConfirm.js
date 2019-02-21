@@ -98,7 +98,7 @@ class CheckoutConfirm extends React.Component {
             },
             body: JSON.stringify({
                 UIDClient: this.state.UIDClient,
-                UIDGoogleUser: this.props.user.length === 0 ? null : this.props.user.uid, // UID пользователя приложения
+                UIDGoogleUser: this.props.user.length === 0 ? null : this.props.user._user.uid, // UID пользователя приложения
                 chFIO: this.props.order.chFIO,
                 chPhone: this.props.order.chPhone,
                 chCity: this.props.order.chCity,

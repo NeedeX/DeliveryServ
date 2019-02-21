@@ -58,7 +58,7 @@ class Stocks extends React.Component {
           {
             this.props.banners.map((banners, index) => (
 
-            <View style={{
+            <View key={index} style={{
               marginLeft: 5, marginRight: 5,
               marginBottom: 5,
               marginTop: 5,
