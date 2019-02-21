@@ -190,17 +190,17 @@ class CheckoutConfirm extends React.Component {
                         <Text style={styles.textTitleStyle2}>{this.props.order.addressPickup !== 0  ? "Самовывоз" : "Доставка  "}</Text>
                         {
                             this.props.order.addressPickup !== 0 ?
-                            <Text style={styles.textStyleValue}>{this.props.order.addressPickup}</Text>
+                            <Text style={styles.textStyleValue}>{this.props.order.addressPickup}11</Text>
                             : null
                         }
                         {
                             this.props.order.addressDelivery !== 0 ?
-                            <Text style={styles.textStyleValue}>{this.props.order.addressDelivery}</Text>
+                            <Text style={styles.textStyleValue}>{this.props.order.addressDelivery}22</Text>
                             : null
                         }
                         {
                             this.props.order.addressDeliveryInput !== 0 ?
-                            <Text style={styles.textStyleValue}>{this.props.order.addressDeliveryInput}</Text>
+                            <Text style={styles.textStyleValue}>{this.props.order.addressDeliveryInput}33</Text>
                             : null
                         }
                         <View

@@ -52,12 +52,12 @@ class CardAddress extends React.Component {
     addSelectAddresses(id, route, chAddress)
     {
         console.log(chAddress);
-        
+        const tempArrLoc = this.props.addresses.find(i => i.idAddress === id);
         if(route === 'Checkout')
         {
             var val = {
                 addressPickup: 0,
-                addressDelivery: chAddress,
+                addressDelivery: tempArrLoc.chAddress,
                 addressDeliveryInput: 0,
             }
             
