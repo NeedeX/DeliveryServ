@@ -198,10 +198,15 @@ class Drawer extends React.Component {
             <Image source={require('./assets/iconCart.png')} 
             style={ styles.iconsMenu }/>
             <Text style={styles.textMenu}>Корзина</Text>
-            <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 12,
+            {
+              this.props.cart.length > 0 ?
+              <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 12,
           marginLeft: 20, backgroundColor: '#F77694', width: 17, height: 17,
           paddingLeft: 5, marginTop: 2,
           borderRadius: 10,}}>{this.props.cart.length}</Text>
+          : null
+            }
+            
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Favorites')}>

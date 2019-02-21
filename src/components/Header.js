@@ -31,8 +31,12 @@ class Header extends Component {
                     underlayColor='rgba(255,255,255,0)'
                     onPress={() =>  this.props.navigation.navigate('Cart')} >
                     <View>
-                        <Image style={styles.iconBtnStyle} source={ require('./assets/iconCart.png')} />
-                        <Text style={{
+                        
+                        {
+                          this.props.cart.length > 0 ?
+                          <View>
+                          <Image style={styles.iconBtnStyle} source={ require('./assets/iconCart.png')} />
+                          <Text style={{
                             backgroundColor: '#F77694',
                             width: 16,
                             height: 16,
@@ -47,6 +51,12 @@ class Header extends Component {
                             marginLeft: 22,
                             marginTop: -28,
                         }}>{this.props.cart.length}</Text>
+                          </View>
+                          :
+                          <Image style={styles.iconBtnStyle} source={ require('./assets/iconCart.png')} />
+                          
+                        }
+                        
                     </View>
                 </TouchableHighlight>
             </View>

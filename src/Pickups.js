@@ -133,6 +133,6 @@ export default connect (
     },
     addItemOrder: (orderData) => {
       dispatch({ type: 'ADD_ITEM', payload: orderData});
-  },
+    },
   })
 )(Pickups);

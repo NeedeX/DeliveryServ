@@ -39,23 +39,23 @@ class DeliveryAndPays extends Component {
         </View>
         :
         <ScrollView>
-
             <View style={styles.viewTitleStyle}>
-              <Text style={styles.textTitleStyle}>Условия доставки</Text>
+              <Text style={styles.textTitleStyle}>Условия оплаты</Text>
             </View>
-            <View style={styles.textStyle}>
+            <View style={styles.viewTextStyle}>
               <Text style={styles.textStyle}>
-                {this.props.customers.txtDeliveryTerms}
+                {this.props.customers.txtPaymentTerms}
               </Text>
             </View>
             <View style={styles.viewTitleStyle}>
-              <Text style={styles.textTitleStyle}>Условия оплаты</Text>
+              <Text style={styles.textTitleStyle}>Условия доставки</Text>
             </View>
             <View style={styles.viewTextStyle}>
               <Text style={styles.textStyle}>
                 {this.props.customers.txtDeliveryTerms}
               </Text>
             </View>
+            
   
             
         </ScrollView>

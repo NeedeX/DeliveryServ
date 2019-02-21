@@ -49,25 +49,27 @@ class CardAddress extends React.Component {
         });
         
     }
-    addSelectAddresses(id, route)
+    addSelectAddresses(id, route, chAddress)
     {
-        console.log(route);
+        console.log(chAddress);
         
         if(route === 'Checkout')
         {
             var val = {
-                addressSelect: "",
-            }
-            this.props.addOption(val);
-            var val = {
-                addressSelect: id,
-                addressPickup: undefined,
+                addressPickup: 0,
+                addressDelivery: chAddress,
+                addressDeliveryInput: 0,
             }
             
-            this.props.addOption(val);
+            console.log("this.props.order = ", this.props.order );
             
-            if(this.props.options.addressSelect === id)
+            this.props.addItemOrder(val);
+
+            if(this.props.order.addressSelect === chAddress)
+            {
+                this.props.addItemOrder(val);
                 this.props.nav.navigate('Checkout');
+            }
             else
             {
                 this.props.addOption(val);
@@ -79,7 +81,7 @@ class CardAddress extends React.Component {
     render() {
         return(
             <TouchableOpacity activeOpacity={0.9}
-            onPress={() =>  this.addSelectAddresses(this.props.idAddress, this.props.routeGoBack) }>
+            onPress={() =>  this.addSelectAddresses(this.props.idAddress, this.props.routeGoBack, this.props.chAddress) }>
             <View style={{
                 marginBottom: -8,
             }}>
@@ -181,14 +183,18 @@ export default connect (
       products: state.ProductsReducer,
       addresses: state.AddressReducer,
       options: state.OptionReducer,
+      order: state.OrderReducer,
     }),
     dispatch => ({
-      delAddress: (index) => {
-        dispatch({ type: 'DELETE_ADDRESS', payload: index})
-      },
-      addOption: (index) => {
-        dispatch({ type: 'ADD_OPTION', payload: index});
-    },
+        delAddress: (index) => {
+            dispatch({ type: 'DELETE_ADDRESS', payload: index})
+        },
+        addOption: (index) => {
+            dispatch({ type: 'ADD_OPTION', payload: index});
+        },
+        addItemOrder: (orderData) => {
+            dispatch({ type: 'ADD_ITEM', payload: orderData});
+        },
       /*
       onAddCategory: (categoryData) => {
         dispatch({ type: 'ADD_CATEGORY', payload: categoryData});
