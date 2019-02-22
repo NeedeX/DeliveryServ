@@ -19,11 +19,11 @@ class Checkout extends React.Component {
 
             /// поля ввода адреса
             chCity: this.props.options.CITY,      // город
-            chStreet: '', /// улица
-            chNumHome: '', // номер дома
-            chHousing: '', // корпус
+            chStreet: '',   /// улица
+            chNumHome: '',  // номер дома
+            chHousing: '',  // корпус
             chEntrance: '', /// подъезд
-            chFloor: '', /// этаж
+            chFloor: '',    /// этаж
             chApartment: '', /// квартира
             /////////////////////////////
             addressPickup: this.props.order.addressPickup,
@@ -54,12 +54,14 @@ class Checkout extends React.Component {
         }
         this.inputs = {};
     }
-
+    // получения имени пользователя из БД
     getNameFromDB() {
+        // проверка иммени в массиве USER, если нет то оставляем пустое
         const name = this.props.user.length !== 0 ? this.props.user.userDB.chFIO : "";
+        // если имя не пучтое, то записываем в редакс, в массив ORDER
         if(name !== "") {
-            var val = { chFIO: name };
-            this.props.addItemOrder(val)
+            var val = { chFIO: name }; // содаем массив с именем для записи в редакс
+            this.props.addItemOrder(val); // запись в редакс, в массив ORDER
         }
         return name;
     }
@@ -81,6 +83,7 @@ class Checkout extends React.Component {
     focusNextField(id) { this.inputs[id].focus(); }
     generateKey = () => { return `${ new Date().getTime() }`; }
     divider(){ return( <View style={ styles.divider } />) }
+    // впроверка ввода имени
     validateName(text) {
         let reg = /^[A-zА-яЁё]+$/i ;
         if(reg.test(text) === false)
@@ -101,13 +104,11 @@ class Checkout extends React.Component {
             });
         }
         /*
-        var val = {
-            chFIO: text
-        };
+        var val = { chFIO: text };
         this.props.addItemOrder(val)
         */
-       // console.log("validateName order = ", this.props.order);
     }
+    // проверка ввода номера телефона
     validatePhone(text)
     {
         let reg = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
