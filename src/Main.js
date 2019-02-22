@@ -50,12 +50,11 @@ class Main extends Component {
 
   onRegister(token) {
     Alert.alert("Registered !", JSON.stringify(token));
-    console.log(token);
+    //console.log(token);
     this.setState({ registerToken: token.token, gcmRegistered: true });
-    
   }
   onNotif(notif) {
-    console.log(notif);
+    //console.log(notif);
     //Alert.alert(notif.title, notif.body);
     //if(this.props.user.userDB.iPushNotification === true)
       this.notif.localNotif(notif.title, notif.body)
@@ -78,7 +77,7 @@ class Main extends Component {
         this.setState({ userUid: user._user.uid});
         //console.log("userEmail = ", this.state.userEmail);
         //console.log("userUid = ", this.state.userUid);
-        console.log("this.props.user = ", this.props.user);
+        //console.log("this.props.user = ", this.props.user);
 
         //// для авторизации по емаил
         if(this.props.user._user.phoneNumber === undefined)
@@ -116,7 +115,7 @@ class Main extends Component {
         this.insertRegisterToken(this.props.options.UIDClient, this.props.options.URL, fcmToken);
       } else {
         // user doesn't have a device token yet
-        console.log("user doesn't have a device token yet");
+        //console.log("user doesn't have a device token yet");
       } 
     });
   }
@@ -172,7 +171,7 @@ class Main extends Component {
 
   closeMessage()
   {
-    console.log("Мы закрыты");
+    //console.log("Мы закрыты");
     
     Alert.alert(
       'Уведомление',
@@ -235,16 +234,13 @@ class Main extends Component {
         intervalStart = Math.round(differenceStart_ms/msOneMinut);
         intervalEnd = Math.round(differenceEnd_ms/msOneMinut);
         // Convert back to days and return 
-        console.log("intervalStart >> ", intervalStart);
-        console.log("intervalEnd >> ", intervalEnd);
+        //console.log("intervalStart >> ", intervalStart);
+        //console.log("intervalEnd >> ", intervalEnd);
       
 
 
         if(intervalStart >= 0 || intervalEnd < 0)
         {  
-         
-          console.log("вошли в интервал");
-          
           ///this.closeMessage();  
           this.setState({countClosesLocation: ++this.state.countClosesLocation});
         }
@@ -259,7 +255,7 @@ class Main extends Component {
           this.props.addOptionCounrOpenLoc(val);
         }*/
       }
-      console.log("countClosesLocation = ", this.state.countClosesLocation);
+      //console.log("countClosesLocation = ", this.state.countClosesLocation);
       
       if(this.state.countClosesLocation === this.props.locations.length)
       {

@@ -9,12 +9,13 @@ class CheckoutConfirm extends React.Component {
     constructor(props){
         super(props);
         var {params} = this.props.navigation.state;
-        console.log("this.props.order = ", this.props.order);
         this.state = {
             UIDClient: this.props.options.UIDClient,
             allPriceCart: 0,
             didFinishInitialAnimation: false,
         }
+        console.log("this.props.order (CheckoutConfirm)", this.props.order);
+        
     }
     static navigationOptions = ({ navigation  }) => {
         return {
@@ -190,17 +191,17 @@ class CheckoutConfirm extends React.Component {
                         <Text style={styles.textTitleStyle2}>{this.props.order.addressPickup !== 0  ? "Самовывоз" : "Доставка  "}</Text>
                         {
                             this.props.order.addressPickup !== 0 ?
-                            <Text style={styles.textStyleValue}>{this.props.order.addressPickup}11</Text>
+                            <Text style={styles.textStyleValue}>{this.props.order.addressPickup}</Text>
                             : null
                         }
                         {
                             this.props.order.addressDelivery !== 0 ?
-                            <Text style={styles.textStyleValue}>{this.props.order.addressDelivery}22</Text>
+                            <Text style={styles.textStyleValue}>{this.props.order.addressDelivery}</Text>
                             : null
                         }
                         {
                             this.props.order.addressDeliveryInput !== 0 ?
-                            <Text style={styles.textStyleValue}>{this.props.order.addressDeliveryInput}33</Text>
+                            <Text style={styles.textStyleValue}>{this.props.order.addressDeliveryInput}</Text>
                             : null
                         }
                         <View
@@ -221,9 +222,15 @@ class CheckoutConfirm extends React.Component {
                         </View>
                         <Text style={styles.textTitleStyle2}>Способ подътверждения</Text>
                         <Text style={styles.textStyleValue}>{this.props.order.chMethodConfirm}</Text>
-                        <Text style={styles.textTitleStyle2}>Комментарий к заказу</Text>
-                        <Text style={styles.textStyleValue}>{this.props.order.chComments}</Text>
+                        {
+                          this.props.order.chComments !== "" ?
+                          <View>
+                            <Text style={styles.textTitleStyle2}>Комментарий к заказу</Text>
+                            <Text style={styles.textStyleValue}>{this.props.order.chComments}</Text>
+                          </View>
+                          : null
 
+                        }
                         <View style={{ borderBottomColor: '#E4E4E4', borderBottomWidth: 1,
                                 marginTop: 3, marginBottom: 3, }} />
                         {

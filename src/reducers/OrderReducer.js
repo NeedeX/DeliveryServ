@@ -14,10 +14,10 @@ export default function OrderReducer (state = INITIAL_STATE, action) {
         ]
         break;   
       case "ADD_ITEM":{
-          return {
-            ...state,
-            ...action.payload,
-          }
+        return {
+          ...state,
+          ...action.payload,
+        }
       }   
       case "ADD_ORDER":  
         return [

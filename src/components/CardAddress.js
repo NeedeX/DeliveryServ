@@ -3,8 +3,7 @@ import { StyleSheet, Dimensions, TouchableHighlight, Text, View, ImageBackground
 import { connect } from 'react-redux';
 
 class CardAddress extends React.Component {
-    divider()
-    {
+    divider() {
         return(
         <View style={{
             flex: 1,
@@ -16,8 +15,8 @@ class CardAddress extends React.Component {
             alignItems: 'center',
         }} />)
     }
-    del(idAddress)
-    {
+    // удаление адреса из БД
+    delAddress(idAddress) {
         return fetch('http://mircoffee.by/deliveryserv/app/DelAddress.php',
         {
             method: 'POST',
@@ -26,65 +25,36 @@ class CardAddress extends React.Component {
                 'Accept-Encoding': "gzip, deflate",
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                idAddress: idAddress,
-            })
+            body: JSON.stringify({ idAddress: idAddress, })
         })
         .then((response) => response.json())
         .then((responseJson) => {
-            //this.props.clearAddresses();
-            /*
-            responseJson.addresses.map( (addresses) => {
-                this.props.loadAddresses(addresses);
-            });
-            */
-           
-            val = {
-                idAddress: idAddress,
-            }
+            val = { idAddress: idAddress, }
             this.props.delAddress(val);
         })
-        .catch((error) => {
-        console.error(error);
-        });
+        .catch((error) => {  console.error(error); });
         
     }
-    addSelectAddresses(id, route, chAddress)
-    {
-        console.log(chAddress);
+    addSelectAddresses(id, routeGoBack) {
+        //console.log(id);
         const tempArrLoc = this.props.addresses.find(i => i.idAddress === id);
-        if(route === 'Checkout')
+        if(routeGoBack === 'Checkout')
         {
+          
             var val = {
                 addressPickup: 0,
                 addressDelivery: tempArrLoc.chAddress,
                 addressDeliveryInput: 0,
             }
-            
-            console.log("this.props.order = ", this.props.order );
-            
-            this.props.addItemOrder(val);
-
-            if(this.props.order.addressSelect === chAddress)
-            {
-                this.props.addItemOrder(val);
-                this.props.nav.navigate('Checkout');
-            }
-            else
-            {
-                this.props.addOption(val);
-                this.props.nav.navigate('Checkout');
-            
-            }
-        }  
+            this.props.addItemOrder(val); // добавляем адрем в редакс
+            this.props.nav.navigate(routeGoBack);// переходим обрано откуда пришли
+        }
     }
     render() {
         return(
             <TouchableOpacity activeOpacity={0.9}
-            onPress={() =>  this.addSelectAddresses(this.props.idAddress, this.props.routeGoBack, this.props.chAddress) }>
-            <View style={{
-                marginBottom: -8,
-            }}>
+            onPress={() =>  this.addSelectAddresses(this.props.idAddress, this.props.routeGoBack) }>
+            <View style={{ marginBottom: -8, }}>
                 <Text style={ styles.textStyle }>
                 г.{this.props.chCity}</Text>
             </View>
@@ -122,7 +92,7 @@ class CardAddress extends React.Component {
                 </View>
                     <TouchableOpacity
                     activeOpacity={1}
-                    onPress={() => this.del(this.props.idAddress)}
+                    onPress={() => this.delAddress(this.props.idAddress)}
                     >
                         <Image source={require('./assets/iconDelInCart.png')} 
                             style={{
