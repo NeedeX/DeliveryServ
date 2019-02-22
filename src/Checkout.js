@@ -1,5 +1,5 @@
 import React from 'react';
-import {  StyleSheet, TextInput, Text, View, Dimensions, TouchableHighlight, Image, ScrollView, ImageBackground,InteractionManager, ActivityIndicator} from 'react-native';
+import {  StyleSheet, TextInput, Text, View, Alert, Dimensions, TouchableHighlight, Image, ScrollView, ImageBackground,InteractionManager, ActivityIndicator} from 'react-native';
 import { connect } from 'react-redux';
 import DatePicker from 'react-native-datepicker';
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button';
@@ -49,6 +49,8 @@ class Checkout extends React.Component {
             maxDate: moment(Number(this.props.customers.iDaysAhead)*86400000 + new Date().getTime()).format("DD-MM-YYYY"),
             isErrorName: false,
             isErrorPhone: false,
+
+            position: 0, // позиция прокрутки, для возврата при ошибке
         }
         this.inputs = {};
     }
@@ -86,7 +88,8 @@ class Checkout extends React.Component {
             //console.log("Имя должно состоять только из букв");
             this.setState({
                 chFIO:text,
-                errorName:"Имя должно состоять только из букв"
+                errorName:"Имя должно состоять только из букв",
+                isErrorName: true,
             })
             //return false;
         }
@@ -94,6 +97,7 @@ class Checkout extends React.Component {
             this.setState({
                 chFIO:text,
                 errorName: '',
+                isErrorName: false,
             });
         }
         /*
@@ -249,48 +253,60 @@ class Checkout extends React.Component {
         )
     }
     onSelectTimeDelivery(index, value){
-        //console.log("value time = ", value);
+        // "Как можно скорее"
         if(value === 1)
         {
-            this.setState({isViewInputDeliveryTimeVisible: false});
-            this.setState({chDeliveryTime: "Как можно скорее"});
-            /*var val = { chDeliveryTime: "Как можно скорее" }
-            this.props.addItemOrder(val);*/
+            this.setState({
+                isViewInputDeliveryTimeVisible: false, // скаываем выбор времени доставки
+                chDeliveryTime: "Как можно скорее", // записываем что выбрано "Как можно скорее"
+            });
+            /*
+            var val = { chDeliveryTime: "Как можно скорее" }
+            this.props.addItemOrder(val);
+            */
         }
+        ///  если выбрано к какому времени привести или приготовить заказ
         if(value === 2)
         {
             var d = new Date(); // текущая дата
             var minutes = d.setMinutes(d.getMinutes() + 30); // прибавляем 30 минут
-            var newDate = new Date(minutes); // получаем новую дату
-            var hours = newDate.getHours()<10 ? "0" + newDate.getHours(): newDate.getHours()
+            var newDate = new Date(minutes); // получаем новую дату c 30 минутами
+            // форматируем к нужному нам виду значение часов
+            var hours = newDate.getHours()<10 ? "0" + newDate.getHours(): newDate.getHours();
+            // форматируем к нужному нам виду значение месяца
             var month = (newDate.getMonth() + 1)<10 ? "0" + (newDate.getMonth() + 1): (newDate.getMonth() + 1);// форматируем номер месяца
-       
+            // форматируем к нужному нам виду значение минут
             var minute = newDate.getMinutes()<10 ? "0" + newDate.getMinutes(): newDate.getMinutes();
-
-            bStart = newDate.getDate()+"." +month+"."+newDate.getFullYear()+" "+ hours +":" + minute;
-            this.setState({chDeliveryTime: bStart});
-            this.setState({isViewInputDeliveryTimeVisible: true});
-/*
+            // форматируем всю строку времени
+            var timeDelivery = newDate.getDate()+"." +month+"."+newDate.getFullYear()+" "+ hours +":" + minute;
+            // помещаем в state
+            this.setState({
+                chDeliveryTime: timeDelivery, // записываем время доставки
+                isViewInputDeliveryTimeVisible: true, // показываем выбор времени доставки
+            });
+            /*
             var val = { chDeliveryTime: bStart }
-            this.props.addItemOrder(val);*/
+            this.props.addItemOrder(val);
+            */
         }
     }
     onSelectPay(index, value){
         // оплата наличными
         if(value === 1) {
             // если выбран самовывоз, скрывать поле ввода суммы, с которой надо дать сдачу, 
-            // даже если выбрана оплата наличными. В кассе всегда должна быть сдача 
-            this.setState({isViewInputSumma: this.props.order.addressPickup === 0 ? true : false});
-            // устанавливаем значение, что выбрано оплата "наличными" и в зависимости замовывоз или нет, то нужно ли слово "курьеру" 
-            this.setState({chMethodPay: `Наличными ${this.props.order.addressPickup === 0 ? 'курьеру' : ""}`});
+            this.setState({
+                // даже если выбрана оплата наличными. В кассе всегда должна быть сдача 
+                isViewInputSumma: this.props.order.addressPickup === 0 ? true : false,
+                // устанавливаем значение, что выбрано оплата "наличными" и в зависимости замовывоз или нет, то нужно ли слово "курьеру" 
+                chMethodPay: `Наличными ${this.props.order.addressPickup === 0 ? 'курьеру' : ""}`
+            });
             // создаем массив, для сохранения в редаксе
-           /* var val = {
+            /* var val = {
                 chMethodPay: 'Наличными'+ this.props.order.addressPickup === 0 ? 'курьеру' : "",
                 chPayGiveChange: '',
             };
             // записываем в редакс
             this.props.addItemOrder(val);*/
-            console.log("===> ", this.state.chMethodPay);
              
         }
         // картой
@@ -309,45 +325,103 @@ class Checkout extends React.Component {
             this.props.addItemOrder(val);*/
         }
     }
-    onSelectConfirm(index, value){
-        if(value === 1){
-            this.setState({chMethodConfirm: 'Звонок оператора'})
-        }
-        if(value === 2){
-            this.setState({chMethodConfirm: 'SMS cообщение'})
-        }
+    // обработчик выбора способа подтверждения заказа
+    onSelectConfirm(index, value) {
+        if(value === 1){ this.setState({chMethodConfirm: 'Звонок оператора'}) }
+        if(value === 2){ this.setState({chMethodConfirm: 'SMS cообщение'}) }
     }
-    nextConfirm(){
-        var chAdress = 0;
-        if( this.props.order.addressPickup === 0 && this.props.order.addressDelivery === 0)
-        {
-            chAdress = "ул. "+this.state.chStreet+" "+this.state.chNumHome;
-            var chHousing = this.state.chHousing !== '' ? "/"+this.state.chHousing+", " : ", ";
-            var chEntrance = this.state.chEntrance !== '' ? "под."+this.state.chEntrance+", " : '';
-            var chFloor = this.state.chFloor !== '' ? "этаж "+this.state.chFloor+", " : '';
-            var chApartment = this.state.chApartment !== '' ? "кв. "+this.state.chApartment : '';
-            chAdress = chAdress + chHousing + chEntrance + chFloor + chApartment;
+    warningMessage(message) {
+        Alert.alert(
+            'Уведомление',
+            message,
+            [
+                //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+                /*{
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },*/
+                {   
+                    text: 'OK', 
+                    //onPress: () => console.log('OK Pressed')
+                },
+            ],
+            {cancelable: false},
+        );
+    }
+    nextConfirm() {
+        var countError= 0;
+        var chAdress = 0; // будет хранится адрес в одну строку введеный ручками
+        if(this.state.chFIO === '' && countError === 0) {
+            countError = ++countError;
+            //this.warningMessage("Вы не ввели имя")
+            this.setState({
+                errorName: "Вы не ввели имя",
+                isErrorName: true,
+            });
+            this.scrollView.scrollTo({x: 0, y: this.state.position, animated: true});
+            this.focusNextField('fio');
+        }
+        // проверяем введен ли номер телефона
+        if(this.state.chPhone === '' ) {
+            countError = ++countError;
+            //this.warningMessage("Вы не ввели номер телефона");
+            this.setState({
+                errorPhone: "Вы не ввели номер телефона",
+                isErrorPhone: true
+            });
+            this.scrollView.scrollTo({x: 0, y: this.state.position, animated: true});
+            this.focusNextField('phone');
+        }
+        //  проверяем введено ли имя, если нет и не было до этого ошибок
+        
+        // формируем адрес в одну строку введеный ручками
+        if( this.props.order.addressPickup === 0 && this.props.order.addressDelivery === 0) {
+            // проверяем введена ли улица при заполнении вручную
+            if(this.state.chStreet !== '') {
+                chAdress = "ул. "+this.state.chStreet+" "+this.state.chNumHome;
+                var chHousing = this.state.chHousing !== '' ? "/"+this.state.chHousing+", " : ", ";
+                var chEntrance = this.state.chEntrance !== '' ? "под."+this.state.chEntrance+", " : '';
+                var chFloor = this.state.chFloor !== '' ? "этаж "+this.state.chFloor+", " : '';
+                var chApartment = this.state.chApartment !== '' ? "кв. "+this.state.chApartment : '';
+                chAdress = chAdress + chHousing + chEntrance + chFloor + chApartment;
+            }
+            else { // не введена, обрабанываем ошибку
+                // если не было ошибок, то выводим уведомление
+                if(countError === 0) {
+                    countError = ++countError;
+                    this.warningMessage("Вы не выбрали способ доставки");
+                }
+            }
         }
 
-        var values = {
-            chFIO: this.state.chFIO,    // имя
-            chPhone:  this.state.chPhone,   // телефон
-            chCity: this.state.chCity,      // город
-            chTypeDeliveryText: this.state.chTypeDeliveryText, /// текст типа доставки (доставка или самовывоз)
-            addressDeliveryInput: chAdress,
-            
-            addressPickup: this.props.order.addressPickup,
-            addressDelivery: this.props.order.addressDelivery,
+        
+        if(countError === 0){
+            var values = {
+                chFIO: this.state.chFIO,    // имя
+                chPhone:  this.state.chPhone,   // телефон
+                chCity: this.state.chCity,      // город
+                chTypeDeliveryText: this.state.chTypeDeliveryText, /// текст типа доставки (доставка или самовывоз)
+                addressDeliveryInput: chAdress,
+                
+                addressPickup: this.props.order.addressPickup,
+                addressDelivery: this.props.order.addressDelivery,
 
-            chDeliveryTime: this.state.chDeliveryTime, // время доставки
-            chMethodPay: this.state.chMethodPay, /// метод оплаты 
-            chPayGiveChange: this.state.chPayGiveChange, // сумма с которой надо дать сдачу
-            chMethodConfirm: this.state.chMethodConfirm, /// метод подътверждения
-            chComments: this.state.chComments, /// комментарий к заказу
+                chDeliveryTime: this.state.chDeliveryTime, // время доставки
+                chMethodPay: this.state.chMethodPay, /// метод оплаты 
+                chPayGiveChange: this.state.chPayGiveChange, // сумма с которой надо дать сдачу
+                chMethodConfirm: this.state.chMethodConfirm, /// метод подътверждения
+                chComments: this.state.chComments, /// комментарий к заказу
+            }
+            this.props.addItemOrder(values) 
+            this.props.navigation.navigate('CheckoutConfirm');
         }
-        this.props.addItemOrder(values) 
-        this.props.navigation.navigate('CheckoutConfirm');
     }
+    _onLayout = ({ nativeEvent: { layout: { x, y, width, height } } }) => {
+        this.setState(prevState => ({
+          position: prevState.position + y
+        }));
+      };
     render() 
     {
         /*
@@ -374,7 +448,7 @@ class Checkout extends React.Component {
             this.state.didFinishInitialAnimation === false ?
             <ActivityIndicator size="large" color="#583286" />
             :
-            <ScrollView>
+            <ScrollView ref={(ref) => this.scrollView = ref}>
                 <Text style={styles.textTitleStyle}>1. Контактная информация</Text>
                 <View style={styles.viewCardStyle}>
                     <View style={{ flex: 1 }}>
@@ -386,8 +460,8 @@ class Checkout extends React.Component {
                             autoCapitalize={'none'}
                             autoCorrect={false}
                             blurOnSubmit={ false }
-                            onSubmitEditing={() => { this.focusNextField('Телефон'); }}
-                            ref={ input => { this.inputs['Имя'] = input; }}
+                            onSubmitEditing={() => { this.focusNextField('phone'); }}
+                            ref={ input => { this.inputs['fio'] = input; }}
                             style={styles.textInputStyleNew}
                             onChangeText={(chFIO) => this.validateName(chFIO)}
                         />
@@ -409,6 +483,7 @@ class Checkout extends React.Component {
                             autoCapitalize={'none'}
                             autoCorrect={false}
                             blurOnSubmit={ false }
+                            ref={ input => { this.inputs['phone'] = input; }}
                             onChangeText={ (chPhone) =>  this.validatePhone(chPhone)}
                         />
                         <AnimatedHideView
