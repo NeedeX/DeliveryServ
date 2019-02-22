@@ -87,6 +87,7 @@ class PhoneAuth extends Component {
         
         <TextInput
           autoFocus
+          keyboardType={'phone-pad'}
           style={styles.styleInputNumber}
           onChangeText={value => this.setState({ phoneNumber: value })}
           placeholder={'Номер телефона ... '}
