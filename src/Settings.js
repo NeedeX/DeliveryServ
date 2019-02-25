@@ -96,18 +96,14 @@ class Settings extends Component {
             alignItems: 'center',
         }} />)
     }
-    chamgeName(name){
-        //console.log("name = ", name);
+    changeName(name){
         this.setState({chFIO: name})
     }
-    onEndEditingName(name){
-        //console.log("Закончили ввод onEndEditingName = ", name);
-        //this.props.editName(name);
-        this.setNameInDB(name);
-        console.log("USER = ", this.props.user);
+    onEndEditingName(name) {
+        this.setNameInDB(name); // запись в БД
     }
-
-    setNameInDB(name){
+    // запись в БД
+    setNameInDB(name) {
         fetch(this.props.options.URL + 'EditSettings.php', {
             method: 'POST',
             headers: {
@@ -124,7 +120,6 @@ class Settings extends Component {
         })
         .then((response) => response.json())
         .then((responseJson) => {
-            //console.log("responseJson = ", responseJson);
             if(responseJson === 1)
                 this.props.editName(name);
         })
@@ -149,18 +144,16 @@ class Settings extends Component {
         })
         .then((response) => response.json())
         .then((responseJson) => {
-            //console.log("responseJson = ", responseJson);
-            if(responseJson === 1)
+            if(responseJson === 1){
                 this.props.editDateOfBirth(chDateOfBirth);
+                this.setState({chDateOfBirth: chDateOfBirth});
+            }
         })
         .catch((error) => {
             console.error(error);
         });
     }
-    setDateOfBirth(date){
-        this.setState({chDateOfBirth: date});
-        this.setDateOfBirthInDB(date);
-    }
+
     deletedAccount(){
         this.setState({ visibleDeletedWindow: false });
         this.signOut();
@@ -237,7 +230,8 @@ class Settings extends Component {
                             editable = {true}
                             maxLength = {40}
                             onEndEditing={() => this.onEndEditingName(this.state.chFIO)}
-                            onChangeText={(name) => this.chamgeName(name)}
+                            onChangeText={(name) => { this.changeName(name)
+                            }}
                         />
                         {this.divider()}
                         <Text style={styles.cardTextStyle}>{this.state.chPhone}</Text>
@@ -265,7 +259,7 @@ class Settings extends Component {
                                 color: 'red', margin: 10, alignItems: 'flex-start',
                                 }
                             }}
-                            onDateChange={(date) => {this.setDateOfBirth(date)}}
+                            onDateChange={(date) => {this.setDateOfBirthInDB(date)}}
                         />
                         </View>
                     </View>

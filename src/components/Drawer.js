@@ -11,6 +11,8 @@ class Drawer extends React.Component {
     this.state = {
         authState: 0,
         dialogSelectPhone: false,
+        phone: '',
+        email: '',
     }  
 
   }
@@ -19,10 +21,14 @@ class Drawer extends React.Component {
         firebase.auth().onAuthStateChanged(user => {
             //console.log("==>");
             if (user) {
-                this.setState({ authState: 1 });
+                this.setState({ 
+                  authState: 1, 
+                  phone: user._user.phoneNumber,
+                  email: user._user.email,
+                });
                
                 //this.loadingFavorites(user.uid);
-                //console.log(user.uid);
+                //console.log("user => ", user);
             }
             else
                 this.setState({ authState: 0 });
@@ -40,7 +46,7 @@ class Drawer extends React.Component {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         //this.loadingFavorites(user.uid);
-        //console.log(user.uid);
+       // console.log("user => ", user);
         this.props.clearHistory();
         this.props.clearFavorites();
         this.props.navigation.navigate('Main')
@@ -119,51 +125,37 @@ class Drawer extends React.Component {
         style={{ flex: 1, width: 318,}} 
         imageStyle={{ resizeMode: 'stretch' }}>
         <View style={{flexDirection: 'row', paddingTop: 20, paddingLeft: 20,}}>
-        
           <View style={{ width: 50, height: 50,}}>
             <Image source={ require('./assets/iconAvatar.png')} 
             style={{  width: 45, height: 45, }}/>
           </View>
           {
-           
             this.state.authState === 1 ?
-            <View>
-              { 
-                /*по email */
-                this.props.user._user.phoneNumber === null ? 
+              <View style={{ height: 50, paddingLeft: 20,}}>
+              {
+                this.props.user.userDB !== undefined ?
                 <View>
                   {
-                    this.props.user._user.displayName === null ?
-                    <View>
-                      <TouchableOpacity  onPress={() => this.props.navigation.navigate('Settings')}>
-                        <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 16, marginTop: 14, marginLeft: 10,}}>{this.props.user._user.email}</Text>
-                      </TouchableOpacity>
-                    </View>
-                    :
-                    <View style={{ height: 50, paddingLeft: 20,}}>
-                      <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 20 }}>{this.props.user.displayName}</Text>
-                      <Text style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 12 }}>{this.props.user._user.email}</Text>
-                    </View>
-                  }
-                </View>
-                
-                : /* по телефону */
-                <View>
-                  {
-                    this.props.user._user.displayName === null ?
+                    this.props.user.userDB.chFIO !== '' ?
                     <TouchableOpacity  onPress={() => this.props.navigation.navigate('Settings')}>
-                        <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 16, marginTop: 14, marginLeft: 10,}}>{this.props.user._user.phoneNumber}</Text>
+                      <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 20 }}>{this.props.user.userDB.chFIO}</Text>
+                      <Text style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 12 }}>{this.state.phone !== null ? this.state.phone : this.state.email}</Text>
                     </TouchableOpacity>
                     :
-                    <View style={{ height: 50, paddingLeft: 20,}}>
-                      <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 20 }}>{this.props.user.displayName}</Text>
-                      <Text style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 12 }}>{this.props.user.phoneNumber}</Text>
-                    </View>
+                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('Settings')}>
+                      <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 17,
+                      marginTop: 12, marginLeft: -15,
+                    }}>{this.state.phone !== null ? this.state.phone : this.state.email}</Text>
+                    </TouchableOpacity>
                   }
                 </View>
+                :
+                <TouchableOpacity  onPress={() => this.props.navigation.navigate('Settings')}>
+                    <Text style={{ color: 'rgba(255, 255, 255, 0.87)', fontSize: 17,
+                      marginTop: 12, marginLeft: -15,}}>{this.state.phone !== null ? this.state.phone : this.state.email}</Text>
+                </TouchableOpacity>
               }
-            </View>
-            
+              </View>
             :
             <View style={{ height: 50, paddingLeft: 20, paddingTop: 10,}}>
               <TouchableOpacity  onPress={() => this.props.navigation.navigate('Phone')}>

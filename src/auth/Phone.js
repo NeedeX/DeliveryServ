@@ -159,8 +159,7 @@ class PhoneAuth extends Component {
       </View>
     );
   }
-  userDB()
-  {
+  userDB() {
     //console.log("UIDGoogleUser = ", user.uid);
     //console.log("chPhone = ", user.phoneNumber);
     //console.log("chUID = ", this.props.options.UIDClient);
@@ -204,7 +203,9 @@ class PhoneAuth extends Component {
         {user && (
           <View style={{ padding: 15, justifyContent: 'center', alignItems: 'center', flex: 1, }} >
           {this.props.loadUser(user)}
-          {this.userDB(user)}
+          {
+            //this.userDB(user)
+          }
           {this.props.navigation.navigate('Main')}
           
           {/*

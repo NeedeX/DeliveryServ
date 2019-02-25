@@ -20,11 +20,41 @@ class Main extends Component {
     };
     this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
 
-    
+    if(this.props.user.length > 0)
+      this.userDB(user);
   }
   componentWillMount(){
     this.getWork();
   }
+  userDB() {
+    //console.log("UIDGoogleUser = ", user.uid);
+    //console.log("chPhone = ", user.phoneNumber);
+    //console.log("chUID = ", this.props.options.UIDClient);
+  
+    return fetch(this.props.options.URL+'InsertUser.php',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        UIDGoogleUser: this.props.user._user.uid,
+        chPhone: this.props.user._user.phoneNumber,
+        UIDClient: this.props.options.chUIDClient,
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  }
+
+  // токен для получения push
   ///https://github.com/yangnana11/react-native-fcm-demo/blob/master/App.android.js
   insertRegisterToken(UIDClient, URL, token){
     return fetch(URL+'InsertRegisterToken.php',{
@@ -182,7 +212,7 @@ class Main extends Component {
           text: 'Cancel',
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
-  },*/
+        },*/
         {text: 'OK', onPress: () => console.log('OK Pressed')},
       ],
       {cancelable: false},
