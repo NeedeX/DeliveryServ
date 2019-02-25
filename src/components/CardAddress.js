@@ -36,8 +36,9 @@ class CardAddress extends React.Component {
         
     }
     addSelectAddresses(id, routeGoBack) {
-        //console.log(id);
+        console.log("id = ", id);
         const tempArrLoc = this.props.addresses.find(i => i.idAddress === id);
+        console.log("addSelectAddresses = ", tempArrLoc);
         if(routeGoBack === 'Checkout')
         {
           

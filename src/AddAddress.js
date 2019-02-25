@@ -45,8 +45,7 @@ class AddAddress extends React.Component {
         return `${ new Date().getTime() }`;
     }
 
-    addAddressDB()
-    {
+    addAddressDB(){
         val = {
             chCity: this.state.chCity,
             chStreet: this.state.chStreet,
@@ -58,9 +57,6 @@ class AddAddress extends React.Component {
             UIDGoogleUser: this.props.user._user.uid, // пользователя приложения, выданный гуглом
             UIDClient: this.props.options.UIDClient,
         };
-
-        console.log("addAddressDB = ", val);
-
         
         fetch(this.props.options.URL + 'InsertAddress.php', 
         {
@@ -103,10 +99,10 @@ class AddAddress extends React.Component {
                     UIDClient: this.props.options.UIDClient,
 
                 };
-            console.log(responseJson);
-                
-            this.props.addAddress(val);
-            console.log(this.props.addresses);
+            //console.log(responseJson);
+                this.loadingAddresses(this.props.user._user.uid);
+            //this.props.addAddress(val);
+            //console.log(this.props.addresses);
             
             //console.log(this.props.addresses);
             this.props.navigation.navigate('Addresses', {animation: 'SlideFromLeft', animationDuration: 500 });
@@ -118,6 +114,30 @@ class AddAddress extends React.Component {
            
 
     }
+    loadingAddresses(chUIDGoogleUser){
+        return fetch(this.props.options.URL + 'LoadingAddresses.php', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Accept-Encoding': "gzip, deflate",
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chUIDGoogleUser: chUIDGoogleUser,
+            UIDClient: this.props.options.UIDClient,
+          })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          //this.props.clearAddresses();
+          this.props.loadAddresses(responseJson.addresses);
+          //console.log("responseJson.addresses = ", responseJson.addresses);
+          //console.log("this.props.addresses = ", this.props.addresses);
+        })
+        .catch((error) => { 
+          console.error(error); 
+        });
+      }
     divider()
     {
         return(
@@ -343,6 +363,9 @@ export default connect (
     addAddress: (index) => {
         dispatch({ type: 'ADD_ADDRESS', payload: index})
     },
+    loadAddresses: (index) => {
+        dispatch({ type: 'LOAD_ADDERESSES', payload: index})
+      },
     /*
     onAddOrder: (orderData) => {
         dispatch({ type: 'ADD_ORDER', payload: orderData});

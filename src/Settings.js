@@ -193,7 +193,6 @@ class Settings extends Component {
         //this.setState({ visibleDeletedWindow: false });
         this.deletedAccount();
     };
-
     render() {
     return (
         <View style={styles.container}>

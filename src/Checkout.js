@@ -49,7 +49,7 @@ class Checkout extends React.Component {
             maxDate: moment(Number(this.props.customers.iDaysAhead)*86400000 + new Date().getTime()).format("DD-MM-YYYY"),
             isErrorName: false,
             isErrorPhone: false,
-
+            selIndexDelivery: 2, // индекс выбора радиобаттона, доставки. По умолчанию ввести адрес
             position: 0, // позиция прокрутки, для возврата при ошибке
         }
         this.inputs = {};
@@ -70,6 +70,34 @@ class Checkout extends React.Component {
         InteractionManager.runAfterInteractions(() => {
             this.setState({ didFinishInitialAnimation: true, });
         });
+        if(this.props.order.addressPickup !== 0){
+            this.setState({ 
+                isViewInputAdressVisible: false,  /// скрываем поля ввода адреса доставки
+                chTypeDeliveryText: 'Самовывоз', // изменяем тип доставки на "Самовывоз"
+                isViewInputSumma: false, // скрываем поле ввода суммы для сдачи
+                chPayGiveChange: '', // сумма с которой надо дать сдачу
+                selIndexDelivery: 0,
+            });
+        }
+        if(this.props.order.addressDelivery !== 0){
+            this.setState({ 
+                isViewInputAdressVisible: false,  /// скрываем поля ввода адреса доставки
+                chTypeDeliveryText: 'Доставка', // изменяем тип доставки на "Самовывоз"
+                isViewInputSumma: true, // скрываем поле ввода суммы для сдачи
+                chPayGiveChange: '', // сумма с которой надо дать сдачу
+                selIndexDelivery: 1,
+            });
+        }
+        if(this.props.order.addressDeliveryInput !== 0){
+            selIndex = 2;
+            this.setState({ 
+                isViewInputAdressVisible: true,  /// скрываем поля ввода адреса доставки
+                chTypeDeliveryText: 'Доставка', // изменяем тип доставки на "Самовывоз"
+                isViewInputSumma: true, // скрываем поле ввода суммы для сдачи
+                chPayGiveChange: '', // сумма с которой надо дать сдачу
+                selIndexDelivery: 2,
+            });
+        }
     }
     static navigationOptions = ({ navigation  }) => {
         return {
@@ -86,8 +114,7 @@ class Checkout extends React.Component {
     // впроверка ввода имени
     validateName(text) {
         let reg = /^[A-zА-яЁё]+$/i ;
-        if(reg.test(text) === false)
-        {
+        if(reg.test(text) === false){
             //console.log("Имя должно состоять только из букв");
             this.setState({
                 chFIO:text,
@@ -132,14 +159,14 @@ class Checkout extends React.Component {
     }
     renderSelectDeliveryMetod(){
         return(
-            <RadioGroup selectedIndex={2} color='#6A3DA1' onSelect = {(index, value) => this.onSelectDeliveryAddress(index, value)} >
+            <RadioGroup selectedIndex={this.state.selIndexDelivery} color='#6A3DA1' onSelect = {(index, value) => this.onSelectDeliveryAddress(index, value)} >
             {
                 <RadioButton value={3}>
                     <View style={styles.arrowRightView}>
                         {
                             this.props.order.addressPickup !== 0 ?
-                            <Text style={{color:'#4E4E4E'}}>{this.props.order.addressPickup}</Text> :
-                            <Text style={{color:'#4E4E4E'}}>Самовывоз</Text>
+                            <Text style={styles.textStyle}>{this.props.order.addressPickup}</Text> :
+                            <Text style={styles.textStyle}>Самовывоз</Text>
                         }
                         <Image style={styles.arrowBottom} 
                             source={require('../assets/arrowRight.png')} />
@@ -153,8 +180,8 @@ class Checkout extends React.Component {
                         <View style={styles.arrowRightView}>
                             {
                                 this.props.order.addressDelivery !== 0 ?
-                                <Text style={{color:'#4E4E4E'}}>{this.props.order.addressDelivery}</Text> :
-                                <Text style={{color:'#4E4E4E'}}>Выбрать адрес</Text>
+                                <Text style={styles.textStyle}>{this.props.order.addressDelivery}</Text> :
+                                <Text style={styles.textStyle}>Выбрать адрес</Text>
                             }
                             <Image
                             style={styles.arrowBottom} 
@@ -167,7 +194,7 @@ class Checkout extends React.Component {
                 this.props.customers.blDelivery == 1 ?
                 <RadioButton value={2}>
                     <View style={styles.arrowRightView}>
-                        <Text style={{color:'#4E4E4E'}}>Ввести адрес вручную</Text>
+                        <Text style={styles.textStyle}>Ввести адрес вручную</Text>
                         <Image
                         style={styles.arrowBottom} 
                         source={ !this.state.isViewInputAdressVisible ? require('../assets/arrowBottom.png') : require('../assets/arrowTop.png')} 
@@ -769,6 +796,7 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         color: '#4E4E4E',
+        marginLeft: 10,
     },
     viewCardStyle:{
         flex:1,
