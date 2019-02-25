@@ -183,7 +183,15 @@ class CheckoutConfirm extends React.Component {
             <View style={styles.viewStyleWrap}>
                 <Text style={styles.titleStyle}>Ваши заказ</Text>
                 <ScrollView >
+                  <View style={{flex: 1, justifyContent: 'space-between', flexDirection: 'row'}}>
                     <Text style={styles.textTitleStyle}> 1. Контактная информация </Text>
+                    <TouchableOpacity  onPress={() => this.props.navigation.goBack()}>
+                    <Image
+                            style={styles.iconPensil} 
+                            source={require('../assets/iconPensil.png')} />
+                    </TouchableOpacity>
+                  </View>
+                    
                     <Text style={styles.textTitleStyle2}>Имя</Text>
                         <Text style={styles.textStyleValue}>{this.props.order.chFIO}</Text>
                         <Text style={styles.textTitleStyle2}>Телефон</Text>
@@ -207,9 +215,14 @@ class CheckoutConfirm extends React.Component {
                         <View
                             style={{  borderBottomColor: '#E4E4E4',
                                 borderBottomWidth: 1, marginTop: 3, marginBottom: 3, }} />
-                        <Text style={styles.textTitleStyle}>
-                            2. Детали
-                        </Text>
+                        <View style={{flex: 1, justifyContent: 'space-between', flexDirection: 'row'}}>
+                          <Text style={styles.textTitleStyle}> 2. Детали </Text>
+                          <TouchableOpacity  onPress={() => this.props.navigation.goBack()}>
+                          <Image
+                                  style={styles.iconPensil} 
+                                  source={require('../assets/iconPensil.png')} />
+                          </TouchableOpacity>
+                        </View>
                         <Text style={styles.textTitleStyle2}>Время доставки</Text>
                         <Text style={styles.textStyleValue}>{this.props.order.chDeliveryTime}</Text>
                         
@@ -233,6 +246,8 @@ class CheckoutConfirm extends React.Component {
                         }
                         <View style={{ borderBottomColor: '#E4E4E4', borderBottomWidth: 1,
                                 marginTop: 3, marginBottom: 3, }} />
+                                
+                                <Text style={styles.textTitleStyle}> 3. Товары </Text>
                         {
                             this.props.cart.map((item, index) => (
                         
@@ -358,6 +373,7 @@ const styles = StyleSheet.create({
         paddingTop: 7,
     },
     textTitleStyle:{
+      marginTop: 5,
         marginLeft: 10,
         fontFamily: 'Roboto',
         fontWeight: '600',
@@ -403,6 +419,12 @@ const styles = StyleSheet.create({
         fontFamily: 'OswaldMedium',
         fontSize: 12,
     },
+    iconPensil: {
+      width: 15,
+      height: 15,
+      marginRight: 10,
+      marginTop: 10,
+    }
 
 });
   

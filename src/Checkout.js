@@ -74,7 +74,7 @@ class Checkout extends React.Component {
             this.setState({ 
                 isViewInputAdressVisible: false,  /// скрываем поля ввода адреса доставки
                 chTypeDeliveryText: 'Самовывоз', // изменяем тип доставки на "Самовывоз"
-                isViewInputSumma: false, // скрываем поле ввода суммы для сдачи
+                //isViewInputSumma: false, // скрываем поле ввода суммы для сдачи
                 chPayGiveChange: '', // сумма с которой надо дать сдачу
                 selIndexDelivery: 0,
             });
@@ -83,7 +83,7 @@ class Checkout extends React.Component {
             this.setState({ 
                 isViewInputAdressVisible: false,  /// скрываем поля ввода адреса доставки
                 chTypeDeliveryText: 'Доставка', // изменяем тип доставки на "Самовывоз"
-                isViewInputSumma: true, // скрываем поле ввода суммы для сдачи
+                //isViewInputSumma: true, // скрываем поле ввода суммы для сдачи
                 chPayGiveChange: '', // сумма с которой надо дать сдачу
                 selIndexDelivery: 1,
             });
@@ -93,7 +93,7 @@ class Checkout extends React.Component {
             this.setState({ 
                 isViewInputAdressVisible: true,  /// скрываем поля ввода адреса доставки
                 chTypeDeliveryText: 'Доставка', // изменяем тип доставки на "Самовывоз"
-                isViewInputSumma: true, // скрываем поле ввода суммы для сдачи
+                //isViewInputSumma: true, // скрываем поле ввода суммы для сдачи
                 chPayGiveChange: '', // сумма с которой надо дать сдачу
                 selIndexDelivery: 2,
             });
@@ -170,6 +170,7 @@ class Checkout extends React.Component {
                         }
                         <Image style={styles.arrowBottom} 
                             source={require('../assets/arrowRight.png')} />
+                    
                     </View>
                 </RadioButton>
             }
@@ -464,11 +465,15 @@ class Checkout extends React.Component {
         var selIndex = 0; // индекс выбраного по умочанию значения способа оплаты
         if(this.props.order.addressPickup === 0) // проверяем выбрана доставка или самовывоз
         {   // проверяем разрешена ли оплата картой курьру, есди да, то индекс 0, если нет, то индеск 1
+            // доставка
             selIndex = this.props.customers.blCardCourier === "1" ? 0 : 1; 
+            
         }
         else 
         {   // проверяем разрешена ли оплата наличными курьру, есди да, то индекс 0, если нет, то индеск 1
+            // самовывоз
             selIndex = this.props.customers.blCashCourier === "1" ? 0: 1; 
+            //this.setState({isViewInputSumma: this.props.customers.blCashCourier === "1" ? true : false});
         }
         return (
         <View style={{backgroundColor: '#F3F3F3'}}> 
@@ -535,7 +540,8 @@ class Checkout extends React.Component {
                         duration={200}
                         unmountOnHide={true}
                         >
-                        <View style={{ flex: 1, marginTop: -15,}}>
+                        {this.divider()}
+                        <View style={{ flex: 1, marginTop: -0,}}>
                             <Sae
                                 label={'Город'}
                                 style={styles.textInputStyleNew}
@@ -751,7 +757,8 @@ class Checkout extends React.Component {
                         </RadioButton>
                     </RadioGroup>
                     {this.divider()}
-                    <TextInput style={{ color: '#4E4E4E', paddingLeft: 10,}}
+                    <TextInput style={{ color: '#4E4E4E', paddingLeft: 10, height: 120,
+                    textAlignVertical: 'top', fontSize: 14,}}
                         multiline = {true}
                         underlineColorAndroid = "transparent"
                         placeholder = "Комментарий к заказу"
