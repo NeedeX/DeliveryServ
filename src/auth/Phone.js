@@ -174,12 +174,16 @@ class PhoneAuth extends Component {
       body: JSON.stringify({
         UIDGoogleUser: this.props.user._user.uid,
         chPhone: this.props.user._user.phoneNumber,
-        UIDClient: this.props.options.chUIDClient,
+        UIDClient: this.props.options.UIDClient,
       })
     })
     .then((response) => response.json())
     .then((responseJson) => {
-
+      if(responseJson > 0){
+        this.props.loadUser(user);
+        this.props.navigation.navigate('Main');
+      }
+      
     })
     .catch((error) => {
       console.error(error);
@@ -196,17 +200,24 @@ class PhoneAuth extends Component {
           backgroundColor="#583286"
           barStyle="light-content"
         />
+        
         <View>
         {!user && !confirmResult && this.renderPhoneNumberInput()}
         {this.renderMessage()}
         {!user && confirmResult && this.renderVerificationCodeInput()}
+
+        
         {user && (
           <View style={{ padding: 15, justifyContent: 'center', alignItems: 'center', flex: 1, }} >
-          {this.props.loadUser(user)}
+          
           {
             //this.userDB(user)
+            this.props.loadUser(user)
           }
-          {this.props.navigation.navigate('Main')}
+          {
+            this.props.navigation.navigate('Main', {route: 'Phone',})
+          }
+          
           
           {/*
             <Image source={{ uri: successImageUri }} style={{ width: 100, height: 100, marginBottom: 25 }} />

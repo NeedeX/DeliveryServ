@@ -3,14 +3,18 @@ import {Platform, StyleSheet, Text, View, InteractionManager, ActivityIndicator,
 import { connect } from 'react-redux';
 import Header from './components/Header';
 import BGNoAuth from './components/BGNoAuth';
-const { width } = Dimensions.get('window');
-
+//const { width } = Dimensions.get('window');
+//const { height } = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
+console.log("height = ", height);
+console.log("width = ", width);
 class Cart extends Component {
   constructor(props){
     super(props);
     this.state = {
       didFinishInitialAnimation: false,
       ingPrice: 0,
+      deliveryPrice: 0,
     }  
   }
   static navigationOptions = ({ navigation  }) => {
@@ -81,9 +85,9 @@ class Cart extends Component {
       priceIng = Number(priceIng) + Number(chPrice) + Number(optionsPrice);
       return priceIng; 
   }
-  allPriceCart() {
+  allPriceCart(priceDelivery) {
     var allPriceCart = 0;
-      
+     
     this.props.cart.map(item =>(
         item.ing ?
         allPriceCart = allPriceCart + this.priceIng(item.ing, item.chPrice, item.optionsPrice)
@@ -91,19 +95,20 @@ class Cart extends Component {
         allPriceCart = allPriceCart + Number(item.chPrice) + Number(item.optionsPrice)
       )
     )
+    
+    //var delivery = allPriceCart <  Number(this.props.customers.iOrderFreeDelivery) ? allPriceCart +  Number(priceDelivery) : allPriceCart + 0;
     this.state.allPriceCart = allPriceCart;
-      
-    return parseFloat(allPriceCart).toFixed(2)+" " + this.props.customers.chCurrency;
+    return parseFloat(allPriceCart).toFixed(2);
   }
   renderCardInCart(){
     //console.log("this.props.cart = ", this.props.cart);
     return(
-      <View style={{ backgroundColor: '#fff', borderTopStartRadius: 10, borderTopEndRadius: 10,  height: 500, }}>
+      <View style={{ backgroundColor: '#fff', borderTopStartRadius: 10, borderTopEndRadius: 10, height: height - 150 }}>
         <View style={styles.viewTextTitle}>
           <Text style={ styles.textTitle}>Ваши товары</Text>
         </View>
           <View style={{ backgroundColor: '#fff', borderRadius: 10, borderTopEndRadius: 0, borderTopStartRadius: 0, width: width - 40,  elevation: 2, }}>
-            <ScrollView style={{paddingBottom: 10,}}>
+            <ScrollView >
             {
               this.props.cart.map((i, index) => (
               <View key={index} style={{ marginBottom: 5, marginTop: 5,}}>
@@ -149,23 +154,26 @@ class Cart extends Component {
                 <Text style={{fontSize: 14, fontFamily: 'Roboto', color: '#828282',}}>Стоимость товаров:</Text>
                 <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-end", }}>
                   <Text style={{}}>
-                    {this.allPriceCart()}
+                    {this.allPriceCart(0) + " " + this.props.customers.chCurrency}
                   </Text>
                 </View>
               </View>
               {/*===============   */}
               <View style={styles.viewStringPrice}>
-                        <View style={{flexDirection: 'column',}}>
-                          <Text style={{fontSize: 14, fontFamily: 'Roboto', color: '#828282',}} >Доставка: </Text>
-                          <Text style={{
+                <View style={{flexDirection: 'column',}}>
+                  <Text style={{fontSize: 14, fontFamily: 'Roboto', color: '#828282',}} >Доставка: </Text>
+                  <Text style={{
                             fontFamily: 'Roboto',
                             fontSize: 10,
                             lineHeight: 12,
                             color: '#BDBDBD',
-                          }}>(при заказе от 20 руб. доставка бесплатно) </Text>
+                          }}>(при заказе от {this.props.customers.iOrderFreeDelivery} {this.props.customers.chCurrency}. доставка бесплатно) </Text>
                         </View>
                     <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-end" }}>
-                      <Text style={{fontSize: 14, fontFamily: 'Roboto',}}> 0 </Text>
+                      <Text style={{fontSize: 14, fontFamily: 'Roboto',}}>
+       
+                      {this.allPriceCart(0) > Number(this.props.customers.iOrderFreeDelivery) ? "Бесплатно" : parseFloat(this.props.customers.iPriceOfDelivery).toFixed(2) + " " + this.props.customers.chCurrency}
+                      </Text> 
                     </View>
                   </View>
               <View style={ styles.viewTotalPrice }>
@@ -177,7 +185,7 @@ class Cart extends Component {
                             alignItems: "flex-end", 
                           }}>
                           <Text style={{color: '#6A3DA1', fontWeight: '600', fontSize: 16, fontFamily: 'Roboto'}}>
-                    {this.allPriceCart()}
+                    {this.allPriceCart(0) > Number(this.props.customers.iOrderFreeDelivery) ?  this.allPriceCart(0) + " " + this.props.customers.chCurrency : parseFloat(Number(this.allPriceCart(0)) + Number(this.props.customers.iPriceOfDelivery)).toFixed(2) } {this.props.customers.chCurrency}
                   </Text>
                 </View>
               </View>

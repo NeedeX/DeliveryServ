@@ -14,12 +14,14 @@ class Settings extends Component {
         var {params} = this.props.navigation.state;
         this.state = { 
           didFinishInitialAnimation: false,
-          switchPushNotification: this.props.user.userDB.iPushNotification,
+          switchPushNotification: this.props.user.userDB.length === 0 ? false : this.props.user.userDB.iPushNotification,
           chPhone: this.props.user.userDB.chPhone,
           chFIO: this.props.user.userDB.chFIO, 
           chDateOfBirth: this.props.user.userDB.chDateOfBirth,
           visibleDeletedWindow: false,
         };
+        console.log("this.props.user.userDB.iPushNotification = ", this.props.user.userDB);
+        
     }
     static navigationOptions = ({ navigation  }) => {
         return {
@@ -51,6 +53,7 @@ class Settings extends Component {
     signOut = () => {
         firebase.auth().signOut();
     }
+    // сохраняет в БД 
     switchPushNotificationInDB(value){
         var val = value === true ? 1 : 0;
         fetch(this.props.options.URL + 'EditSettings.php', 
@@ -70,7 +73,6 @@ class Settings extends Component {
         })
         .then((response) => response.json())
         .then((responseJson) => {
-            console.log("responseJson = ",responseJson);
             if(responseJson === 1)
                 this.props.editPushNotification(value);
         })

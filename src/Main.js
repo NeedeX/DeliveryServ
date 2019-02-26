@@ -19,9 +19,11 @@ class Main extends Component {
       countClosesLocation: 0, /// кол-во открытых заведений в данный момент
     };
     this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
-
-    if(this.props.user.length > 0)
-      this.userDB(user);
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.userDB(user);
+      }
+    })
   }
   componentWillMount(){
     this.getWork();
@@ -41,7 +43,7 @@ class Main extends Component {
       body: JSON.stringify({
         UIDGoogleUser: this.props.user._user.uid,
         chPhone: this.props.user._user.phoneNumber,
-        UIDClient: this.props.options.chUIDClient,
+        UIDClient: this.props.options.UIDClient,
       })
     })
     .then((response) => response.json())
@@ -103,8 +105,11 @@ class Main extends Component {
     firebase.auth().onAuthStateChanged(user => {
       //console.log("==>");
       if (user) {
-        this.setState({ userEmail: user._user.email});
-        this.setState({ userUid: user._user.uid});
+        this.setState({ 
+          userEmail: user._user.email,
+          userUid: user._user.uid,
+        });
+        //this.userDB(user);
         //console.log("userEmail = ", this.state.userEmail);
         //console.log("userUid = ", this.state.userUid);
         //console.log("this.props.user = ", this.props.user);
