@@ -8,7 +8,7 @@ import Header from './components/Header';
 import { Sae } from 'react-native-textinput-effects';
 import moment  from 'moment';
 
-const { width } = Dimensions.get('window');
+const { width, height} = Dimensions.get('window');
 class Checkout extends React.Component {
     constructor(props){
         super(props);
@@ -479,7 +479,9 @@ class Checkout extends React.Component {
         <View style={{backgroundColor: '#F3F3F3'}}> 
         {      
             this.state.didFinishInitialAnimation === false ?
-            <ActivityIndicator size="large" color="#583286" />
+            <View style={{flex:1,  backgroundColor: '#F3F3F3',}}>
+                <ActivityIndicator style={{marginTop: 350}} size="large" color="#583286" />
+            </View>
             :
             <ScrollView ref={(ref) => this.scrollView = ref}>
                 <Text style={styles.textTitleStyle}>1. Контактная информация</Text>
@@ -786,12 +788,6 @@ class Checkout extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F3F3F3',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     textTitleStyle:{
         marginTop: 10,
         fontSize: 14,

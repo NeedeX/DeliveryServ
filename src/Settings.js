@@ -14,7 +14,7 @@ class Settings extends Component {
         var {params} = this.props.navigation.state;
         this.state = { 
           didFinishInitialAnimation: false,
-          switchPushNotification: this.props.user.userDB.length === 0 ? false : this.props.user.userDB.iPushNotification,
+          switchPushNotification: this.props.user.userDB.iPushNotification,
           chPhone: this.props.user.userDB.chPhone,
           chFIO: this.props.user.userDB.chFIO, 
           chDateOfBirth: this.props.user.userDB.chDateOfBirth,
@@ -231,8 +231,8 @@ class Settings extends Component {
                             editable = {true}
                             maxLength = {40}
                             onEndEditing={() => this.onEndEditingName(this.state.chFIO)}
-                            onChangeText={(name) => { this.changeName(name)
-                            }}
+                            onChangeText={(name) => { this.changeName(name) }}
+                            placeholderTextColor={'#4E4E4E'}
                         />
                         {this.divider()}
                         <Text style={styles.cardTextStyle}>{this.state.chPhone}</Text>
