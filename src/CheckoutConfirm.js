@@ -62,7 +62,7 @@ class CheckoutConfirm extends React.Component {
       )
       this.state.allPriceCart = allPriceCart;
       //console.log(this.state.allPriceCart);
-      return parseFloat(allPriceCart).toFixed(2) +" " + this.props.customers.chCurrency;
+      return parseFloat(allPriceCart).toFixed(2);
     }
     validePurchase(){
         var address = '';
@@ -276,7 +276,7 @@ class CheckoutConfirm extends React.Component {
                         <Text style={{fontSize: 14, fontFamily: 'Roboto', color: '#828282',}}>Стоимость товаров:</Text>
                         <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-end", }}>
                             <Text style={{}}>
-                              {this.allPriceCart()}
+                            {this.allPriceCart(0) + " " + this.props.customers.chCurrency}
                             </Text>
                         </View>
                     </View>
@@ -291,10 +291,14 @@ class CheckoutConfirm extends React.Component {
                               fontSize: 10,
                               lineHeight: 12,
                               color: '#BDBDBD',
-                            }}>(при заказе от 20 руб. доставка бесплатно) </Text>
+                            }}>
+                            (при заказе от {this.props.customers.iOrderFreeDelivery} {this.props.customers.chCurrency}. доставка бесплатно) 
+                            </Text>
                           </View>
                           <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-end" }}>
-                            <Text style={{fontSize: 14, fontFamily: 'Roboto',}}> 0 </Text>
+                            <Text style={{fontSize: 14, fontFamily: 'Roboto',}}> 
+                            {this.allPriceCart(0) > Number(this.props.customers.iOrderFreeDelivery) ? "Бесплатно" : parseFloat(this.props.customers.iPriceOfDelivery).toFixed(2) + " " + this.props.customers.chCurrency}
+                            </Text>
                           </View>
                         </View>
                         <View style={{ flex: 1,  flexDirection: 'row', alignItems: 'flex-start',
@@ -309,7 +313,11 @@ class CheckoutConfirm extends React.Component {
                               alignItems: "flex-end", 
                             }}>
                             <Text style={{color: '#6A3DA1', fontWeight: '600', fontSize: 16, fontFamily: 'Roboto'}}>
-                              {this.allPriceCart()}
+                            {this.allPriceCart(0) > Number(this.props.customers.iOrderFreeDelivery) ?  
+                            this.allPriceCart(0)
+                            : 
+                            parseFloat(Number(this.allPriceCart(0)) + Number(this.props.customers.iPriceOfDelivery)).toFixed(2)} 
+                            {" " +this.props.customers.chCurrency}
                             </Text>
                           </View>
                         </View>

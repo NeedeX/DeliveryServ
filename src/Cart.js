@@ -6,8 +6,7 @@ import BGNoAuth from './components/BGNoAuth';
 //const { width } = Dimensions.get('window');
 //const { height } = Dimensions.get('window');
 const {height, width} = Dimensions.get('window');
-console.log("height = ", height);
-console.log("width = ", width);
+
 class Cart extends Component {
   constructor(props){
     super(props);
@@ -167,7 +166,9 @@ class Cart extends Component {
                             fontSize: 10,
                             lineHeight: 12,
                             color: '#BDBDBD',
-                          }}>(при заказе от {this.props.customers.iOrderFreeDelivery} {this.props.customers.chCurrency}. доставка бесплатно) </Text>
+                          }}>
+                          (при заказе от {this.props.customers.iOrderFreeDelivery} {this.props.customers.chCurrency}. доставка бесплатно) 
+                          </Text>
                         </View>
                     <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-end" }}>
                       <Text style={{fontSize: 14, fontFamily: 'Roboto',}}>
@@ -185,7 +186,11 @@ class Cart extends Component {
                             alignItems: "flex-end", 
                           }}>
                           <Text style={{color: '#6A3DA1', fontWeight: '600', fontSize: 16, fontFamily: 'Roboto'}}>
-                    {this.allPriceCart(0) > Number(this.props.customers.iOrderFreeDelivery) ?  this.allPriceCart(0) + " " + this.props.customers.chCurrency : parseFloat(Number(this.allPriceCart(0)) + Number(this.props.customers.iPriceOfDelivery)).toFixed(2) } {this.props.customers.chCurrency}
+                    {this.allPriceCart(0) > Number(this.props.customers.iOrderFreeDelivery) ?  
+                      this.allPriceCart(0)
+                      : 
+                      parseFloat(Number(this.allPriceCart(0)) + Number(this.props.customers.iPriceOfDelivery)).toFixed(2)} 
+                    {" " +this.props.customers.chCurrency}
                   </Text>
                 </View>
               </View>

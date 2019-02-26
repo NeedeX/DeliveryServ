@@ -28,7 +28,7 @@ class Main extends Component {
   componentWillMount(){
     this.getWork();
   }
-  userDB() {
+  userDB(user) {
     //console.log("UIDGoogleUser = ", user.uid);
     //console.log("chPhone = ", user.phoneNumber);
     //console.log("chUID = ", this.props.options.UIDClient);
@@ -41,14 +41,14 @@ class Main extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        UIDGoogleUser: this.props.user._user.uid,
-        chPhone: this.props.user._user.phoneNumber,
+        UIDGoogleUser: user._user.uid,
+        chPhone: user._user.phoneNumber,
         UIDClient: this.props.options.UIDClient,
       })
     })
     .then((response) => response.json())
     .then((responseJson) => {
-
+      //this.props.loadUser(user);
     })
     .catch((error) => {
       console.error(error);
