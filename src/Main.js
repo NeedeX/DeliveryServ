@@ -21,7 +21,7 @@ class Main extends Component {
     this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.userDB(user);
+        //this.userDB(user);
       }
     })
   }
@@ -163,20 +163,6 @@ class Main extends Component {
       textAlign: 'center',
     },
     header: (props) => <Header title={'Меню'} nav={ navigation } {...props} />,
-    headerRight: (
-      <Button
-        onPress={() => alert('This is a button!')}
-        title="Info"
-        color="#000"
-      />
-    ),
-    headerLeft: (
-      <Button
-        onPress={() => alert('This is a button!')}
-        title="Info"
-        color="#000"
-      />
-    ),
     };
   };
   renderStocks(nav){
@@ -270,42 +256,20 @@ class Main extends Component {
         // Convert back to days and return 
         //console.log("intervalStart >> ", intervalStart);
         //console.log("intervalEnd >> ", intervalEnd);
-      
-
-
-        if(intervalStart >= 0 || intervalEnd < 0)
-        {  
-          ///this.closeMessage();  
+        if(intervalStart >= 0 || intervalEnd < 0) {  
           this.setState({countClosesLocation: ++this.state.countClosesLocation});
         }
-        /*
-        else
-        {
-          //console.log("открыто");
-
-          var val = {
-            countOpenLocation: this.state.countOpenLocation,
-          }
-          this.props.addOptionCounrOpenLoc(val);
-        }*/
       }
       //console.log("countClosesLocation = ", this.state.countClosesLocation);
       
-      if(this.state.countClosesLocation === this.props.locations.length)
-      {
+      if(this.state.countClosesLocation === this.props.locations.length) {
         this.closeMessage();
       }
     })
   }
-  /// сравнивает время и выводит сообщение при отрицательном результате
-  checkWortTime(currentTime, startOrEndTime){
-
-    //this.closeMessage();
-  }
   render() {
     var {navigate} = this.props.navigation;
     //this.getTodayDayName();
-    
     return (
       <View style={styles.container}>
         <StatusBar
@@ -313,7 +277,6 @@ class Main extends Component {
           backgroundColor="#583286"
           barStyle="default"
         />
-        
         {
           this.state.didFinishInitialAnimation === false ?
           <ActivityIndicator size="large" color="#583286" />
@@ -331,7 +294,6 @@ class Main extends Component {
                 </TouchableOpacity>
               </View>
               <Swiper
-
                 height={168}
                 autoplay={true}
                 removeClippedSubviews={false}
@@ -357,12 +319,6 @@ class Main extends Component {
                 ))
               }
               </View>
-              {/*
-              <TouchableOpacity style={styles.button} 
-              onPress={() => { this.props.navigation.navigate('Checkout') }}>
-              <Text>Checkout</Text></TouchableOpacity>
-              */}
-              
           </ScrollView>
         
         }
@@ -405,8 +361,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-
-
   textMenu: {
     color: '#4E4E4E', 
     fontFamily: 'OswaldSemiBold', 

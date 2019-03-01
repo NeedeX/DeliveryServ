@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 import Dialog, { DialogTitle, DialogContent,  DialogButton, } from 'react-native-popup-dialog';
 const bg  = require('../components/assets/drawerBg.png');
-
+import RNRestart from 'react-native-restart'
 
 class Drawer extends React.Component {
   constructor(props){
@@ -50,7 +50,8 @@ class Drawer extends React.Component {
        // console.log("user => ", user);
         this.props.clearHistory();
         this.props.clearFavorites();
-        this.props.navigation.navigate('Main')
+        //this.props.navigation.navigate('Main');
+        RNRestart.Restart();
       }
     });
   }
