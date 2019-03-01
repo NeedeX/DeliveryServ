@@ -5,6 +5,7 @@ import firebase from 'react-native-firebase';
 import Dialog, { DialogTitle, DialogContent,  DialogButton, } from 'react-native-popup-dialog';
 const bg  = require('../components/assets/drawerBg.png');
 
+
 class Drawer extends React.Component {
   constructor(props){
     super(props);
@@ -117,9 +118,7 @@ class Drawer extends React.Component {
     }
     
   render() {
-
-    return (
-      
+    return ( 
       <ImageBackground  
         source={bg} 
         style={{ flex: 1, width: 318,}} 
@@ -177,7 +176,10 @@ class Drawer extends React.Component {
             }}
           />
   
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Main')}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate('Main');
+          this.props.navigation.closeDrawer();
+          }}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconMenuDrawer.png')} 
             style={ styles.iconsMenu }/>
@@ -185,7 +187,10 @@ class Drawer extends React.Component {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Cart')}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate('Cart');
+          this.props.navigation.closeDrawer();
+        }}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconCart.png')} 
             style={ styles.iconsMenu }/>
@@ -201,7 +206,10 @@ class Drawer extends React.Component {
             
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Favorites')}>
+        <TouchableOpacity onPress={() => { 
+          this.props.navigation.navigate('Favorites');
+          this.props.navigation.closeDrawer();
+          }}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconFavorites.png')} 
             style={ styles.iconsMenu }/>
@@ -209,21 +217,30 @@ class Drawer extends React.Component {
           </View>
         </TouchableOpacity>
    
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('History')}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate('History');
+          this.props.navigation.closeDrawer();
+        }}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconHistory.png')} 
             style={ styles.iconsMenu }/>
             <Text style={styles.textMenu}>История заказов</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Stocks')}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate('Stocks');
+          this.props.navigation.closeDrawer();
+          }}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconStocks.png')} 
             style={ styles.iconsMenu }/>
             <Text style={styles.textMenu}>Акции</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('DeliveryAndPays')}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate('DeliveryAndPays');
+          this.props.navigation.closeDrawer();
+          }}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconDelivery.png')} 
             style={ styles.iconsMenu }/>
@@ -241,32 +258,48 @@ class Drawer extends React.Component {
             }}
           />
         {this.renderDialogSort()}
-        <TouchableOpacity onPress={() => this.showDialogSort()}>
+        <TouchableOpacity onPress={() => {
+          this.showDialogSort();
+          this.props.navigation.closeDrawer();
+        }}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconOperator.png')} 
             style={ styles.iconsMenu }/>
             <Text style={styles.textMenu}>Связь с оператором</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Stocks')}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate('Stocks');
+          this.props.navigation.closeDrawer();
+        }}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconAbout.png')} 
             style={ styles.iconsMenu }/>
             <Text style={styles.textMenu}>О приложении</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate('Login');
+          this.props.navigation.closeDrawer();
+          }}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconAbout.png')} 
             style={ styles.iconsMenu }/>
             <Text style={styles.textMenu}>Войти по e-mail</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() =>  this.signOut() }>
+        <TouchableOpacity onPress={() =>  {this.signOut();this.props.navigation.closeDrawer();}}>
           <View style={{ flexDirection: 'row', marginBottom: 20, }}>
             <Image source={require('./assets/iconAbout.png')} 
             style={ styles.iconsMenu }/>
             <Text style={styles.textMenu}>Выйти</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() =>{ this.props.navigation.navigate('Test'); this.props.navigation.closeDrawer();}}>
+          <View style={{ flexDirection: 'row', marginBottom: 20, }}>
+            <Image source={require('./assets/iconAbout.png')} 
+            style={ styles.iconsMenu }/>
+            <Text style={styles.textMenu}>Test</Text>
           </View>
         </TouchableOpacity>
       </ImageBackground>

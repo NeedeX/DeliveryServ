@@ -67,6 +67,11 @@ class PhoneAuth extends Component {
       confirmResult.confirm(codeInput)
         .then((user) => {
           this.setState({ message: 'Код подтвержден!' });
+            this.userDB(user)
+            this.props.loadUser(user)
+            
+        
+
         })
         .catch(error => this.setState({ message: `Ошибка подтверждения кода: ${error.message}` }));
     }
@@ -212,7 +217,7 @@ class PhoneAuth extends Component {
           
           {
             //this.userDB(user)
-            this.props.loadUser(user)
+            //this.props.loadUser(user)
           }
           {
             this.props.navigation.navigate('Main', {route: 'Phone',})

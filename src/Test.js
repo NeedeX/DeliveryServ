@@ -1,15 +1,24 @@
 import React, {Component} from 'react';
 import {StyleSheet, ImageBackground, Platform, YellowBox, TextInput, Alert, Dimensions, Button, TouchableHighlight,TouchableOpacity, InteractionManager, ActivityIndicator, Image, Text, View, StatusBar, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
-import Swiper from 'react-native-swiper';
+
 import ButtomCategoryNew from './components/ButtomCategoryNew';
 import Header from './components/Header';
 const { width } = Dimensions.get('window');
 import firebase from 'react-native-firebase';
 import NotifService from './NotifService';
 import appConfig from '../app.json';
+
+import Swiper from 'react-native-animated-swiper';
+
+const Slide = ({ title }) => (
+    <View style={styles.slide}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
+  );
+
 YellowBox.ignoreWarnings(['Require cycle:']);
-class Main extends Component {
+class Test extends Component {
   constructor(props) {
     super(props)
     var {params} = this.props.navigation.state;
@@ -162,7 +171,7 @@ class Main extends Component {
       fontWeight: 'bold',
       textAlign: 'center',
     },
-    header: (props) => <Header title={'Меню'} nav={ navigation } {...props} />,
+    header: (props) => <Header title={'Test'} nav={ navigation } {...props} />,
     headerRight: (
       <Button
         onPress={() => alert('This is a button!')}
@@ -181,7 +190,7 @@ class Main extends Component {
   };
   renderStocks(nav){
     return this.props.banners.map((banners, index) => (
-      <TouchableOpacity activeOpacity={0.9} style={{ marginLeft: 22, marginRight: 22}} key={index} onPress={() => nav('StocksView', { bannersId: banners.iStock, title: banners.chName, desc:banners.sDescriptio,  countInBasket: this.state.countInBasket })}>
+      <TouchableOpacity activeOpacity={0.9} style={{flex: 1, marginLeft: 24, marginRight: 24 }} key={index} onPress={() => nav('StocksView', { bannersId: banners.iStock, title: banners.chName, desc:banners.sDescriptio,  countInBasket: this.state.countInBasket })}>
         <View style={{elevation: 2, height: 180, borderRadius: 20, }}>
         <Image key={banners.iStock} source={{ uri: banners.sImage }} style={styles.img}/> 
         </View>
@@ -330,18 +339,18 @@ class Main extends Component {
                   <Text style={ styles.textStocksAll}>все</Text>
                 </TouchableOpacity>
               </View>
+           
               <Swiper
+                    backgroundColor={['#4285f4', '#0f9d58', '#f4b400', '#db4437']}
+                    dots={true}
+                    dotsBottom={10}
+                    dotsColor="rgba(255, 255, 255, 0.25)"
+                    dotsColorActive="rgba(255, 255, 255, 0.99)"
+                    >
+                    {this.renderStocks(navigate)}
+                </Swiper>
+          
 
-                height={168}
-                autoplay={true}
-                removeClippedSubviews={false}
-                style={styles.wrapper}
-                paginationStyle={{ bottom: 15, left: 0, right: 0, }}
-                activeDot={<View style={{backgroundColor: '#fff', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
-                dot={<View style={{backgroundColor: 'rgba(0,0,0,.2)', width: 5, height: 5, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
-                >
-                  {this.renderStocks(navigate)}
-              </Swiper>
             </ImageBackground>
             <Text style={ styles.textMenu}>Меню</Text>
             <View style={ styles.viewGridMenu }>
@@ -406,7 +415,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
 
-
+  wrapper: { 
+    marginLeft: 24*360/width,
+    marginRight: 24*360/width,
+  },
   textMenu: {
     color: '#4E4E4E', 
     fontFamily: 'OswaldSemiBold', 
@@ -455,6 +467,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     
   },
+  slide: { alignItems: 'center', flex: 1, justifyContent: 'center' },
+  title: { color: '#fff', fontSize: 48 },
 });
 
 export default connect (
@@ -492,4 +506,4 @@ export default connect (
       dispatch({ type: 'EDIT_CATEGORY', payload: categoryData});
     },*/
   })
-)(Main);
+)(Test);

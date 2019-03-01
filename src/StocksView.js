@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   img:{
     justifyContent: 'center',
     alignItems: 'center',
-    height: 150,
+    height: 205,
     opacity: 1,
     borderRadius: 30,
    
@@ -81,13 +81,13 @@ const styles = StyleSheet.create({
   },
   viewTitleStyle: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+
     flexDirection: 'row',
  
-    marginLeft: 20,
+    marginLeft: 40,
     marginRight: 20,
     marginBottom: 10,
+    
   },
   textTitleStyle: {
     color: '#4E4E4E',
@@ -95,12 +95,13 @@ const styles = StyleSheet.create({
     fontFamily: 'OswaldSemiBold',
   },
   viewTextDescription:{
-    marginLeft: 35,
-    marginRight: 35,
+    marginLeft: 40,
+    marginRight: 40,
+    
   },
   viewTextDescriptionNotes:{
-    marginLeft: 35,
-    marginRight: 35,
+    marginLeft: 40,
+    marginRight: 40,
     marginTop: 10,
   },
   textDescription:{

@@ -17,7 +17,7 @@ class CustomHeader extends Component {
             style={styles.touchableOpacityStyle}>
                 <View style={{elevation: 2,  borderRadius: 15}}>
                     <Image source={ this.props.chMainImage.length > 0 ? { uri: this.props.chMainImage } : require('./assets/noImageAvailable.png')} 
-                    style={{  width: 154,  height: 114, borderRadius: 15, }}
+                    style={{  width: 164,  height: 114, borderRadius: 15, }}
                     imageStyle={{ borderRadius: 15 }}/>
                 </View>
                 <View style={{ flex: 1, flexDirection: 'row', borderRadius: 25, height: 50,}}>
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
       fontWeight: '600',
       fontFamily: 'Roboto',
       color: '#4E4E4E',
-      marginLeft: 10,
+      marginLeft: 8,
     },
     touchableOpacityStyle:
     {
@@ -46,6 +46,8 @@ const styles = StyleSheet.create({
         borderRadius:15, 
         borderWidth: 0,
         height: 140,
+
+        marginBottom: 16,
     }
     
 

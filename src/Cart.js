@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   btnConfirm: {
     marginTop: 10, 
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 45,
     justifyContent: 'center', 
   },
   buttonText:{
