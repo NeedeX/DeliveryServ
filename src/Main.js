@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, ImageBackground, Platform, YellowBox, TextInput, Alert, Dimensions, Button, TouchableHighlight,TouchableOpacity, InteractionManager, ActivityIndicator, Image, Text, View, StatusBar, ScrollView} from 'react-native';
+import {StyleSheet, ImageBackground, YellowBox, Alert, Dimensions, TouchableOpacity, InteractionManager, ActivityIndicator, Image, Text, View, StatusBar, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
 import ButtomCategoryNew from './components/ButtomCategoryNew';
