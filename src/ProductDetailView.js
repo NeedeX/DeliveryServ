@@ -195,7 +195,7 @@ class ProductDetailView extends React.Component {
     this.state.viewLeftRigthCount = 0;  
     if(resultFav.length > 0)
     { return (
-        <TouchableOpacity style={{elevation: 3, marginRight: 15, marginTop: 15,}}
+        <TouchableOpacity style={{elevation: 3,}}
           onPress={() => { this.delToFavorite(resultFav[0].idFavorite, this.props.user.uid)}}>
           <Image
             style={ styles.imgFavStyle }
@@ -206,9 +206,10 @@ class ProductDetailView extends React.Component {
     }
     else { 
     return (
-      <TouchableOpacity style={{elevation: 3, marginRight: 15, marginTop: 15,}}
+      <TouchableOpacity style={{elevation: 3,}}
         onPress={() => { this.addToFavorite(iProduct)}}>
         <Image
+          //style={ styles.imgFavStyle }
           style={ styles.imgFavStyle }
           source={require('../assets/iconHeartNoFav.png')}
         />  
@@ -390,31 +391,28 @@ class ProductDetailView extends React.Component {
     return (
       <View style={{backgroundColor: '#fff', }}> 
       {
-            this.state.didFinishInitialAnimation === false ?
-            <ActivityIndicator size="large" color="#583286" />
-            :
+        this.state.didFinishInitialAnimation === false ?
+        <ActivityIndicator size="large" color="#583286" />
+        :
         <ScrollView>
           {this.renderDialog()}
-          <View style={{ flexDirection: 'row', paddingBottom: 20,}}>
-            <View style={{ width: "5%", height: 100, }}>
-            </View>
-            <View style={{  width: "85%",  }}>
-              <View style={{ flex: 1, alignItems: 'center'}}>
+          <View>
+            <View style={{ flex: 1, alignItems: 'center', marginLeft: 32, marginRight: 32}}>
                 <Text style={ styles.titleName }>{result[0].chName }</Text>
                 <Text style={{ paddingLeft: 10, color: '#828282', fontSize: 12, fontFamily: 'Roboto',}}>
                   {result[0].chDescription}
                 </Text>
-              </View>
             </View>
-            {/* добавление в избранное */}
-            <View style={{ width: "10%", height: 100,}}>
-              
-              { this.renderFavoriteButtom(result[0].iProduct) }
-            </View>
+            
           </View>
           {/* отображение главной картинки продукта */}
           <View>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            {/* добавление в избранное */}
+            <View style={{ marginLeft: 32, backgroundColor: 'red', marginRight: 32, marginBottom: 16, marginTop: 16, justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+              
+              { this.renderFavoriteButtom(result[0].iProduct) }
+            </View>
             <Image
               style={{width: 360, height: 232, zIndex: 0,}}
               source={ result[0].chMainImage === "" ? require('../assets/noImage.jpg') : { uri: result[0].chMainImage } }
@@ -551,7 +549,9 @@ const styles = StyleSheet.create({
     opacity:.85,
   },
   imgFavStyle:
-  {width: 24,  height: 20, zIndex: 0, justifyContent: 'flex-end', marginTop: 4,},
+  {width: 24,  height: 21, zIndex: 0, justifyContent: 'flex-end',
+    zIndex: 10, marginBottom: -30,
+  },
   viewTitleStyle: {
     flex: 1,
     justifyContent: 'center',

@@ -167,8 +167,8 @@ class Main extends Component {
   };
   renderStocks(nav){
     return this.props.banners.map((banners, index) => (
-      <TouchableOpacity activeOpacity={0.9} style={{ marginLeft: 22, marginRight: 22}} key={index} onPress={() => nav('StocksView', { bannersId: banners.iStock, title: banners.chName, desc:banners.sDescriptio,  countInBasket: this.state.countInBasket })}>
-        <View style={{elevation: 2, height: 180, borderRadius: 20, }}>
+      <TouchableOpacity activeOpacity={0.9} style={{ height: 200, marginLeft: 22, marginRight: 22, }} key={index} onPress={() => nav('StocksView', { bannersId: banners.iStock, title: banners.chName, desc:banners.sDescriptio,  countInBasket: this.state.countInBasket })}>
+        <View style={{elevation: 4, height: 180, borderRadius: 20, }}>
         <Image key={banners.iStock} source={{ uri: banners.sImage }} style={styles.img}/> 
         </View>
       </TouchableOpacity>
@@ -185,7 +185,7 @@ class Main extends Component {
     weekday[4]="Пятница";
     weekday[5]="Суббота";
     weekday[6]="Воскресенье";
-    //console.log("Сегодня " + weekday[d.getDay()]);
+    console.log("Сегодня " + weekday[d.getDay()]);
     return weekday[d.getDay() - 1];
   }
 
@@ -294,10 +294,10 @@ class Main extends Component {
                 </TouchableOpacity>
               </View>
               <Swiper
-                height={168}
+                height={200}
                 autoplay={true}
                 removeClippedSubviews={false}
-                style={styles.wrapper}
+                style={{ height: 200,}}
                 paginationStyle={{ bottom: 15, left: 0, right: 0, }}
                 activeDot={<View style={{backgroundColor: '#fff', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
                 dot={<View style={{backgroundColor: 'rgba(0,0,0,.2)', width: 5, height: 5, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
@@ -403,10 +403,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center', 
     justifyContent: 'space-around', 
-    width: width,
+    width: width-24,
     marginLeft: 0,
     flexDirection: 'row', 
     flexWrap: 'wrap',
+    marginLeft: 12, 
+    marginRight: 12,
     
   },
 });

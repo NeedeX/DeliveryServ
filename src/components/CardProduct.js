@@ -45,13 +45,11 @@ class CardProduct extends Component {
     }
 
     btnOptionsSelect(options){
-
-        if(options.length > 0)
-        {
+        if(options.length > 0) {
             return options.map((item, index) => (
             item.idSetsDetail === this.state.selectIdSetsDetail ?
                 <TouchableOpacity
-                style={{elevation: 3, width: 40, marginRight: 30, marginTop: 15,marginBottom: 15,}}
+                style={{elevation: 3, width: 40, marginRight: 30, marginTop: 16,}}
                 key={index}
                     onPress={() => {
                         this.setState({
@@ -68,7 +66,7 @@ class CardProduct extends Component {
             :
 
                 <TouchableOpacity
-                style={{elevation: 3, width: 40, marginRight: 30, marginTop: 15,marginBottom: 15,}}
+                style={{elevation: 3, width: 40, marginRight: 30, marginTop: 16,}}
                 key={index}
                     onPress={() => {
                         this.setState({
@@ -108,11 +106,11 @@ class CardProduct extends Component {
             activeOpacity={1}
             onPress={() => this.props.nav.navigate('ProductDetailView', { iProduct: this.props.iProduct, iCategories: this.props.iCategories,})}
             >
-                <View style={{ flex: 1, flexDirection: "row", elevation: 2, marginBottom: 10, backgroundColor: '#fff'}}>
+                <View style={{ flex: 1, flexDirection: "row", elevation: 2, marginBottom: 8, backgroundColor: '#fff'}}>
                     {/* картинка */}
-                    <View style={{ margin: 10, marginRight: 5, minHeight: 100,}}>
+                    <View style={{ margin: 8, marginRight: 5, minHeight: 100,}}>
                         <Image
-                        style={{width: 100, height: 100, zIndex: 0}}
+                        style={{width: 124, height: 124, zIndex: 0, marginTop: 24}}
                         source={ this.props.chMainImage === "" ? require('./assets/noImage.jpg') : { uri: this.props.chMainImage }}
                         defaultSource={require('./assets/noImageAvailable.png')}
                         />
@@ -143,11 +141,11 @@ class CardProduct extends Component {
                         {/* Описание*/}
                         <View><Text style={styles.textDescrStyle}>{this.props.chDescription}</Text></View>
                         {/* опции*/}
-                        <View style={{  flexDirection: 'row', justifyContent: 'center',}}>{this.btnOptionsSelect(this.props.optionsProduct)}</View>
+                        <View style={{  flexDirection: 'row', justifyContent: 'flex-start',}}>{this.btnOptionsSelect(this.props.optionsProduct)}</View>
                         {/* цена и кнопка*/}
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10,}}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 16, marginBottom: 10,}}>
                             {/* цена */}
-                            <View style={{ flexDirection: 'row'}}>
+                            <View style={{ flexDirection: 'row', marginTop: 3,}}>
                                 <Text style={styles.textPriceStyle}> 
                                     {parseFloat(Number(this.props.chPrice) + Number(this.state.selectPriceChange)).toFixed(2) + " " + this.props.customers.chCurrency} 
                                 </Text>
@@ -228,35 +226,34 @@ const styles = StyleSheet.create({
     },
     buttonText:{
         borderWidth: 0,
-        padding: 7,
+        paddingTop: 9,
         borderColor: '#6A3DA1',
         backgroundColor: '#6A3DA1',
         color: '#fff',
-        fontWeight: "600",
+        fontWeight: "500",
         borderRadius: 4,
         textAlign: "center",
         width: 110,
+        height: 36,
         fontFamily: 'OswaldMedium',
-        fontSize: 11,
+        fontSize: 12,
+        
     },
     textNameStyle: { 
         flex: 1, 
         fontSize: 14, 
-        fontWeight: "600", 
         color: '#4E4E4E',
         fontFamily: 'Roboto',
-        fontWeight: '600',
-        lineHeight: 14,
-        marginTop: 10,
-        marginBottom: 10,
+        fontWeight: 'bold',
+        marginTop: 16,
     },
     textDescrStyle:{
         fontSize: 12, 
-        flex: 1,  
+        flex: 1, 
+        marginTop: 16, 
         paddingRight: 10,
         fontFamily: 'Roboto',
         color: '#828282',
-        lineHeight: 14,
         paddingBottom: 3,
     },
     textWeightStyle:{

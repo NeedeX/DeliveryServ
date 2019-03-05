@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import Header from './components/Header';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 class Stocks extends React.Component {
   constructor(props){
     super(props);
@@ -46,7 +46,7 @@ class Stocks extends React.Component {
             barStyle="light-content"
         />
         <ImageBackground
-              style={{ flex: 1, width: width, height: 170, }}
+              style={{ flex: 1, width: width, height: 135*height/640, }}
               imageStyle={{ resizeMode: 'stretch' }}
               source={require('../assets/main.png')}
           >
@@ -59,15 +59,12 @@ class Stocks extends React.Component {
             this.props.banners.map((banners, index) => (
 
             <View key={index} style={{
-              marginLeft: 5, marginRight: 5,
-              marginBottom: 5,
-              marginTop: 5,
-              width: width - 10,
+              marginLeft: 16, marginRight: 16,
+              marginTop: 16,
+              width: width,
               elevation: 2,
-              paddingLeft: 10,
-              paddingRight: 10,
             }}>
-              <TouchableOpacity style={{flex: 1, opacity: 1}} key={this.generateKey()} 
+              <TouchableOpacity  activeOpacity={0.9} style={{flex: 1, opacity: 1}} key={this.generateKey()} 
                 onPress={() => this.props.navigation.navigate('StocksView', { bannersId: banners.iStock,})}>
                   <Image key={index} source={{ uri: banners.sImage }} style={styles.img}/> 
               </TouchableOpacity>
@@ -95,7 +92,8 @@ const styles = StyleSheet.create({
 
     justifyContent: 'center',
     alignItems: 'center',
-    height: 150,
+    height: 208*height/720,
+    width: width - 32,
     opacity: 1,
     borderRadius: 30,
 

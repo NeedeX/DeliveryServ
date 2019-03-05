@@ -36,6 +36,8 @@
   },
   "devDependencies": {
     "babel-jest": "23.6.0",
+    "eslint": "^5.15.1",
+    "eslint-plugin-react": "^7.12.4",
     "jest": "23.6.0",
     "metro-react-native-babel-preset": "0.50.0",
     "react-native-debugger-open": "^0.3.17",

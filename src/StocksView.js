@@ -4,6 +4,7 @@ import { ListView,
 import { connect } from 'react-redux';
 import Header from './components/Header';
 
+const { width, height } = Dimensions.get('window');
 class Stocks extends React.Component {
   constructor(props){
     super(props);
@@ -70,52 +71,44 @@ const styles = StyleSheet.create({
   img:{
     justifyContent: 'center',
     alignItems: 'center',
-    height: 205,
+    height: 205*height/720,
+    width: width-32,
     opacity: 1,
     borderRadius: 30,
-   
-    marginTop: 20,
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 10,
+    margin: 16,
+
   },
   viewTitleStyle: {
     flex: 1,
-
     flexDirection: 'row',
- 
     marginLeft: 40,
-    marginRight: 20,
-    marginBottom: 10,
-    
+    marginRight: 40,
+    marginBottom: 16,
   },
   textTitleStyle: {
     color: '#4E4E4E',
     fontSize: 20,
-    fontFamily: 'OswaldSemiBold',
+    fontFamily: 'OswaldRegular',
+    fontWeight: 'bold',
   },
   viewTextDescription:{
+    flex: 1,
     marginLeft: 40,
     marginRight: 40,
-    
+    marginBottom: 16,
   },
   viewTextDescriptionNotes:{
+    flex: 1,
     marginLeft: 40,
     marginRight: 40,
-    marginTop: 10,
+    marginBottom: 16,
+    
   },
   textDescription:{
     color: '#4E4E4E',
     fontSize: 12,
-    fontFamily: 'Roboto'
+    fontFamily: 'Roboto',
   },
-  iconBtnStyle: {
-    width: 25,
-    height: 25, 
-    marginTop: 10,
-    marginLeft: 10,
-    marginRight: 10,
-},
 
   
 });
