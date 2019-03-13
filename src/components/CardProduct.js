@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
         height: 36,
         fontFamily: 'OswaldMedium',
         fontSize: 12,
-        marginBottom: 12,
+
         
     },
     textNameStyle: { 
