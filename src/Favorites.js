@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 import BGNoAuth from './components/BGNoAuth';
 import Header from './components/Header';
-const { width } = Dimensions.get('window');
+const { width, height} = Dimensions.get('window');
 
 class Favorites extends React.Component {
     constructor(props){
@@ -96,7 +96,8 @@ class Favorites extends React.Component {
                   backgroundColor: '#fff',
                   borderTopStartRadius: 10,
                   borderTopEndRadius: 10,
-                  height: 500,
+                  height: height - 150,
+                  width: width - 48,
                 }}>
                   <View style={styles.viewTextTitle}>
                       <Text style={ styles.textTitle}>Ваши избранные товары</Text>
@@ -106,11 +107,11 @@ class Favorites extends React.Component {
                     borderRadius: 10,
                     borderTopEndRadius: 0,
                     borderTopStartRadius: 0,
-                    width: width - 40,
+                    width: width - 48,
                     elevation: 3, 
                  }}>
                 <ScrollView >
-                    <View style={{ width: width - 40, marginBottom: 20,}}>
+                    <View style={{ width: width - 48, marginBottom: 20,}}>
                     {
                       this.props.favorites.map((item, index) => (
                         this.renderCard(item.idProduct, item.idFavorite, index)
@@ -360,7 +361,7 @@ const styles = StyleSheet.create({
     viewTextTitle:{
         backgroundColor: '#fff',
         borderRadius: 10,
-        width: width - 40,
+        width: width - 48,
         zIndex: 1000,
         
     },

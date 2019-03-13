@@ -6,7 +6,7 @@ import AnimatedHideView from 'react-native-animated-hide-view';
 import Header from './components/Header';
 
 import BGNoAuth from './components/BGNoAuth';
-const { width } = Dimensions.get('window');
+const { width, height} = Dimensions.get('window');
 
 
 class History extends Component {
@@ -115,7 +115,7 @@ class History extends Component {
                 backgroundColor: '#fff',
                 borderTopStartRadius: 10,
                 borderTopEndRadius: 10,
-                height: 500,
+                height: height - 150,
             }}>
                 <View style={styles.viewTextTitle}>
                     <Text style={ styles.textTitle}>Прошлые заказы</Text>
@@ -133,7 +133,7 @@ class History extends Component {
                 this.props.history.map((item, index) => (
                 <View key={index} style={{ marginBottom: 5, marginTop: 5,}}>
                     <TouchableOpacity  key={index} underlayColor='rgba(255,255,255,0.1)'
-                      style={{ borderRadius: 10, elevation: 1, backgroundColor: '#F2F2F2', height: 50, }} onPress={() =>  this.hideView(item.idOrder) }>
+                      style={{ borderRadius: 0, elevation: !item.isView ? 0 : 1 , backgroundColor: '#F2F2F2', height: 50, }} onPress={() =>  this.hideView(item.idOrder) }>
                         <View style={{flexDirection: 'row', backgroundColor: '#F2F2F2', justifyContent: 'space-between', flex: 1}}>
                             <View style={{ width: 80, alignItems: 'center', justifyContent:'center', }}>
                                 {this.dateOrder(item.dDateOrder)}
@@ -158,7 +158,6 @@ class History extends Component {
                         unmountOnHide={true}
                         >
                         {
-                            
                             item.sostav.map((i, index)=>(
                                 this.renderItemsInSostav(i.chChangePrice,
                                 i.chNameProduct, i.chOption, i.chPriceProduct, i.iProduct,
