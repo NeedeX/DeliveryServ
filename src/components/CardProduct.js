@@ -110,9 +110,9 @@ class CardProduct extends Component {
                     {/* картинка */}
                     <View style={{ margin: 8, marginRight: 5, minHeight: 100,}}>
                         <Image
-                        style={{width: 124, height: 124, zIndex: 0, marginTop: 24}}
+                        style={{width: 124, height: 124, zIndex: 0, marginTop: 24, marginBottom: 16}}
                         source={ this.props.chMainImage === "" ? require('./assets/noImage.jpg') : { uri: this.props.chMainImage }}
-                        defaultSource={require('./assets/noImageAvailable.png')}
+                        defaultSource={require('./assets/noImage.jpg')}
                         />
                         <View style={{zIndex: 10, marginTop: this.props.tegsProduct.length > 1 ? -50 : -20}}>
                         {
@@ -237,6 +237,7 @@ const styles = StyleSheet.create({
         height: 36,
         fontFamily: 'OswaldMedium',
         fontSize: 12,
+        marginBottom: 12,
         
     },
     textNameStyle: { 
@@ -279,7 +280,7 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         fontFamily: 'Roboto',
         lineHeight: 14,
-        paddingLeft: 10,
+        paddingLeft: 0,
     }
 
   
