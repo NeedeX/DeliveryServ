@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 import AnimatedHideView from 'react-native-animated-hide-view';
 import Header from './components/Header';
+
 import BGNoAuth from './components/BGNoAuth';
 const { width } = Dimensions.get('window');
+
 
 class History extends Component {
     constructor(props){
@@ -14,9 +16,14 @@ class History extends Component {
             AuthState: 0,
             didFinishInitialAnimation: false,
         }  
-        this.loadingHistory(this.props.user.userDB.chUIDGoogleUser);
+        
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                this.loadingHistory(this.props.user.userDB.chUIDGoogleUser);
+            }
+          })
     }
-    static navigationOptions = ({ navigation  }) => {
+    static navigationOptions({ navigation  }) {
         return {
             title: 'Home',
             headerTintColor: '#fff',

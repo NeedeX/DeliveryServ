@@ -258,17 +258,26 @@ class Drawer extends React.Component {
               marginBottom: 20,
             }}
           />
-        {this.renderDialogSort()}
-        <TouchableOpacity onPress={() => {
-          this.showDialogSort();
-          this.props.navigation.closeDrawer();
-        }}>
-          <View style={{ flexDirection: 'row', marginBottom: 20, }}>
-            <Image source={require('./assets/iconOperator.png')} 
-            style={ styles.iconsMenu }/>
-            <Text style={styles.textMenu}>Связь с оператором</Text>
-          </View>
-        </TouchableOpacity>
+        {
+          //this.renderDialogSort()
+        }
+
+        {
+          this.props.customers.chPhoneForOperator !== '' ?
+          <TouchableOpacity onPress={() => {
+            this.phoneOpen(this.props.customers.chPhoneForOperator);
+            this.props.navigation.closeDrawer();
+          }}>
+            <View style={{ flexDirection: 'row', marginBottom: 20, }}>
+              <Image source={require('./assets/iconOperator.png')} 
+              style={ styles.iconsMenu }/>
+              <Text style={styles.textMenu}>Связь с оператором</Text>
+            </View>
+          </TouchableOpacity>
+          :
+          null
+        }
+        
         <TouchableOpacity onPress={() => {
           this.props.navigation.navigate('Stocks');
           this.props.navigation.closeDrawer();
@@ -342,6 +351,7 @@ export default connect (
     order: state.OrderReducer,
     user: state.UserReducer,
     locations: state.LocationReducer,
+    customers: state.CustomersReducer,
   }),
   dispatch => ({
     addCart: (index) => {

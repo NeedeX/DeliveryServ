@@ -243,7 +243,7 @@ class Favorites extends React.Component {
                 this.state.didFinishInitialAnimation === false ?
                 <View style={{ alignItems: "center", justifyContent:'center'}}>
                     <View style={ [styles.circleIcone,{
-                        marginTop: 84,
+                        marginTop: 84, zIndex: -10,
                     }] }>
                     <Image source={require('../assets/favoritesIcon.png')} style={ styles.imageIcon } />
                     <ActivityIndicator size="large" color="#583286" style={{marginTop: 50,}} />
