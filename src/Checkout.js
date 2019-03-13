@@ -273,7 +273,7 @@ class Checkout extends React.Component {
                     <RadioButton value={2}>
                         <View style={styles.arrowRightView}>
                             <Text style={styles.textStyle}>Ко времени</Text>
-                            <Image style={styles.arrowBottom}  source={require('../assets/arrowBottom.png')} />
+                            <Image style={styles.arrowBottom}  source={ this.state.isViewInputDeliveryTimeVisible === false ? require('../assets/arrowBottom.png') : require('../assets/arrowTop.png')} />
                         </View>
                     </RadioButton>
                     : null

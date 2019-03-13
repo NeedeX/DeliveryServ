@@ -1,10 +1,11 @@
 import React from 'react';
-import { Switch, StyleSheet, Text, View, InteractionManager, TouchableOpacity, Image, ScrollView, Button, ActivityIndicator} from 'react-native';
+import { Switch, StyleSheet, Text, View, Dimensions, InteractionManager, TouchableOpacity, Image, ScrollView, Button, ActivityIndicator} from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 import AnimatedHideView from 'react-native-animated-hide-view';
 import Dialog from "react-native-dialog";
 import Header from './components/Header';
+const { width } = Dimensions.get('window');
 //import firebase from 'react-native-firebase';
 class ProductDetailView extends React.Component {
   constructor(props){
@@ -195,8 +196,8 @@ class ProductDetailView extends React.Component {
     this.state.viewLeftRigthCount = 0;  
     if(resultFav.length > 0)
     { return (
-        <TouchableOpacity style={{elevation: 3,}}
-          onPress={() => { this.delToFavorite(resultFav[0].idFavorite, this.props.user.uid)}}>
+        <TouchableOpacity style={styles.touchableOpacityImgFavStyle}
+          onPress={() => { this.delToFavorite(resultFav[0].idFavorite, this.props.user.uid) }}>
           <Image
             style={ styles.imgFavStyle }
             source={require('../assets/iconHeartFav.png')}
@@ -205,15 +206,15 @@ class ProductDetailView extends React.Component {
       )
     }
     else { 
-    return (
-      <TouchableOpacity style={{elevation: 3,}}
-        onPress={() => { this.addToFavorite(iProduct)}}>
-        <Image
-          //style={ styles.imgFavStyle }
-          style={ styles.imgFavStyle }
-          source={require('../assets/iconHeartNoFav.png')}
-        />  
-      </TouchableOpacity>
+      return (
+        <TouchableOpacity style={styles.touchableOpacityImgFavStyle}
+          onPress={() => { this.addToFavorite(iProduct)}}>
+          <Image
+            //style={ styles.imgFavStyle }
+            style={ styles.imgFavStyle }
+            source={require('../assets/iconHeartNoFav.png')}
+          />  
+        </TouchableOpacity>
       )
     }
   }
@@ -355,7 +356,6 @@ class ProductDetailView extends React.Component {
         }
       }
     }
-    
   }
   addIngredient(value, id, price, i){
     let ing = [...this.state.ing];
@@ -397,7 +397,7 @@ class ProductDetailView extends React.Component {
         <ScrollView>
           {this.renderDialog()}
           <View>
-            <View style={{ flex: 1, alignItems: 'center', marginLeft: 32, marginRight: 32}}>
+            <View style={{ flex: 1, alignItems: 'center', marginLeft: 32, marginRight: 32, marginBottom: 16}}>
                 <Text style={ styles.titleName }>{result[0].chName }</Text>
                 <Text style={{ paddingLeft: 10, color: '#828282', fontSize: 12, fontFamily: 'Roboto',}}>
                   {result[0].chDescription}
@@ -409,14 +409,15 @@ class ProductDetailView extends React.Component {
           <View>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             {/* добавление в избранное */}
-            <View style={{ marginLeft: 32, backgroundColor: 'red', marginRight: 32, marginBottom: 16, marginTop: 16, justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+            <View style={ styles.viewFav }>
               
               { this.renderFavoriteButtom(result[0].iProduct) }
             </View>
             <Image
-              style={{width: 360, height: 232, zIndex: 0,}}
+              style={ styles.mainImg }
               source={ result[0].chMainImage === "" ? require('../assets/noImage.jpg') : { uri: result[0].chMainImage } }
             />
+            
            </View>
               {
                 result[0].tegs.length > 0 ?
@@ -541,16 +542,32 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
   },
-  img:{
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 200,
-    opacity:.85,
+  mainImg: {
+    width: 360, 
+    height: 360, 
+    zIndex: 0,
   },
-  imgFavStyle:
-  {width: 24,  height: 21, zIndex: 0, justifyContent: 'flex-end',
-    zIndex: 10, marginBottom: -30,
+  imgFavStyle: {
+    width: 26,  
+    height: 21, 
+    justifyContent: 'flex-end',
+    zIndex: 10, 
+    
+  },
+  touchableOpacityImgFavStyle: { 
+    elevation: 3, 
+    zIndex: 100,
+
+  },
+  viewFav: { 
+    marginLeft: 32, 
+    width: width-64,
+    marginRight: 32,
+    marginBottom: -26, 
+    marginTop: 0, 
+    justifyContent: 'flex-end', 
+    alignItems: 'flex-end',
+    zIndex: 1,
   },
   viewTitleStyle: {
     flex: 1,
@@ -589,25 +606,27 @@ const styles = StyleSheet.create({
       fontSize: 10,
       paddingTop: 5,  
   },
-  textPrice:{
+  textPrice: {
     color: '#4E4E4E',
     fontWeight: '600',
     marginLeft: 20,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     borderRadius: 8,
-    padding: 15, },
+    padding: 15, 
+  },
   buttonText:{
-      borderWidth: 0,
-      padding: 8,
-      borderColor: '#6A3DA1',
-      backgroundColor: '#6A3DA1',
-      color: '#fff',
-      fontWeight: "600",
-      borderRadius: 4,
-      textAlign: "center",
-      width: 120,
-      fontFamily: 'OswaldMedium',
-      fontSize: 12,
+    borderWidth: 0,
+    padding: 8,
+    borderColor: '#6A3DA1',
+    backgroundColor: '#6A3DA1',
+    color: '#fff',
+    fontWeight: "600",
+    borderRadius: 4,
+    textAlign: "center",
+    width: 120,
+    fontFamily: 'OswaldMedium',
+    fontSize: 12,
+    marginRight: 16,
   },
   viewBtnIng:{
     flexDirection: 'row', 
