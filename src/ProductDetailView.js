@@ -52,7 +52,7 @@ class ProductDetailView extends React.Component {
         viewLeftRigthCount: 0,
         isViewIng: false,
         didFinishInitialAnimation: false,
-        
+        counter: 10, 
       }
     }
 
@@ -450,15 +450,19 @@ class ProductDetailView extends React.Component {
               <View style={{flexDirection: 'row'}}>
                 <Text>Количество:</Text>
                 <TextInput
-                  style={{height: 20, borderColor: 'gray', color: '#fff',borderWidth: 1, width: 100,}}
-                  onChangeText={(text) => this.setState({counter: text})}
-                  value={'10'}
+                  style={{ paddingTop: 5, paddingBottom: 5, marginTop: -5, marginLeft: 5,
+                    backgroundColor: '#ccc', 
+                    height: 30, width: 100, 
+                  }}
+                  onChangeText={(text) => this.setState({counter: +text})}
+                  value={this.state.counter.toString()}
                   keyboardType={'numeric'}
+                  contextMenuHidden={true}
                 />
               </View>
               <Slider
                 style={{width: width-48, height: 30, }}
-                value={this.state.counter}
+                value={this.state.counter > 100 ? 100 : this.state.counter}
                 step={1}
                 thumbTintColor={'#6A3DA1'}
                 minimumValue={0}
@@ -468,7 +472,6 @@ class ProductDetailView extends React.Component {
                 thumbTouchSize={{width: 30, height: 30}}
                 onValueChange={ (value) => this.setState({counter: value}) }
               />
-              <Text>{this.state.counter}</Text>
             </View>
             :
             null
