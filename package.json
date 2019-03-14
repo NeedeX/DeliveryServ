@@ -3,12 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "postinstall": "rndebugger-open"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/slider": "^1.0.2",
     "moment": "^2.22.2",
-    "react": "16.6.1",
-    "react-native": "0.57.7",
+    "react": "^16.8.3",
+    "react-native": "0.59.0",
     "react-native-animated-bar": "^0.2.0",
     "react-native-animated-hide-view": "^1.0.0",
     "react-native-animated-swiper": "0.0.23",
@@ -25,6 +27,7 @@
     "react-native-push-notification": "^3.1.2",
     "react-native-restart": "0.0.8",
     "react-native-scroll-up": "^0.1.6",
+    "react-native-slider": "^0.11.0",
     "react-native-swiper": "^1.5.14",
     "react-native-swiper-flatlist": "^1.0.9",
     "react-native-switch": "^1.5.0",
@@ -35,13 +38,15 @@
     "remote-redux-devtools": "^0.5.13"
   },
   "devDependencies": {
-    "babel-jest": "23.6.0",
+    "@babel/core": "7.3.4",
+    "@babel/runtime": "7.3.4",
+    "babel-jest": "24.5.0",
     "eslint": "^5.15.1",
     "eslint-plugin-react": "^7.12.4",
-    "jest": "23.6.0",
-    "metro-react-native-babel-preset": "0.50.0",
+    "jest": "24.5.0",
+    "metro-react-native-babel-preset": "^0.53.0",
     "react-native-debugger-open": "^0.3.17",
-    "react-test-renderer": "16.6.1"
+    "react-test-renderer": "16.8.3"
   },
   "jest": {
     "preset": "react-native"

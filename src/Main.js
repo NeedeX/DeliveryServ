@@ -185,7 +185,7 @@ class Main extends Component {
     weekday[4]="Пятница";
     weekday[5]="Суббота";
     weekday[6]="Воскресенье";
-    console.log("Сегодня " + weekday[d.getDay()]);
+    console.log("Сегодня " + weekday[d.getDay()-1]);
     return weekday[d.getDay() - 1];
   }
 

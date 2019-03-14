@@ -298,6 +298,8 @@ class Loading extends Component {
     .then((responseJson) => {
         this.props.loadProducts(responseJson.products);
         //this.progres(0.1);
+        console.log("this.props.products = ", this.props.products);
+        
         this.setState(state => {
           return {
             progress: state.progress + loagIndex,

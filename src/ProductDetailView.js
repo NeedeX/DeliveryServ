@@ -1,9 +1,11 @@
 import React from 'react';
-import { Switch, StyleSheet, Text, View, Dimensions, InteractionManager, TouchableOpacity, Image, ScrollView, Button, ActivityIndicator} from 'react-native';
+import { Switch, StyleSheet, Text, TextInput, View, Dimensions, InteractionManager, TouchableOpacity, Image, ScrollView, Button, ActivityIndicator} from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 import AnimatedHideView from 'react-native-animated-hide-view';
 import Dialog from "react-native-dialog";
+//import Slider from '@react-native-community/slider';
+import Slider from "react-native-slider";
 import Header from './components/Header';
 const { width } = Dimensions.get('window');
 //import firebase from 'react-native-firebase';
@@ -35,7 +37,7 @@ class ProductDetailView extends React.Component {
         viewLeftRigthCount: 0, // считает проходы при выводе кнопок добавления ингридиентов
         isViewIng: false,
         didFinishInitialAnimation: false,
-        
+        counter: 10, 
       }
     }
     else{
@@ -442,6 +444,35 @@ class ProductDetailView extends React.Component {
           justifyContent: 'center', marginTop: 20,}}>
             {this.viewBtnOptions(result[0].options)}
           </View>
+          {
+            result[0].blCounter === '0' ?
+            <View style={{alignItems: 'center'}}>
+              <View style={{flexDirection: 'row'}}>
+                <Text>Количество:</Text>
+                <TextInput
+                  style={{height: 20, borderColor: 'gray', color: '#fff',borderWidth: 1, width: 100,}}
+                  onChangeText={(text) => this.setState({counter: text})}
+                  value={'10'}
+                  keyboardType={'numeric'}
+                />
+              </View>
+              <Slider
+                style={{width: width-48, height: 30, }}
+                value={this.state.counter}
+                step={1}
+                thumbTintColor={'#6A3DA1'}
+                minimumValue={0}
+                maximumValue={100}
+                minimumTrackTintColor="#6A3DA1"
+                maximumTrackTintColor="#ccc"
+                thumbTouchSize={{width: 30, height: 30}}
+                onValueChange={ (value) => this.setState({counter: value}) }
+              />
+              <Text>{this.state.counter}</Text>
+            </View>
+            :
+            null
+          }
           {/* выбор ингридиентов */}
           {
             this.state.ing.length > 0 ?
@@ -461,7 +492,7 @@ class ProductDetailView extends React.Component {
             :
             null
           }
-            
+          
           <AnimatedHideView
             visible={this.state.isViewIng}
 
@@ -469,15 +500,29 @@ class ProductDetailView extends React.Component {
             duration={10}>
             <View style={{marginLeft: 30, marginRight: 30, height: this.state.isViewIng ? 'auto' : 10,}}>
               { 
-                
                 result[0].ingredients.map((i, index) => (
                   this.viewIngredients(index, i.idIngredients) 
                 ))
-                
               }
               
             </View>
           </AnimatedHideView>
+          
+
+          {/* 
+          <Slider
+                style={{width: width-48, height: 30, }}
+                value={this.state.counter}
+                step={1}
+                minimumValue={0}
+                maximumValue={100}
+                minimumTrackTintColor="#ccc"
+                maximumTrackTintColor="#000000"
+                thumbTouchSize={{width: 30, height: 30}}
+                onValueChange={ (value) => this.setState({counter: value}) }
+            
+              />
+          */}
           <View style={{flexDirection: 'row', marginBottom: 20, marginTop: 20, justifyContent:'space-between'}}>
             <View style={{marginLeft: 13,}}>
               <Text style={ styles.textPrice }>              

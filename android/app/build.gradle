@@ -156,6 +156,7 @@ android {
 }
 
 dependencies {
+    implementation project(':@react-native-community_slider')
     compile project(':react-native-restart')
     compile project(':react-native-push-notification')
     implementation project(':react-native-firebase')
