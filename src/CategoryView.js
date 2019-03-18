@@ -72,7 +72,8 @@ class CategoryView extends Component {
       {
         this.state.products.map((item, index) => (
               item.iCategories === this.state.iCategories ?
-            <Card
+              /*
+              <Card
               key={index}
               iProduct={item.iProduct}    
               iCategories = {this.state.iCategories}                 
@@ -83,6 +84,12 @@ class CategoryView extends Component {
               chOldPrice={item.chOldPrice}
               optionsProduct={item.options}
               tegsProduct={item.tegs}
+              nav={this.props.navigation}
+              />
+              */
+            <Card
+              key={index}
+              iProduct={item.iProduct}
               nav={this.props.navigation}
               />
               :

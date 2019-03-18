@@ -106,7 +106,25 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "0.1 Beta"
+    }
+	signingConfigs {
+        release {
+			if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+				keyAlias 'otecvit'
+				keyPassword 'gfynthf1986'
+				storeFile file('D:/key')
+				storePassword 'gfynthf1986'
+			}
+        }
+		config {
+			if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+				keyAlias 'otecvit'
+				keyPassword 'gfynthf1986'
+				storeFile file('D:/key')
+				storePassword 'gfynthf1986'
+			}
+        }
     }
     splits {
         abi {
