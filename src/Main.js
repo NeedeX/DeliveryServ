@@ -5,8 +5,9 @@ import Swiper from 'react-native-swiper';
 import ButtomCategoryNew from './components/ButtomCategoryNew';
 import Header from './components/Header';
 const { width } = Dimensions.get('window');
-import firebase from 'react-native-firebase';
-import NotifService from './NotifService';
+
+//import firebase from 'react-native-firebase';
+//import NotifService from './NotifService';
 import appConfig from '../app.json';
 YellowBox.ignoreWarnings(['Require cycle:']);
 class Main extends Component {
@@ -18,15 +19,17 @@ class Main extends Component {
       senderId: appConfig.senderID,
       countClosesLocation: 0, /// кол-во открытых заведений в данный момент
     };
-    this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
+    //this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
+    /*
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         //this.userDB(user);
       }
     })
+    */
   }
   componentWillMount(){
-    this.getWork();
+    //this.getWork();
   }
   userDB(user) {
     //console.log("UIDGoogleUser = ", user.uid);
@@ -102,6 +105,7 @@ class Main extends Component {
         didFinishInitialAnimation: true,
       });
     });
+    /*
     firebase.auth().onAuthStateChanged(user => {
       //console.log("==>");
       if (user) {
@@ -142,6 +146,8 @@ class Main extends Component {
         //this.checkUser();
       }
     })
+    */
+   /*
     firebase.messaging().getToken()
     .then(fcmToken => {
       if (fcmToken) {
@@ -153,6 +159,7 @@ class Main extends Component {
         //console.log("user doesn't have a device token yet");
       } 
     });
+    */
   }
   static navigationOptions = ({ navigation  }) => {
     return {

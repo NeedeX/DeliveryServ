@@ -3,25 +3,32 @@ import { createStackNavigator, createDrawerNavigator, createAppContainer } from 
 
 import Loading from './Loading';
 import Main from './Main';
-import Category from './CategoryView'; 
-import ProductDetailView from './ProductDetailView';
+import Favorites from './Favorites';
+import History from './History';
 import Stocks from './Stocks';
 import StocksView from "./StocksView";
-
+import DeliveryAndPays from './DeliveryAndPays';
 import Cart from './Cart';
+import Category from './CategoryView'; 
+/*
+
+import ProductDetailView from './ProductDetailView';
+
+
+
 import Checkout from './Checkout';
 import Pickups from './Pickups';
 import Addresses from './Addresses';
 import AddAddress from './AddAddress';
-import Favorites from './Favorites';
+
 import CheckoutConfirm from './CheckoutConfirm';
 import CompletedOrder from './CompletedOrder';
-import History from './History';
+
 import Settings from './Settings';
-import DeliveryAndPays from './DeliveryAndPays';
+
 import Test from './Test';
-// drawer 
-import DrawerMenu from './components/Drawer';
+
+
 
 
 /// auth
@@ -29,7 +36,11 @@ import LoadingAuth from './auth/Loading';
 import Login from './auth/Login';
 import Phone from './auth/Phone';
 import SignUp from './auth/SignUp';
-import Start from './Start';
+
+*/
+// drawer 
+import DrawerMenu from './components/Drawer';
+import Start from './Start'; // экран выбора "Зарегистриваться" или пропустить. Продолжить без регистрации
 
 const transitionConfig = () => {
   return {
@@ -59,27 +70,35 @@ const transitionConfig = () => {
 const AppNavigator = createStackNavigator({
   Loading: { screen: Loading },
   Main: { screen: Main },
-  Category: { screen: Category},
-  ProductDetailView: { screen: ProductDetailView},
+  Favorites: { screen: Favorites},
+  History: { screen: History},
   Stocks: { screen: Stocks},
   StocksView: { screen: StocksView},
+  DeliveryAndPays: { screen: DeliveryAndPays},
   Cart: { screen: Cart}, 
+  Category: { screen: Category},
+  /*
+
+  ProductDetailView: { screen: ProductDetailView},
+  
+
   Checkout: { screen: Checkout},
   Pickups: { screen: Pickups},
   CheckoutConfirm: { screen: CheckoutConfirm},
   CompletedOrder: { screen: CompletedOrder},
   Addresses: { screen: Addresses },
   AddAddress: { screen: AddAddress},
-  Favorites: { screen: Favorites},
-  History: { screen: History},
+  
   Settings: { screen: Settings},
-  DeliveryAndPays: { screen: DeliveryAndPays},
+
   Test: { screen: Test},
   /// auth
   LoadingAuth : { screen: Loading },
   Login : { screen: Login },
   Phone : { screen: Phone },
   SignUp : { screen: SignUp },
+  
+  */
   Start: { screen: Start},
 },
 {
@@ -100,6 +119,7 @@ const AppNavigator = createStackNavigator({
   
 });
 
+
 const Drawer = createDrawerNavigator(
   {
     Main: { screen: AppNavigator }
@@ -109,5 +129,7 @@ const Drawer = createDrawerNavigator(
     drawerWidth: 300
   }
 );
+
 const App = createAppContainer(Drawer);
+//const App = createAppContainer(AppNavigator);
 export default App;

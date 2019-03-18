@@ -7,7 +7,7 @@ import AnimatedBar from "react-native-animated-bar";
 YellowBox.ignoreWarnings(['Require cycle:']);
 
 
-const loagIndex = 0.4;
+const loagIndex = 0.4; 
 
 class Loading extends Component {
   constructor(props) {
@@ -15,26 +15,31 @@ class Loading extends Component {
     this.state = { 
       didFinishInitialAnimation: false,
       progress: 0, // прогресс загрузки
-      route: '', 
-      isAuth: false,
+      isAuth: false, // флаг, зарегистрирован ли пользователь. 
     };
 
     this.props.loadOptions();
-
+    console.log("this.props.options = ", this.props.options);
+    
+    // загрузка общих данных
     this.loadingCustomers(this.props.options.UIDClient, this.props.options.URL);
     this.loadingBanners(this.props.options.UIDClient, this.props.options.URL);
     this.loadingCategories(this.props.options.UIDClient, this.props.options.URL);
     this.loadingProducts(this.props.options.UIDClient, this.props.options.URL);
     this.loadingTegs(this.props.options.UIDClient, this.props.options.URL);
     this.loadingLocation(this.props.options.UIDClient, this.props.options.URL);
+
+    // проверка зарегистрирован/авторизован ли пользователь
     firebase.auth().onAuthStateChanged(user => {
-      if (user) { this.state.isAuth = true;
-        this.props.loadUser(user);
-        this.loadingUserDB(user.uid);
-        this.loadingAddresses(user.uid);
-        this.loadingFavorites(user.uid);
+      if (user) { 
+        this.state.isAuth = true;
+        // загрузка личных данных
+        this.props.loadUser(user); // сохранение данных пользоыателя в redux
+        this.loadingUserDB(user.uid); // загрузка данных пользователя из БД
+        this.loadingAddresses(user.uid); // загрузка адресов пользователя из БД
+        this.loadingFavorites(user.uid); // загрузка избранных товаров пользователя из БД
       }
-      else {this.state.isAuth = false}
+      else this.state.isAuth = false; // изменение маяка на об авторизации на false (не авторизован) 
     })
   }
   static navigationOptions = {
@@ -44,34 +49,25 @@ class Loading extends Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.setState({ didFinishInitialAnimation: true });
-        if (this.state.isAuth) {
-          
-          this.state.didFinishInitialAnimation ?
-            setTimeout(() => {
-              const resetAction = StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'Main' })],
-              });
-              this.props.navigation.dispatch(resetAction);
-            }, 1500)
-          : null
-        }
-        else { 
-          this.state.didFinishInitialAnimation ?
-            setTimeout(() => {
-              const resetAction = StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'Start' })],
-              });
-              this.props.navigation.dispatch(resetAction);
-            }, 1500)
-            : null
-          }
-    });
-
-         
-    
+        if (this.state.isAuth)
+         this.state.didFinishInitialAnimation ? this.goNext('Main', 1500) : null
+        else 
+          this.state.didFinishInitialAnimation ? this.goNext('Start', 1500) : null
+    }); 
   }
+
+  // функция перехода на другой экран через определенное время
+  // route - на какой экран переход, time - через какое время (миллисекунды)
+  goNext(route, time){
+    setTimeout(() => {
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: route })],
+      });
+      this.props.navigation.dispatch(resetAction);
+    }, time)
+  }
+
   loadingLocation(UIDClient, URL){
     return fetch(URL+'LoadingLocations.php',{
       method: 'POST',
@@ -95,41 +91,6 @@ class Loading extends Component {
     });
   }
 
-  loadingUser() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.props.loadUser(user);
-        this.loadingUserDB(user.uid);
-        this.loadingAddresses(user.uid);
-        this.loadingFavorites(user.uid);
-        //this.setState({ route: 'Main'})
-        this.state.route = 'Main';
-        this.state.didFinishInitialAnimation ?
-          setTimeout(() => {
-            const resetAction = StackActions.reset({
-              index: 0,
-              actions: [NavigationActions.navigate({ routeName: 'Main' })],
-            });
-            this.props.navigation.dispatch(resetAction);
-          }, 1500)
-        : null
-      }
-      else { 
-        //this.setState({ route: 'Start'}) 
-        this.state.route = 'Start';
-        this.state.didFinishInitialAnimation ?
-          setTimeout(() => {
-            const resetAction = StackActions.reset({
-              index: 0,
-              actions: [NavigationActions.navigate({ routeName: 'Start' })],
-            });
-            this.props.navigation.dispatch(resetAction);
-          }, 1500)
-          : null
-      }
-    })
-  }
-
   loadingUserDB(chUIDGoogleUser){
     return fetch(this.props.options.URL + 'LoadingUserDB.php', {
       method: 'POST',
@@ -145,8 +106,9 @@ class Loading extends Component {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      //console.log("responseJson = ", responseJson);
+      
       this.props.editUser(responseJson);
+      console.log("this.props.user = ", this.props.user);
       this.setState(state => { 
         return {  progress: state.progress + loagIndex, }; 
       });

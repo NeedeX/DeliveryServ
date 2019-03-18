@@ -18,7 +18,6 @@ class Header extends Component {
         <View style={{ backgroundColor: '#eee' }}>
             <ImageBackground
                 style={{ height: 52,}}
-                
                 source={{uri: 'asset:/headerBg.png'}} >
             <View style={{justifyContent: 'space-between',flexDirection: 'row' }}>
                 <TouchableHighlight 

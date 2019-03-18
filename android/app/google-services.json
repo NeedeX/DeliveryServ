@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "555843709453-uqeemmlmi80tr89qh89mhdbp8sase7ua.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deliveryserv",
+            "certificate_hash": "d038785c661c2bbf0dd5883d722678aae4bf624e"
+          }
+        },
+        {
           "client_id": "555843709453-opuped8cgevugkl1v03t28hj423s24aa.apps.googleusercontent.com",
           "client_type": 3
         }

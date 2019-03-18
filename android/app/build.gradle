@@ -77,6 +77,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -91,53 +92,34 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = false
-def _ext = rootProject.ext
-def _googlePlayServicesVersion = _ext.has('googlePlayServicesVersion') ? _ext.googlePlayServicesVersion : '+'
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     defaultConfig {
         applicationId "com.deliveryserv"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "0.1 Beta"
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
-    }
-	signingConfigs {
-        release {
-			if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
-				keyAlias 'otecvit'
-				keyPassword 'gfynthf1986'
-				storeFile file('D:/key')
-				storePassword 'gfynthf1986'
-			}
-        }
-		config {
-			if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
-				keyAlias 'otecvit'
-				keyPassword 'gfynthf1986'
-				storeFile file('D:/key')
-				storePassword 'gfynthf1986'
-			}
-        }
+        versionName "1.0"
     }
     splits {
         abi {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
             universalApk false  // If true, also generate a universal APK
-            include "armeabi-v7a", "x86"
+            include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-			signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
@@ -145,7 +127,7 @@ android {
         variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
             // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-            def versionCodes = ["armeabi-v7a":1, "x86":2]
+            def versionCodes = ["armeabi-v7a":1, "x86":2, "arm64-v8a": 3, "x86_64": 4]
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
@@ -156,22 +138,17 @@ android {
 }
 
 dependencies {
-    implementation project(':@react-native-community_slider')
-    implementation project(':react-native-restart')
-    implementation project(':react-native-push-notification')
     implementation project(':react-native-firebase')
     implementation project(':react-native-gesture-handler')
-	implementation 'com.firebaseui:firebase-ui-auth:4.0.0'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
 	
-	implementation "com.google.android.gms:play-services-base:15.0.1"
-    implementation 'com.google.firebase:firebase-core:16.0.4'
-	implementation "com.google.firebase:firebase-messaging:17.3.4"
-    implementation 'me.leolin:ShortcutBadger:1.1.21@aar' // <-- Add this line if you wish to use badge on Android
-
+	implementation 'com.google.firebase:firebase-core:16.0.8'
+	implementation 'com.google.firebase:firebase-auth:16.2.0'
+	implementation 'com.google.firebase:firebase-messaging:17.4.0'
 	
+	implementation 'com.google.android.gms:play-services-base:16.0.1'
 }
 
 // Run this once to be able to run the application with BUCK

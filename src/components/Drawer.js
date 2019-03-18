@@ -2,9 +2,9 @@ import React from 'react';
 import {StyleSheet, View, ImageBackground, Image, Text, Linking, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
-import Dialog, { DialogTitle, DialogContent,  DialogButton, } from 'react-native-popup-dialog';
+//import Dialog, { DialogTitle, DialogContent,  DialogButton, } from 'react-native-popup-dialog';
 const bg  = require('../components/assets/drawerBg.png');
-import RNRestart from 'react-native-restart'
+//import RNRestart from 'react-native-restart'
 
 class Drawer extends React.Component {
   constructor(props){
@@ -19,6 +19,7 @@ class Drawer extends React.Component {
   }
   componentDidMount()
     {
+      
         firebase.auth().onAuthStateChanged(user => {
             //console.log("==>");
             if (user) {
@@ -34,7 +35,7 @@ class Drawer extends React.Component {
             else
                 this.setState({ authState: 0 });
         });
-
+        
 
     }
   toggleDrawer = () => {
@@ -43,17 +44,19 @@ class Drawer extends React.Component {
     });
   };
   signOut = () => {
+    
     firebase.auth().signOut();
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         //this.loadingFavorites(user.uid);
-       // console.log("user => ", user);
+        //console.log("user => ", user);
         this.props.clearHistory();
         this.props.clearFavorites();
         //this.props.navigation.navigate('Main');
-        RNRestart.Restart();
+        //RNRestart.Restart();
       }
     });
+    
   }
   phoneOpen(chPhone){
     Linking.openURL('tel:'+chPhone)
@@ -62,6 +65,7 @@ class Drawer extends React.Component {
   }
   //********** */ обработчики диалогового окна 
   showDialogSort = () => { this.setState({ dialogSelectPhone: true }); };
+
   renderDialogSort()
     {
     
