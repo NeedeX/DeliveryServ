@@ -10,8 +10,6 @@ import StocksView from "./StocksView";
 import DeliveryAndPays from './DeliveryAndPays';
 import Cart from './Cart';
 import Category from './CategoryView'; 
-/*
-
 import ProductDetailView from './ProductDetailView';
 
 
@@ -27,17 +25,12 @@ import CompletedOrder from './CompletedOrder';
 import Settings from './Settings';
 
 import Test from './Test';
-
-
-
-
 /// auth
 import LoadingAuth from './auth/Loading';
 import Login from './auth/Login';
 import Phone from './auth/Phone';
 import SignUp from './auth/SignUp';
 
-*/
 // drawer 
 import DrawerMenu from './components/Drawer';
 import Start from './Start'; // экран выбора "Зарегистриваться" или пропустить. Продолжить без регистрации
@@ -77,7 +70,7 @@ const AppNavigator = createStackNavigator({
   DeliveryAndPays: { screen: DeliveryAndPays},
   Cart: { screen: Cart}, 
   Category: { screen: Category},
-  /*
+ 
 
   ProductDetailView: { screen: ProductDetailView},
   
@@ -98,7 +91,7 @@ const AppNavigator = createStackNavigator({
   Phone : { screen: Phone },
   SignUp : { screen: SignUp },
   
-  */
+
   Start: { screen: Start},
 },
 {
