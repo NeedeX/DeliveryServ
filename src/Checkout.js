@@ -487,19 +487,22 @@ class Checkout extends React.Component {
                 <Text style={styles.textTitleStyle}>1. Контактная информация</Text>
                 <View style={styles.viewCardStyle}>
                     <View style={{ flex: 1 }}>
-                        <Sae
-                            label={'Имя'}
-                            autoFocus
-                            value={this.state.chFIO}
-                            // TextInput props
-                            autoCapitalize={'none'}
-                            autoCorrect={false}
-                            blurOnSubmit={ false }
-                            onSubmitEditing={() => { this.focusNextField('phone'); }}
+                    <Sae
+    label={'Имя'}
+
+    autoFocus
+
+    value={this.state.chFIO}
+    // active border height
+    borderHeight={2}
+    // TextInput props
+    autoCapitalize={'none'}
+    autoCorrect={false}
+    onSubmitEditing={() => { this.focusNextField('phone'); }}
                             ref={ input => { this.inputs['fio'] = input; }}
                             style={styles.textInputStyleNew}
                             onChangeText={(chFIO) => this.validateName(chFIO)}
-                        />
+  />
                         <AnimatedHideView
                             visible={this.state.isErrorName}
                             style={{ padding: 0, marginTop: -10,}}
@@ -820,6 +823,7 @@ const styles = StyleSheet.create({
         paddingTop: 0, 
         marginRight: 10,
         marginBottom: 0,
+        color: "#fff",
     },
 
     textInputStyle: {
