@@ -488,21 +488,19 @@ class Checkout extends React.Component {
                 <View style={styles.viewCardStyle}>
                     <View style={{ flex: 1 }}>
                     <Sae
-    label={'Имя'}
-
-    autoFocus
-
-    value={this.state.chFIO}
-    // active border height
-    borderHeight={2}
-    // TextInput props
-    autoCapitalize={'none'}
-    autoCorrect={false}
-    onSubmitEditing={() => { this.focusNextField('phone'); }}
+                        label={'Имя'}
+                        autoFocus
+                        value={this.state.chFIO}
+                        // active border height
+                        borderHeight={2}
+                        // TextInput props
+                        autoCapitalize={'none'}
+                        autoCorrect={false}
+                        onSubmitEditing={() => { this.focusNextField('phone'); }}
                             ref={ input => { this.inputs['fio'] = input; }}
                             style={styles.textInputStyleNew}
                             onChangeText={(chFIO) => this.validateName(chFIO)}
-  />
+                        />
                         <AnimatedHideView
                             visible={this.state.isErrorName}
                             style={{ padding: 0, marginTop: -10,}}
@@ -792,12 +790,12 @@ class Checkout extends React.Component {
 
 const styles = StyleSheet.create({
     textTitleStyle:{
-        marginTop: 10,
+        marginTop: 16,
         fontSize: 14,
         fontFamily: 'Roboto',
         color: '#4E4E4E',
         fontWeight: "600",
-        paddingLeft: 30,
+        paddingLeft: 56,
         lineHeight: 24,
     },
     textStyle: {
@@ -809,8 +807,8 @@ const styles = StyleSheet.create({
         elevation: 3,  
         borderRadius: 10, 
         flexDirection: 'column',
-        marginLeft: 20,
-        marginRight: 20,
+        marginLeft: 40,
+        marginRight: 40,
         backgroundColor: '#fff'
     },
 
@@ -823,7 +821,7 @@ const styles = StyleSheet.create({
         paddingTop: 0, 
         marginRight: 10,
         marginBottom: 0,
-        color: "#fff",
+        color: "#828282",
     },
 
     textInputStyle: {
@@ -836,89 +834,8 @@ const styles = StyleSheet.create({
         marginRight: 10,
         marginBottom: 0,
     },
-    textInputStyleMultiline:
-    {
-        height: 60, 
-        borderWidth: 0, 
-        color: '#4E4E4E',
-        fontFamily: 'Roboto',
-        fontWeight: "400",
-        flex: 1, 
-        marginLeft: 10, 
-        paddingBottom: 0, 
-        paddingTop: 0, 
-        marginRight: 10,
-        marginBottom: 0,
-        textAlignVertical: 'top',
-        
-        
-    },
-    viewCardStyleNoSumma: //ok
-    {
-        flex:1,
-        elevation: 3,  
-        borderRadius: 10, 
-        flexDirection: 'column',
-        marginLeft: 20,
-        marginRight: 20,
-        backgroundColor: '#fff',
-        height: 80,
-    },
-    viewCardStyleNoTime: //ok
-    {
-        flex:1,
-        elevation: 3,  
-        borderRadius: 10, 
-        flexDirection: 'column',
-        marginLeft: 20,
-        marginRight: 20,
-        backgroundColor: '#fff',
-        height: 80,
-    },
-    viewCardStyleNoTimeNoSelectTime: //ok
-    {
-        flex:1,
-        elevation: 3,  
-        borderRadius: 10, 
-        flexDirection: 'column',
-        marginLeft: 20,
-        marginRight: 20,
-        backgroundColor: '#fff',
-        height: 40,
-    },
-    viewCardStyleDeliveryNoAdress: // ok
-    {
-        flex:1,
-        elevation: 3,  
-        borderRadius: 10, 
-        flexDirection: 'column',
-        marginLeft: 20,
-        marginRight: 20,
-        backgroundColor: '#fff',
-        height: 80,
-    },
-    viewCardStyleDeliveryNoAdressAndPickup: // ok
-    {
-        flex:1,
-        elevation: 3,  
-        borderRadius: 10, 
-        flexDirection: 'column',
-        marginLeft: 20,
-        marginRight: 20,
-        backgroundColor: '#fff',
-        height: 120,
-    },
-    viewCardStyleDeliveryOnlyPickup: // ok
-    {
-        flex:1,
-        elevation: 3,  
-        borderRadius: 10, 
-        flexDirection: 'column',
-        marginLeft: 20,
-        marginRight: 20,
-        backgroundColor: '#fff',
-        height: 40,
-    },
+
+
     buttonText:{
         borderWidth: 0,
         padding: 10,
@@ -960,7 +877,7 @@ const styles = StyleSheet.create({
         height: 15,
         marginTop: 6,
         marginLeft: 0,
-        marginRight: 3,
+        marginRight: 40,
     },
     divider: {
         flex: 1,

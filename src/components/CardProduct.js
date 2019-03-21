@@ -103,7 +103,7 @@ class CardProduct extends Component {
         
       }
     render() {
-        console.log(" >>>> ", this.state.product );
+        ///console.log(" >>>> ", this.state.product );
         return (
             <TouchableOpacity activeOpacity={1}
             onPress={() => this.props.nav.navigate(
@@ -130,6 +130,25 @@ class CardProduct extends Component {
                         source={ this.state.product.chMainImage === "" ? require('./assets/noImage.jpg') : { uri: this.state.product.chMainImage }}
                         defaultSource={require('./assets/noImage.jpg')}
                         />
+                        <View style={{zIndex: 10, marginTop: this.state.product.tegs.length > 1 ? -50 : -20}}>
+                        {
+                           this.state.product.tegs.length > 0 ?
+                           this.state.product.tegs.map((t, index) =>(
+                                <View key={index} style={{backgroundColor:  "#"+this.props.tegs.find(tf => tf.idTag === t.iTag).chColor,
+                                width: 58, height: 19, marginLeft: -10, borderBottomEndRadius: 5,
+                                borderTopRightRadius: 5, marginBottom: 5,  
+                                }}>
+                                    <Text style={{color: '#FFFFFF', textAlign: 'center', fontSize: 10,
+                                paddingTop: 2,}}>
+                                    
+                                    { this.props.tegs.find(tf => tf.idTag === t.iTag).chTag }
+                                    </Text>
+                                </View>
+                            ))
+                            :
+                            null
+                        }
+                        </View>
                 </View>
                     {/** Информация */}
                     <View style={{
@@ -175,7 +194,7 @@ class CardProduct extends Component {
                                             optionsId: this.state.selectIdSetsDetail,
                                             optionsPrice: this.state.selectPriceChange,
                                             optionsName: this.state.selectOptionsName,
-                                            tegsProduct: this.state.product.tegsProduct
+                                            tegsProduct: this.state.product.tegs
                                         }     
                                         this.props.addCart(val)        
                                     }
