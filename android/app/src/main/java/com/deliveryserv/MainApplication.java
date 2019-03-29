@@ -3,6 +3,7 @@ package com.deliveryserv;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.BV.LinearGradient.LinearGradientPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import io.invertase.firebase.RNFirebasePackage;
@@ -30,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
 			new MainReactPackage(),
+            new LinearGradientPackage(),
             new ReactNativePushNotificationPackage(),
             new ReactNativeRestartPackage(),
             new RNFirebasePackage(),

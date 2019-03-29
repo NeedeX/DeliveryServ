@@ -4,6 +4,8 @@ import { NavigationActions, StackActions } from 'react-navigation';
 import firebase from 'react-native-firebase';
 import { connect } from 'react-redux';
 import AnimatedBar from "react-native-animated-bar";
+import LinearGradient from 'react-native-linear-gradient';
+
 YellowBox.ignoreWarnings(['Require cycle:']);
 
 
@@ -29,6 +31,8 @@ class Loading extends Component {
     this.loadingTegs(this.props.options.UIDClient, this.props.options.URL);
     this.loadingLocation(this.props.options.UIDClient, this.props.options.URL);
 
+    //this.sendNotification(status);
+    this.sendNotification(1);
     // проверка зарегистрирован/авторизован ли пользователь
     firebase.auth().onAuthStateChanged(user => {
       if (user) { 
@@ -56,6 +60,31 @@ class Loading extends Component {
     }); 
   }
 
+  sendNotification(status){
+    return fetch(this.props.options.URL + 'NotificationNewOrder.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Encoding': "gzip, deflate",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        status: status,
+        UIDClient: this.props.options.UIDClient,
+      })
+    })
+  
+    .then((responseJson) => {
+      this.setState(state => { 
+        return {  progress: state.progress + loagIndex, }; 
+      });
+      console.log("status = ", status);
+      
+    })
+    .catch((error) => { 
+      console.error(error); 
+    });
+  }
   // функция перехода на другой экран через определенное время
   // route - на какой экран переход, time - через какое время (миллисекунды)
   goNext(route, time){
@@ -301,10 +330,16 @@ class Loading extends Component {
 
   render() {
     return (
-      <ImageBackground
+      
+      <LinearGradient 
+        colors={['#4c669f', '#3b5998', '#192f6a']} 
+        style={styles.container}>
+        {/**
+        <ImageBackground
         style={styles.container}
         source={require('../assets/loadingBg.png')}
         imageStyle={{ resizeMode: 'cover' }} >
+         */}
         <StatusBar
           hidden={true}
           backgroundColor="#583286"
@@ -324,7 +359,10 @@ class Loading extends Component {
           duration={1000}
           style={styles.animatedBarStyle}
         />
-      </ImageBackground>
+      {/**</ImageBackground> */}
+      </LinearGradient>
+
+        
    
  
     );

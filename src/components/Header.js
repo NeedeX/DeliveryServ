@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, TouchableHighlight, View, ImageBackground, Image} from 'react-native';
 import { connect } from 'react-redux';
+import LinearGradient from 'react-native-linear-gradient';
 
 class Header extends Component {
     constructor(props) {
@@ -16,9 +17,12 @@ class Header extends Component {
     render() {
       return (
         <View style={{ backgroundColor: '#eee' }}>
-            <ImageBackground
+          {/*}  <ImageBackground
                 style={{ height: 52,}}
-                source={{uri: 'asset:/headerBg.png'}} >
+                source={{uri: 'asset:/headerBg.png'}} >*/}
+              <LinearGradient 
+              colors={['#4c669f', '#3b5998', '#192f6a']} 
+              style={{ height: 52,}}>
             <View style={{justifyContent: 'space-between',flexDirection: 'row' }}>
                 <TouchableHighlight 
                     underlayColor='rgba(255,255,255,0)'
@@ -59,7 +63,8 @@ class Header extends Component {
                     </View>
                 </TouchableHighlight>
             </View>
-        </ImageBackground>
+            </LinearGradient>
+        {/**</ImageBackground> */}
       </View>
     );
   }

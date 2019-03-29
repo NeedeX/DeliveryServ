@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ImageBackground, StyleSheet, Image, StatusBar, TouchableHighlight, Text, View} from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
-
+import LinearGradient from 'react-native-linear-gradient';
 class Start extends Component {
     constructor(props) {
         super(props)
@@ -33,10 +33,13 @@ class Start extends Component {
     render() {
         var {navigate} = this.props.navigation;
         return (
-          <ImageBackground
+          <LinearGradient 
+        colors={['#4c669f', '#3b5998', '#192f6a']} 
+        style={styles.container}>
+         {/* <ImageBackground
           style={styles.container}
           source={require('../assets/loadingBg.png')}
-          imageStyle={{ resizeMode: 'cover' }} >
+         imageStyle={{ resizeMode: 'cover' }} > */}
             <StatusBar
                 hidden={true}
                 backgroundColor="#583286"
@@ -64,7 +67,8 @@ class Start extends Component {
                 onPress={() => this.resetRoute()}>
                     <Text style={{color: '#F2F2F2'}}> ПРОПУСТИТЬ </Text>
             </TouchableHighlight>
-        </ImageBackground>
+            {/*</ImageBackground>*/}
+        </LinearGradient>
     );
   }
 }
