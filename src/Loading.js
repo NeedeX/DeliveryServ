@@ -342,7 +342,7 @@ class Loading extends Component {
          */}
         <StatusBar
           hidden={true}
-          backgroundColor="#583286"
+          backgroundColor={"#fff"}
           barStyle="default"
         />
         <Image 

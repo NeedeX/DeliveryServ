@@ -8,7 +8,7 @@ const { width } = Dimensions.get('window');
 import firebase from 'react-native-firebase';
 import NotifService from './NotifService';
 import appConfig from '../app.json';
-
+import LinearGradient from 'react-native-linear-gradient';
 import Swiper from 'react-native-animated-swiper';
 
 const Slide = ({ title }) => (
@@ -319,7 +319,7 @@ class Test extends Component {
       <View style={styles.container}>
         <StatusBar
           hidden={false}
-          backgroundColor="#583286"
+          backgroundColor="#4c669f"
           barStyle="default"
         />
         
@@ -328,6 +328,32 @@ class Test extends Component {
           <ActivityIndicator size="large" color="#583286" />
           :
           <ScrollView>
+            <LinearGradient 
+              colors={['#4c669f', '#3b5998', '#583286']} 
+              style={{ 
+                height: 220,
+                borderBottomRightRadius: 150,
+                borderBottomLeftRadius: 150,
+              }}>
+              <View style={ styles.viewStockTitleBtn }>
+                <Text style={styles.textStocks} >Акции</Text>
+                <TouchableOpacity  onPress={() => this.props.navigation.navigate('Stocks')}>
+                  <Text style={ styles.textStocksAll}>все</Text>
+                </TouchableOpacity>
+              </View>
+              <Swiper
+                    backgroundColor={['#4285f4', '#0f9d58', '#f4b400', '#db4437']}
+                    dots={true}
+                    dotsBottom={10}
+                    dotsColor="rgba(255, 255, 255, 0.25)"
+                    dotsColorActive="rgba(255, 255, 255, 0.99)"
+                    >
+                    {this.renderStocks(navigate)}
+              </Swiper>
+            </LinearGradient>
+
+
+            {/* 
             <ImageBackground
               style={{ flex: 1, width: width, height: 220}}
               imageStyle={{ resizeMode: 'stretch' }}
@@ -352,6 +378,7 @@ class Test extends Component {
           
 
             </ImageBackground>
+            */}
             <Text style={ styles.textMenu}>Меню</Text>
             <View style={ styles.viewGridMenu }>
               {

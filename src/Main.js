@@ -5,7 +5,7 @@ import Swiper from 'react-native-swiper';
 import ButtomCategoryNew from './components/ButtomCategoryNew';
 import Header from './components/Header';
 const { width } = Dimensions.get('window');
-
+import LinearGradient from 'react-native-linear-gradient';
 //import firebase from 'react-native-firebase';
 //import NotifService from './NotifService';
 import appConfig from '../app.json';
@@ -281,7 +281,7 @@ class Main extends Component {
       <View style={styles.container}>
         <StatusBar
           hidden={false}
-          backgroundColor="#583286"
+          backgroundColor={"#"+this.props.customers.chColorStatusBar}
           barStyle="default"
         />
         {
@@ -289,11 +289,13 @@ class Main extends Component {
           <ActivityIndicator size="large" color="#583286" />
           :
           <ScrollView>
-            <ImageBackground
-              style={{ flex: 1, width: width, height: 220}}
-              imageStyle={{ resizeMode: 'stretch' }}
-              source={require('../assets/main.png')}
-            >
+            <LinearGradient 
+              colors={['#4c669f', '#3b5998', '#583286']} 
+              style={{ 
+                height: 220,
+                borderBottomRightRadius: 150,
+                borderBottomLeftRadius: 150,
+              }}>
               <View style={ styles.viewStockTitleBtn }>
                 <Text style={styles.textStocks} >Акции</Text>
                 <TouchableOpacity  onPress={() => this.props.navigation.navigate('Stocks')}>
@@ -301,17 +303,15 @@ class Main extends Component {
                 </TouchableOpacity>
               </View>
               <Swiper
-                height={200}
-                autoplay={true}
-                removeClippedSubviews={false}
-                style={{ height: 200,}}
-                paginationStyle={{ bottom: 15, left: 0, right: 0, }}
-                activeDot={<View style={{backgroundColor: '#fff', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
-                dot={<View style={{backgroundColor: 'rgba(0,0,0,.2)', width: 5, height: 5, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
-                >
-                  {this.renderStocks(navigate)}
+                    backgroundColor={['#4285f4', '#0f9d58', '#f4b400', '#db4437']}
+                    dots={true}
+                    dotsBottom={10}
+                    dotsColor="rgba(255, 255, 255, 0.25)"
+                    dotsColorActive="rgba(255, 255, 255, 0.99)"
+                    >
+                    {this.renderStocks(navigate)}
               </Swiper>
-            </ImageBackground>
+            </LinearGradient>
             <Text style={ styles.textMenu}>Меню</Text>
             <View style={ styles.viewGridMenu }>
               {

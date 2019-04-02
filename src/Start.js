@@ -31,18 +31,17 @@ class Start extends Component {
     }
 
     render() {
-        var {navigate} = this.props.navigation;
         return (
           <LinearGradient 
-        colors={['#4c669f', '#3b5998', '#192f6a']} 
-        style={styles.container}>
+            colors={['#4c669f', '#3b5998', '#192f6a']} 
+            style={styles.container}>
          {/* <ImageBackground
           style={styles.container}
           source={require('../assets/loadingBg.png')}
          imageStyle={{ resizeMode: 'cover' }} > */}
             <StatusBar
                 hidden={true}
-                backgroundColor="#583286"
+                backgroundColor={"#fff"}
                 barStyle="light-content"
             />
             <Image 

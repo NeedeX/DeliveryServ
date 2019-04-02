@@ -6,7 +6,7 @@ import BGNoAuth from './components/BGNoAuth';
 //const { width } = Dimensions.get('window');
 //const { height } = Dimensions.get('window');
 const {height, width} = Dimensions.get('window');
-
+import LinearGradient from 'react-native-linear-gradient';
 class Cart extends Component {
   constructor(props){
     super(props);
@@ -223,13 +223,27 @@ class Cart extends Component {
         var {navigate} = this.props.navigation;
         return (
         <View style={styles.container}>
+            {/*}
             <ImageBackground
             style={{ flex: 1, width: width, height: 170, marginTop:0, alignItems: 'center', justifyContent: 'flex-start'}}
             imageStyle={{ resizeMode: 'cover' }}
-            source={require('../assets/main.png')}>
+            source={require('../assets/main.png')}> */}
+            <LinearGradient 
+              colors={['#4c669f', '#3b5998', '#583286']} 
+              style={{ 
+                width: width,
+                height: 280,
+                marginTop: -50,
+                borderBottomRightRadius: 200,
+                borderBottomLeftRadius: 200,
+
+              }}>
+
+          </LinearGradient>
+          <View style={{ marginTop: -160,}}>
             {
                 this.state.didFinishInitialAnimation === false ?
-                <View style={{ alignItems: "center", justifyContent:'center'}}>
+                <View style={{ alignItems: "center", justifyContent:'center',}}>
                     <View style={ [styles.circleIcone, { marginTop: 84, }] }>
                         <Image source={require('../assets/historyIcon.png')} style={ styles.imageIcon } />
                         <ActivityIndicator size="large" color="#583286" style={{marginTop: 50,}} />
@@ -252,7 +266,8 @@ class Cart extends Component {
                 }
                 </View>
             }
-            </ImageBackground>
+            </View>
+            {/* </ImageBackground> */}
         </View>
         );
     }
@@ -261,7 +276,7 @@ class Cart extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
@@ -321,6 +336,10 @@ const styles = StyleSheet.create({
         lineHeight: 24,
         color: '#FFFFFF',
         marginTop: 20,
+        width: width,
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
     },
     viewTextTitle:{
         backgroundColor: '#fff',

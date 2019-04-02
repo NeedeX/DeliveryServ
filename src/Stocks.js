@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, View, Dimensions, StatusBar, InteractionManager, ActivityIndicator, TouchableOpacity,Image, ScrollView, ImageBackground} from 'react-native';
 import { connect } from 'react-redux';
-
+import LinearGradient from 'react-native-linear-gradient';
 import Header from './components/Header';
 
 const { width, height } = Dimensions.get('window');
@@ -42,19 +42,36 @@ class Stocks extends React.Component {
       <View style={styles.container}> 
         <StatusBar
             hidden={false}
-            backgroundColor="#583286"
+            backgroundColor={"#"+this.props.customers.chColorStatusBar}
             barStyle="light-content"
         />
-        <ImageBackground
+         {/*
+         <ImageBackground
               style={{ flex: 1, width: width, height: 135*height/640, }}
               imageStyle={{ resizeMode: 'stretch' }}
               source={require('../assets/main.png')}
           >
+          */}
+          
           {
           this.state.didFinishInitialAnimation === false ?
-          <ActivityIndicator size="large" color="#583286" />
+            <ActivityIndicator size="large" color="#583286" />
+
           :
           <ScrollView>
+            <LinearGradient 
+              colors={['#4c669f', '#3b5998', '#583286']} 
+              style={{ 
+                width: width,
+                height: 220,
+                borderBottomRightRadius: 150,
+                borderBottomLeftRadius: 150,
+              }}>
+
+          </LinearGradient>
+          <View style={{
+            marginTop: -210,
+          }}>
           {
             this.props.banners.map((banners, index) => (
 
@@ -73,9 +90,10 @@ class Stocks extends React.Component {
             )
           )
           }
+          </View>
           </ScrollView>
           }
-        </ImageBackground>
+        {/* </ImageBackground> */}
       </View>
     );
   }
@@ -112,7 +130,7 @@ const mapStateToProps = (state) => {
 
 export default connect (
   state => ({
-
+    customers: state.CustomersReducer,
     cart: state.CartReducer,
     banners: state.BannerReducer,
   }),
