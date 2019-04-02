@@ -1,11 +1,12 @@
 import React from 'react';
-import {StyleSheet, View, ImageBackground, Image, Text, Linking, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Dimensions, Image, Text, Linking, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 //import Dialog, { DialogTitle, DialogContent,  DialogButton, } from 'react-native-popup-dialog';
-const bg  = require('../components/assets/drawerBg.png');
+//const bg  = require('../components/assets/drawerBg.png');
 //import RNRestart from 'react-native-restart'
-
+const { width, height } = Dimensions.get('window');
+import LinearGradient from 'react-native-linear-gradient';
 class Drawer extends React.Component {
   constructor(props){
     super(props);
@@ -124,10 +125,19 @@ class Drawer extends React.Component {
     
   render() {
     return ( 
-      <ImageBackground  
+      
+        <LinearGradient 
+            //colors={['#4c669f', '#192f6a']} 
+            colors={[
+              this.props.customers.chColorGR1 !== undefined ? "#"+this.props.customers.chColorGR1 : '#eee', 
+              this.props.customers.chColorGR3 !== undefined ? "#"+this.props.customers.chColorGR3 : '#eee', 
+            ]} 
+            style={{ flex: 1, height: height}} >
+            {/*<ImageBackground  
         source={bg} 
         style={{ flex: 1, width: 318,}} 
         imageStyle={{ resizeMode: 'stretch' }}>
+      */}
         <View style={{flexDirection: 'row', paddingTop: 20, paddingLeft: 20,}}>
           <View style={{ width: 50, height: 50,}}>
             <Image source={ require('./assets/iconAvatar.png')} 
@@ -316,7 +326,9 @@ class Drawer extends React.Component {
             <Text style={styles.textMenu}>Test</Text>
           </View>
         </TouchableOpacity>
-      </ImageBackground>
+        {/*</ImageBackground> */}
+        </LinearGradient>
+        
 
 
     );

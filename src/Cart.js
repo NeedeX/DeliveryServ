@@ -104,7 +104,7 @@ class Cart extends Component {
     return(
       <View style={{ backgroundColor: '#fff', borderTopStartRadius: 10, borderTopEndRadius: 10, height: height - 150 }}>
         <View style={styles.viewTextTitle}>
-          <Text style={ styles.textTitle}>Ваши товары</Text>
+          <Text style={ [styles.textTitle, {color: "#"+this.props.customers.chColorTextBtn, backgroundColor: "#"+this.props.customers.chColorBtn}]}>Ваши товары</Text>
         </View>
           <View style={{ backgroundColor: '#fff', borderRadius: 10, borderTopEndRadius: 0, borderTopStartRadius: 0, width: width - 40,  elevation: 2, }}>
             <ScrollView >
@@ -177,8 +177,8 @@ class Cart extends Component {
                       </Text> 
                     </View>
                   </View>
-              <View style={ styles.viewTotalPrice }>
-                        <Text style={{color: '#6A3DA1', fontWeight: '600', fontSize: 16, fontFamily: 'Roboto'}}>К оплате: </Text>
+                  <View style={ styles.viewTotalPrice }>
+                    <Text style={{color: '#6A3DA1', fontWeight: '600', fontSize: 16, fontFamily: 'Roboto'}}>К оплате: </Text>
                         <View 
                           style={{
                             flex: 1,
@@ -351,9 +351,8 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 14,
         lineHeight: 24,
-        backgroundColor: '#6A3DA1',
         borderRadius: 10,
-        color: '#F2F2F2',
+        
         height: 45,
         paddingLeft: 20,
         paddingTop: 10,

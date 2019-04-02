@@ -54,7 +54,7 @@ class CardProduct extends Component {
                         })
                     }
                 }>
-                    <Text style = {styles.btnWeightSelect}>
+                    <Text style = {[styles.btnWeightSelect, {backgroundColor: "#"+this.props.customers.chColorBtnOption, borderColor: "#"+this.props.customers.chColorBtnOption,}]}>
                         {item.chName}
                     </Text>
                 </TouchableOpacity>
@@ -70,7 +70,7 @@ class CardProduct extends Component {
                         })
                     }
                 }>
-                    <Text style = {styles.btnWeight}>
+                    <Text style = {[styles.btnWeight, {borderColor: "#"+this.props.customers.chColorBtnOption,}]}>
                         {item.chName}
                     </Text>
                 </TouchableOpacity>
@@ -94,11 +94,11 @@ class CardProduct extends Component {
         if(result.length > 0)
         {
           return (
-            <Text style = {styles.buttonText}>ДОБАВИТЬ ЕЩЁ</Text>
+            <Text style = {[styles.buttonText, {backgroundColor: "#"+this.props.customers.chColorBtn,borderColor: "#"+this.props.customers.chColorBtn,}]}>ДОБАВИТЬ ЕЩЁ</Text>
           )
         }
         else{
-          return(<Text style = {styles.buttonText}>В КОРЗИНУ</Text>)
+          return(<Text style = {[styles.buttonText, {backgroundColor: "#"+this.props.customers.chColorBtn,borderColor: "#"+this.props.customers.chColorBtn,}]}>В КОРЗИНУ</Text>)
         }
         
       }
@@ -229,8 +229,6 @@ const styles = StyleSheet.create({
     },
     btnWeightSelect:{
         borderWidth: 0,
-        borderColor: '#F891A9',
-        backgroundColor: '#F891A9',
         color: '#fff',
         borderRadius: 20,
         textAlign: "center",
@@ -243,7 +241,7 @@ const styles = StyleSheet.create({
     },
     btnWeight:{
         borderWidth: 1,
-        borderColor: '#F891A9',
+        
         backgroundColor: '#FFF',
         color: '#828282',
         borderRadius: 20,
@@ -273,8 +271,6 @@ const styles = StyleSheet.create({
     buttonText:{
         borderWidth: 0,
         paddingTop: 9,
-        borderColor: '#6A3DA1',
-        backgroundColor: '#6A3DA1',
         color: '#fff',
         fontWeight: "500",
         borderRadius: 4,

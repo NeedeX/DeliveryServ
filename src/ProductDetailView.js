@@ -259,7 +259,7 @@ class ProductDetailView extends React.Component {
                 selectOptionsName: item.chName,
               });
             }}>
-            <Text style = {styles.btnWeightSelect}>{item.chName}</Text>
+            <Text style = {[styles.btnWeightSelect, {backgroundColor: "#"+this.props.customers.chColorBtnOption, borderColor: "#"+this.props.customers.chColorBtnOption,}]}>{item.chName}</Text>
           </TouchableOpacity>
         :
           <TouchableOpacity
@@ -272,7 +272,7 @@ class ProductDetailView extends React.Component {
                 selectOptionsName: item.chName,
               });
             }}>
-            <Text style = {styles.btnWeight}> {item.chName} </Text>
+            <Text style = {[styles.btnWeight, {borderColor: "#"+this.props.customers.chColorBtnOption,}]}> {item.chName} </Text>
           </TouchableOpacity>
         )
       );
@@ -378,9 +378,9 @@ class ProductDetailView extends React.Component {
     //console.log("this.props.navigation.state.params.routeGoBack = ", this.props.navigation.state.params.routeGoBack);
     
     if(result.length > 0)
-      return ( <Text style = {styles.buttonText}>{this.props.navigation.state.params.routeGoBack === 'inCart' ? "СОХРАНИТЬ" : "ДОБАВИТЬ ЕЩЁ"}</Text> )
+      return ( <Text style = {[styles.buttonText, {backgroundColor: "#"+this.props.customers.chColorBtn,borderColor: "#"+this.props.customers.chColorBtn,}]}>{this.props.navigation.state.params.routeGoBack === 'inCart' ? "СОХРАНИТЬ" : "ДОБАВИТЬ ЕЩЁ"}</Text> )
     else
-      return(<Text style = {styles.buttonText}>В КОРЗИНУ</Text>)
+      return(<Text style = {[styles.buttonText, {backgroundColor: "#"+this.props.customers.chColorBtn,borderColor: "#"+this.props.customers.chColorBtn,}]}>В КОРЗИНУ</Text>)
     
     
     
@@ -452,7 +452,9 @@ class ProductDetailView extends React.Component {
                 <TextInput
                   style={{ paddingTop: 5, paddingBottom: 5, marginTop: -5, marginLeft: 5,
                     backgroundColor: '#ccc', 
-                    height: 30, width: 100, 
+                    height: 30, width: 50, 
+                    borderRadius: 20,
+                    textAlign: 'center',
                   }}
                   onChangeText={(text) => this.setState({counter: +text})}
                   value={this.state.counter.toString()}
@@ -464,12 +466,12 @@ class ProductDetailView extends React.Component {
                 style={{width: width-48, height: 30, }}
                 value={this.state.counter > 100 ? 100 : this.state.counter}
                 step={1}
-                thumbTintColor={'#6A3DA1'}
+                thumbTintColor={'#'+this.props.customers.chColorBtn}
                 minimumValue={0}
                 maximumValue={100}
-                minimumTrackTintColor="#6A3DA1"
+                minimumTrackTintColor={'#'+this.props.customers.chColorBtn}
                 maximumTrackTintColor="#ccc"
-                thumbTouchSize={{width: 30, height: 30}}
+                thumbTouchSize={ {width: 30, height: 30} }
                 onValueChange={ (value) => this.setState({counter: value}) }
               />
             </View>
@@ -629,8 +631,6 @@ const styles = StyleSheet.create({
   },
   btnWeightSelect:{
     borderWidth: 0,
-    borderColor: '#F891A9',
-    backgroundColor: '#F891A9',
     color: '#fff',
     borderRadius: 20,
     textAlign: "center",
@@ -643,7 +643,6 @@ const styles = StyleSheet.create({
   },
   btnWeight:{
       borderWidth: 1,
-      borderColor: '#F891A9',
       backgroundColor: '#FFF',
       color: '#828282',
       borderRadius: 20,
@@ -665,8 +664,6 @@ const styles = StyleSheet.create({
   buttonText:{
     borderWidth: 0,
     padding: 8,
-    borderColor: '#6A3DA1',
-    backgroundColor: '#6A3DA1',
     color: '#fff',
     fontWeight: "600",
     borderRadius: 4,

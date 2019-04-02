@@ -6,12 +6,8 @@ import LinearGradient from 'react-native-linear-gradient';
 class Start extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-      
-        };
-    
+        this.state = { };
     }
-
     // опции нагатора
     static navigationOptions = {
         // убрать певхний бар
@@ -57,7 +53,6 @@ class Start extends Component {
             <View style={{flexDirection: 'row', marginTop: 20,}}> 
               <Text style={{color: '#F2F2F2'}}>Уже есть аккаунт?</Text>
               <TouchableHighlight underlayColor='rgba(255,255,255,0.1)'
-                 
                   onPress={() => this.props.navigation.navigate('Phone', {animation: 'SlideFromLeft', animationDuration: 500 })}>
                       <Text style={{color: '#F2F2F2'}}> Войти </Text>
               </TouchableHighlight>
