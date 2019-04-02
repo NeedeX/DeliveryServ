@@ -33,7 +33,8 @@ class Start extends Component {
     render() {
         return (
           <LinearGradient 
-            colors={['#4c669f', '#3b5998', '#192f6a']} 
+            //colors={['#4c669f', '#192f6a']} 
+            colors={["#"+this.props.customers.chColorGR1, "#"+this.props.customers.chColorGR3]} 
             style={styles.container}>
          {/* <ImageBackground
           style={styles.container}
@@ -51,7 +52,7 @@ class Start extends Component {
             <TouchableHighlight underlayColor='rgba(255,255,255,0.1)'
                 style={{elevation: 5,marginTop: 50,}}
                 onPress={() => this.props.navigation.navigate('Phone', {animation: 'SlideFromLeft', animationDuration: 500 })}>
-                    <Text style = {styles.buttonText}> РЕГИСТРАЦИЯ </Text>
+                    <Text style = {[styles.buttonText, {backgroundColor: "#"+this.props.customers.chColorBtn,borderColor: "#"+this.props.customers.chColorBtn,}]}> РЕГИСТРАЦИЯ </Text>
             </TouchableHighlight>
             <View style={{flexDirection: 'row', marginTop: 20,}}> 
               <Text style={{color: '#F2F2F2'}}>Уже есть аккаунт?</Text>
@@ -91,8 +92,9 @@ const styles = StyleSheet.create({
   buttonText:{
     borderWidth: 0,
     padding: 10,
-    borderColor: '#6A3DA1',
-    backgroundColor: '#6A3DA1',
+    
+    elevation: 2,
+    
     color: '#fff',
     fontWeight: "600",
     borderRadius: 5,
@@ -113,6 +115,7 @@ export default connect (
     categories: state.CategoriesReducer,
     products: state.ProductsReducer,
     offers: state.CommercialOfferReducer,
+    customers: state.CustomersReducer,
   }),
   /*
   dispatch => ({

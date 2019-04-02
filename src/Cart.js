@@ -229,14 +229,12 @@ class Cart extends Component {
             imageStyle={{ resizeMode: 'cover' }}
             source={require('../assets/main.png')}> */}
             <LinearGradient 
-              colors={['#4c669f', '#3b5998', '#583286']} 
+              colors={["#"+this.props.customers.chColorGR2, "#"+this.props.customers.chColorGR3]} 
               style={{ 
-                width: width,
-                height: 280,
-                marginTop: -50,
-                borderBottomRightRadius: 200,
-                borderBottomLeftRadius: 200,
-
+                width: width+20,
+                height: 200,
+                borderBottomRightRadius: 350,
+                borderBottomLeftRadius: 350,
               }}>
 
           </LinearGradient>

@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, YellowBox, InteractionManager, StatusBar, ImageBackground, Image} from 'react-native';
+import {StyleSheet, Dimensions, Text, YellowBox, View, InteractionManager, ActivityIndicator, StatusBar, ImageBackground, Image} from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import firebase from 'react-native-firebase';
 import { connect } from 'react-redux';
 import AnimatedBar from "react-native-animated-bar";
 import LinearGradient from 'react-native-linear-gradient';
-
+const { width, height } = Dimensions.get('window');
 YellowBox.ignoreWarnings(['Require cycle:']);
 
 
@@ -17,13 +17,31 @@ class Loading extends Component {
     this.state = { 
       didFinishInitialAnimation: false,
       progress: 0, // прогресс загрузки
-      isAuth: false, // флаг, зарегистрирован ли пользователь. 
+      isAuth: false, // флаг, зарегистрирован ли пользователь.
+      isLoadingColor: false, // загрудены ли цвета для фона  
     };
-
     this.props.loadOptions();
     console.log("this.props.options = ", this.props.options);
     
+    
+  }
+  static navigationOptions = {
+    header: null,
+    headerMode: 'none',
+  };
+  componentWillMount(){
+    
+    console.log("this.props.customers === ", this.props.status );
+    
+    console.log(" grb = ", this.props.customers.chColorGR1);
+
+  }
+  componentDidMount() {
+    //this.props.loadOptions();
+    //console.log("this.props.options = ", this.props.options);
+    
     // загрузка общих данных
+    //this.loadingCustomers(this.props.options.UIDClient, this.props.options.URL);
     this.loadingCustomers(this.props.options.UIDClient, this.props.options.URL);
     this.loadingBanners(this.props.options.UIDClient, this.props.options.URL);
     this.loadingCategories(this.props.options.UIDClient, this.props.options.URL);
@@ -31,8 +49,6 @@ class Loading extends Component {
     this.loadingTegs(this.props.options.UIDClient, this.props.options.URL);
     this.loadingLocation(this.props.options.UIDClient, this.props.options.URL);
 
-    //this.sendNotification(status);
-    this.sendNotification(1);
     // проверка зарегистрирован/авторизован ли пользователь
     firebase.auth().onAuthStateChanged(user => {
       if (user) { 
@@ -45,46 +61,17 @@ class Loading extends Component {
       }
       else this.state.isAuth = false; // изменение маяка на об авторизации на false (не авторизован) 
     })
-  }
-  static navigationOptions = {
-    header: null,
-    headerMode: 'none',
-  };
-  componentDidMount() {
-    InteractionManager.runAfterInteractions(() => {
-      this.setState({ didFinishInitialAnimation: true });
-        if (this.state.isAuth)
-         this.state.didFinishInitialAnimation ? this.goNext('Main', 1500) : null
-        else 
-          this.state.didFinishInitialAnimation ? this.goNext('Start', 1500) : null
-    }); 
+
+      InteractionManager.runAfterInteractions(() => {
+        this.setState({ didFinishInitialAnimation: true });
+          if (this.state.isAuth)
+          this.state.didFinishInitialAnimation ? this.goNext('Main', 2500) : null
+          else 
+            this.state.didFinishInitialAnimation ? this.goNext('Start', 2500) : null
+      }); 
+    
   }
 
-  sendNotification(status){
-    return fetch(this.props.options.URL + 'NotificationNewOrder.php', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Accept-Encoding': "gzip, deflate",
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        status: status,
-        UIDClient: this.props.options.UIDClient,
-      })
-    })
-  
-    .then((responseJson) => {
-      this.setState(state => { 
-        return {  progress: state.progress + loagIndex, }; 
-      });
-      console.log("status = ", status);
-      
-    })
-    .catch((error) => { 
-      console.error(error); 
-    });
-  }
   // функция перехода на другой экран через определенное время
   // route - на какой экран переход, time - через какое время (миллисекунды)
   goNext(route, time){
@@ -114,6 +101,7 @@ class Loading extends Component {
         this.setState(state => { 
           return { progress: state.progress + loagIndex }; 
         });
+        
     })
     .catch((error) => { 
       console.error(error); 
@@ -213,6 +201,7 @@ class Loading extends Component {
     .then((responseJson) => {
         this.props.loadCustomers(responseJson);
         console.log("this.props.customers = ", this.props.customers);
+        this.setState({ isLoadingColor: true});
         this.setState(state => {
           return { progress: state.progress + loagIndex, };
         });
@@ -330,37 +319,52 @@ class Loading extends Component {
 
   render() {
     return (
+
+      <View style={{
+        height: height,
+        flax: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        {
+          this.state.isLoadingColor === false ? 
+            <ActivityIndicator size="large" color="#583286" />
+            :
+            <LinearGradient 
+            colors={["#"+this.props.customers.chColorGR1, "#"+this.props.customers.chColorGR3]} 
+             
+            style={styles.container}>
+            {/**
+            <ImageBackground
+            style={styles.container}
+            source={require('../assets/loadingBg.png')}
+            imageStyle={{ resizeMode: 'cover' }} >
+             */}
+            <StatusBar
+              hidden={true}
+              backgroundColor={"#fff"}
+              barStyle="default"
+            />
+            <Image 
+              source={require('../assets/logo.png')} 
+              style={styles.logoStyle}
+            />
+            <AnimatedBar
+              progress={this.state.progress}
+              height={10}
+              borderColor="#DDD"
+              barColor="#6A3DA1"
+              borderRadius={1}
+              borderWidth={0}
+              duration={1000}
+              style={styles.animatedBarStyle}
+            />
+          {/**</ImageBackground> */}
+          </LinearGradient>
+        }
+      </View>
       
-      <LinearGradient 
-        colors={['#4c669f', '#3b5998', '#192f6a']} 
-        style={styles.container}>
-        {/**
-        <ImageBackground
-        style={styles.container}
-        source={require('../assets/loadingBg.png')}
-        imageStyle={{ resizeMode: 'cover' }} >
-         */}
-        <StatusBar
-          hidden={true}
-          backgroundColor={"#fff"}
-          barStyle="default"
-        />
-        <Image 
-          source={require('../assets/logo.png')} 
-          style={styles.logoStyle}
-        />
-        <AnimatedBar
-          progress={this.state.progress}
-          height={10}
-          borderColor="#DDD"
-          barColor="#6A3DA1"
-          borderRadius={1}
-          borderWidth={0}
-          duration={1000}
-          style={styles.animatedBarStyle}
-        />
-      {/**</ImageBackground> */}
-      </LinearGradient>
+      
 
         
    

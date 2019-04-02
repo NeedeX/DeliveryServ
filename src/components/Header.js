@@ -21,7 +21,7 @@ class Header extends Component {
                 style={{ height: 52,}}
                 source={{uri: 'asset:/headerBg.png'}} >*/}
               <LinearGradient 
-              colors={['#4c669f', '#3b5998', '#192f6a']} 
+              colors={["#"+this.props.customers.chColorGR1, "#"+this.props.customers.chColorGR2]} 
               style={{ height: 52,}}>
             <View style={{justifyContent: 'space-between',flexDirection: 'row' }}>
                 <TouchableHighlight 
@@ -101,6 +101,7 @@ export default connect (
     state => ({
       cart: state.CartReducer,
       categories: state.CategoriesReducer,
+      customers: state.CustomersReducer,
     }),
     dispatch => ({
       /*

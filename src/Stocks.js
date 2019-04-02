@@ -60,12 +60,13 @@ class Stocks extends React.Component {
           :
           <ScrollView>
             <LinearGradient 
-              colors={['#4c669f', '#3b5998', '#583286']} 
+              colors={["#"+this.props.customers.chColorGR2, "#"+this.props.customers.chColorGR3]} 
               style={{ 
-                width: width,
-                height: 220,
-                borderBottomRightRadius: 150,
-                borderBottomLeftRadius: 150,
+                width: width+20,
+                height: 200,
+                marginLeft: -10,
+                borderBottomRightRadius: 350,
+                borderBottomLeftRadius: 350,
               }}>
 
           </LinearGradient>

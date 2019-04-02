@@ -290,11 +290,12 @@ class Main extends Component {
           :
           <ScrollView>
             <LinearGradient 
-              colors={['#4c669f', '#3b5998', '#583286']} 
+              colors={["#"+this.props.customers.chColorGR2, "#"+this.props.customers.chColorGR3]} 
               style={{ 
+                width: width,
                 height: 220,
-                borderBottomRightRadius: 150,
-                borderBottomLeftRadius: 150,
+                borderBottomRightRadius: 250,
+                borderBottomLeftRadius: 250,
               }}>
               <View style={ styles.viewStockTitleBtn }>
                 <Text style={styles.textStocks} >Акции</Text>
