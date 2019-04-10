@@ -554,6 +554,7 @@ class ProductDetailView extends React.Component {
                     optionsName: this.state.selectOptionsName,
                     tegsProduct: result[0].tegs,
                     ing: this.state.ing.filter(op => op.value === true),
+                    counter: this.state.counter,
                   }
                   //console.log("val", val);
                   
@@ -565,7 +566,8 @@ class ProductDetailView extends React.Component {
                     this.props.addCart(val);
               
                   // обнуляем счетчик вывода ингридиентов
-                  this.state.viewLeftRigthCount = 0;      
+                  this.state.viewLeftRigthCount = 0;  
+                  this.state.counter = 0;    
                 }}>
                 
                 {this.renderBtnInCart(params.iProduct)}

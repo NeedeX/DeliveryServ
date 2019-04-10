@@ -125,7 +125,7 @@ class Cart extends Component {
                       <Text style={styles.textNameStyle}>{i.chName}</Text>
                       <Text style={styles.texOptionStyle}>{i.optionsName} {parseFloat(Number(i.chPrice) + Number(i.optionsPrice)).toFixed(2) +" " + this.props.customers.chCurrency}</Text>
                       {this.renderIng(i.ing)}
-                      <Text style={styles.textPriceStyle}> {parseFloat(Number(i.chPrice) + Number(i.optionsPrice) + Number(this.ingPrice(i.ing))).toFixed(2) +" " + this.props.customers.chCurrency} </Text>
+                      <Text style={[styles.textPriceStyle, {color: "#"+this.props.customers.chColorBtn}]}> {parseFloat(Number(i.chPrice) + Number(i.optionsPrice) + Number(this.ingPrice(i.ing))).toFixed(2) +" " + this.props.customers.chCurrency} </Text>
                                 {this.oldPrice(i.chOldPrice)}
                     </View>
                     <View style={{justifyContent: 'flex-start', paddingTop: 10, paddingRight: 10,}}>
@@ -177,15 +177,15 @@ class Cart extends Component {
                       </Text> 
                     </View>
                   </View>
-                  <View style={ styles.viewTotalPrice }>
-                    <Text style={{color: '#6A3DA1', fontWeight: '600', fontSize: 16, fontFamily: 'Roboto'}}>К оплате: </Text>
+                  <View style={ styles.viewTotalPrice}>
+                    <Text style={{color: "#"+this.props.customers.chColorBtn, fontWeight: '600', fontSize: 16, fontFamily: 'Roboto'}}>К оплате: </Text>
                         <View 
                           style={{
                             flex: 1,
                             justifyContent: "flex-end",
                             alignItems: "flex-end", 
                           }}>
-                          <Text style={{color: '#6A3DA1', fontWeight: '600', fontSize: 16, fontFamily: 'Roboto'}}>
+                          <Text style={{color: "#"+this.props.customers.chColorBtn, fontWeight: '600', fontSize: 16, fontFamily: 'Roboto'}}>
                     {this.allPriceCart(0) > Number(this.props.customers.iOrderFreeDelivery) ?  
                       this.allPriceCart(0)
                       : 
@@ -197,7 +197,7 @@ class Cart extends Component {
               <TouchableOpacity style={ styles.btnConfirm}
                       onPress={() => this.props.navigation.navigate('Checkout')}
                       >
-                      <Text style = {styles.buttonText}>
+                      <Text style = {[styles.buttonText, {color: "#"+this.props.customers.chColorTextBtn, backgroundColor: "#"+this.props.customers.chColorBtn}]}>
                         ОФОРМИТЬ ЗАКАЗ
                       </Text>
                   </TouchableOpacity>
@@ -399,7 +399,6 @@ const styles = StyleSheet.create({
     marginTop: 3,
     fontSize: 14, 
     marginLeft: 5,
-    color: '#6A3DA1',
     fontWeight: "600",
     fontFamily: 'OswaldMedium',
     marginTop: 10,
