@@ -125,7 +125,7 @@ class Cart extends Component {
                         source={ i.chMainImage === "" ? require('../assets/noImage.jpg') : { uri: i.chMainImage }}
                         />
                     </View>
-                    <View style={{ flex: 1, justifyContent: 'flex-start',}}>
+                    <View style={{ flex: 1, justifyContent: 'flex-start', }}>
                       <Text style={styles.textNameStyle}>{i.chName}</Text>
                       <Text style={styles.texOptionStyle}>
                         {this.props.categories.find(x => x.iCategory ===  i.iCategories).chName} {i.optionsName !== "" ? " "+i.optionsName+" ":"" } 
@@ -133,8 +133,12 @@ class Cart extends Component {
                       </Text>
                       
                       {this.renderIng(i.ing)}
-                      <Text style={[styles.textPriceStyle, {color: "#"+this.props.customers.chColorBtn}]}> {parseFloat(Number(i.chPrice) + Number(i.optionsPrice) + Number(this.ingPrice(i.ing))).toFixed(2) +" " + this.props.customers.chCurrency} </Text>
+                      <View style={{flexDirection: "row", marginTop: 16, marginLeft: 3,}}>
+                      <Text style={[styles.textPriceStyle, {color: "#"+this.props.customers.chColorBtn}]}> 
+                      {parseFloat(Number(i.chPrice) + Number(i.optionsPrice) + Number(this.ingPrice(i.ing))).toFixed(2) +" " + this.props.customers.chCurrency} 
+                      </Text>
                                 {this.oldPrice(i.chOldPrice)}
+                      </View>
                     </View>
                     <View style={{justifyContent: 'flex-start', paddingTop: 10, paddingRight: 10,}}>
                       <TouchableOpacity underlayColor='rgba(255,255,255,0.1)'
@@ -314,17 +318,16 @@ const styles = StyleSheet.create({
   buttonText:{
     borderWidth: 0,
     padding: 10,
-      borderColor: '#6A3DA1',
-      backgroundColor: '#6A3DA1',
-      color: '#fff',
-      fontWeight: "600",
+    borderColor: '#6A3DA1',
+    backgroundColor: '#6A3DA1',
+    color: '#fff',
+    fontWeight: "600",
       borderRadius: 5,
       paddingLeft: 10,
       paddingRight: 10,
       textAlign: "center",
-      
-      fontFamily: 'OswaldMedium',
-      fontSize: 12,
+    fontFamily: 'OswaldMedium',
+    fontSize: 12,
   },
   imageIcon:{ 
     zIndex: 1,
@@ -332,9 +335,9 @@ const styles = StyleSheet.create({
     height: 64,
     marginTop: 35,
     justifyContent: 'center',
-        alignItems: "center",
-        marginLeft: 30,
-    },
+    alignItems: "center",
+    marginLeft: 30,
+  },
     textNoItems:{
         fontFamily: 'Roboto',
         fontWeight: '600',
