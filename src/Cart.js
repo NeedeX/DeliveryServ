@@ -101,6 +101,10 @@ class Cart extends Component {
   }
   renderCardInCart(){
     //console.log("this.props.cart = ", this.props.cart);
+    //console.log("this.props.categories = ", this.props.categories);
+
+    //console.log(">> ", this.props.categories.find(x => x.iCategory ===  this.props.cart[0].iCategories).chName);
+    
     return(
       <View style={{ backgroundColor: '#fff', borderTopStartRadius: 10, borderTopEndRadius: 10, height: height - 150 }}>
         <View style={styles.viewTextTitle}>
@@ -123,7 +127,11 @@ class Cart extends Component {
                     </View>
                     <View style={{ flex: 1, justifyContent: 'flex-start',}}>
                       <Text style={styles.textNameStyle}>{i.chName}</Text>
-                      <Text style={styles.texOptionStyle}>{i.optionsName} {parseFloat(Number(i.chPrice) + Number(i.optionsPrice)).toFixed(2) +" " + this.props.customers.chCurrency}</Text>
+                      <Text style={styles.texOptionStyle}>
+                        {this.props.categories.find(x => x.iCategory ===  i.iCategories).chName} {i.optionsName !== "" ? " "+i.optionsName+" ":"" } 
+                        {parseFloat(Number(i.chPrice) + Number(i.optionsPrice)).toFixed(2) +" " + this.props.customers.chCurrency}
+                      </Text>
+                      
                       {this.renderIng(i.ing)}
                       <Text style={[styles.textPriceStyle, {color: "#"+this.props.customers.chColorBtn}]}> {parseFloat(Number(i.chPrice) + Number(i.optionsPrice) + Number(this.ingPrice(i.ing))).toFixed(2) +" " + this.props.customers.chCurrency} </Text>
                                 {this.oldPrice(i.chOldPrice)}
@@ -318,12 +326,12 @@ const styles = StyleSheet.create({
       fontFamily: 'OswaldMedium',
       fontSize: 12,
   },
-    imageIcon:{ 
-        zIndex: 1,
-        width: 70,
-        height: 64,
-        marginTop: 35,
-        justifyContent: 'center',
+  imageIcon:{ 
+    zIndex: 1,
+    width: 70,
+    height: 64,
+    marginTop: 35,
+    sjustifyContent: 'center',
         alignItems: "center",
         marginLeft: 30,
     },

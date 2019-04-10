@@ -566,8 +566,7 @@ class ProductDetailView extends React.Component {
                     this.props.addCart(val);
               
                   // обнуляем счетчик вывода ингридиентов
-                  this.state.viewLeftRigthCount = 0;  
-                  this.state.counter = 0;    
+                  this.state.viewLeftRigthCount = 0;    
                 }}>
                 
                 {this.renderBtnInCart(params.iProduct)}
