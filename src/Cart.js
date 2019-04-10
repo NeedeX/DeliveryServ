@@ -133,7 +133,7 @@ class Cart extends Component {
                       </Text>
                       
                       {this.renderIng(i.ing)}
-                      <View style={{flexDirection: "row", marginTop: 16, marginLeft: 3,}}>
+                      <View style={{flexDirection: "row", marginTop: 8, marginLeft: 3,}}>
                       <Text style={[styles.textPriceStyle, {color: "#"+this.props.customers.chColorBtn}]}> 
                       {parseFloat(Number(i.chPrice) + Number(i.optionsPrice) + Number(this.ingPrice(i.ing))).toFixed(2) +" " + this.props.customers.chCurrency} 
                       </Text>
