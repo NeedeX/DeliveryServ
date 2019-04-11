@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions, TouchableOpacity, Animated, Image, TextInput, Button, InteractionManager, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import Dialog, { DialogTitle, DialogContent,  DialogButton, } from 'react-native-popup-dialog';
+import Dialog, { DialogTitle, DialogContent,  DialogFooter, DialogButton, } from 'react-native-popup-dialog';
 import CheckBox from 'react-native-check-box'
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button';
 import Card from './components/CardProduct';
 import Header from './components/Header';
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 class CategoryView extends Component {
   constructor(props){
     super(props);
@@ -153,6 +153,7 @@ class CategoryView extends Component {
         <Dialog
           onTouchOutside={() => { this.setState({ dialogVisibleSort: false }); }}
           width={0.9}
+          height={250}
           visible={this.state.dialogVisibleSort}
           dialogTitle={
             <DialogTitle
@@ -163,8 +164,9 @@ class CategoryView extends Component {
               style={{ backgroundColor: '#6A3DA1', padding: 10, margin: 0, borderRadius: 6,}}
             />
           }
-          actions={[
-            <DialogButton
+          footer={
+            <DialogFooter>
+              <DialogButton
               text="Отмена"
               textStyle={{ color: 'rgba(0, 0, 0, 0.38)', 
               fontFamily: 'Roboto',
@@ -173,8 +175,8 @@ class CategoryView extends Component {
             }}
               onPress={() => { this.setState({ dialogVisibleSort: false }); }}
               key="button-1"
-            />,
-            <DialogButton
+            />
+              <DialogButton
               text="Принять"
               textStyle={{ color: '#6A3DA1',
               fontFamily: 'Roboto', fontSize: 14, lineHeight: 16,}}
@@ -184,8 +186,9 @@ class CategoryView extends Component {
                 //console.log(this.state.iSort);
               }}
               key="button-2"
-            />,
-          ]}
+            />
+            </DialogFooter>
+          }
           >
           <DialogContent>
           <RadioGroup 
@@ -448,7 +451,10 @@ class CategoryView extends Component {
         <View style={styles.container}>
           {
             this.state.didFinishInitialAnimation === false ?
-            <ActivityIndicator size="large" color="#583286" />
+            <View style={{ justifyContent: 'center', height: height -100,}}>
+              <ActivityIndicator size="large" color="#583286" style={{ marginTop: -20}} />
+            </View>
+            
             :
             <View>
               { this.renderDialogSort() }
