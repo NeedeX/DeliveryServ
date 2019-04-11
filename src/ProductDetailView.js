@@ -37,7 +37,7 @@ class ProductDetailView extends React.Component {
         viewLeftRigthCount: 0, // считает проходы при выводе кнопок добавления ингридиентов
         isViewIng: false,
         didFinishInitialAnimation: false,
-        counter: 10, 
+        counter: resultProduct[0].blCounter === '1' ? 10 : 0, 
       }
     }
     else{
@@ -52,7 +52,7 @@ class ProductDetailView extends React.Component {
         viewLeftRigthCount: 0,
         isViewIng: false,
         didFinishInitialAnimation: false,
-        counter: 10, 
+        counter: resultProduct[0].blCounter === '1' ? 10 : 0, 
       }
     }
 
@@ -445,7 +445,7 @@ class ProductDetailView extends React.Component {
             {this.viewBtnOptions(result[0].options)}
           </View>
           {
-            result[0].blCounter === '0' ?
+            result[0].blCounter === '1' ?
             <View style={{alignItems: 'center'}}>
               <View style={{flexDirection: 'row'}}>
                 <Text>Количество:</Text>

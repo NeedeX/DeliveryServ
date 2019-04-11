@@ -137,6 +137,9 @@ class Cart extends Component {
                       <Text style={[styles.textPriceStyle, {color: "#"+this.props.customers.chColorBtn}]}> 
                       {parseFloat(Number(i.chPrice) + Number(i.optionsPrice) + Number(this.ingPrice(i.ing))).toFixed(2) +" " + this.props.customers.chCurrency} 
                       </Text>
+                      <Text style={[styles.textPriceStyle, {color: "#"+this.props.customers.chColorBtn}]}> 
+                      {i.counter}
+                      </Text>
                                 {this.oldPrice(i.chOldPrice)}
                       </View>
                     </View>

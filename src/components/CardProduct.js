@@ -109,24 +109,11 @@ class CardProduct extends Component {
             onPress={() => this.props.nav.navigate(
                 'ProductDetailView', 
                 { iProduct: this.state.product.iProduct, iCategories: this.state.product.iCategories, })}>
-                <View style={{
-                    elevation: 2,
-                    width: width,
-                    flexDirection: 'row',
-                    marginBottom: 8,
-                    flex: 1,
-                    backgroundColor: '#fff',
-                }}>
+                <View style={ styles.viewMain}>
                 {/** Картинка */}
-                <View style={{ 
-                    width: width/3 + 16,
-                    paddingTop: 24,
-                    paddingLeft: 8,
-                    paddingRight: 8,
-                    paddingBottom: 8,
-                }}>
+                <View style={ styles.viewMainImg }>
                     <Image
-                        style={{width: width/3, height: width/3, zIndex: 0,}}
+                        style={ styles.mainImg }
                         source={ this.state.product.chMainImage === "" ? require('./assets/noImage.jpg') : { uri: this.state.product.chMainImage }}
                         defaultSource={require('./assets/noImage.jpg')}
                         />
@@ -151,11 +138,7 @@ class CardProduct extends Component {
                         </View>
                 </View>
                     {/** Информация */}
-                    <View style={{
-                        flex: 1,
-                        backgroundColor: 'white',
-                        paddingTop: 18,
-                    }}>
+                    <View style={ styles.viewInfo }>
                         <Text style={ styles.textName }>
                             {this.state.product.chName}
                         </Text>
@@ -266,7 +249,6 @@ const styles = StyleSheet.create({
         color: '#BDBDBD', 
         textDecorationLine: 'line-through',
         marginTop: -10,
-        
     },
     buttonText:{
         borderWidth: 0,
@@ -279,8 +261,33 @@ const styles = StyleSheet.create({
         height: 36,
         fontFamily: 'OswaldMedium',
         fontSize: 12,
-
     },
+    viewMain: {
+        elevation: 2,
+        width: width,
+        minHeight: 170,
+        flexDirection: 'row',
+        marginBottom: 8,
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    viewMainImg: { 
+        width: width/3 + 16,
+        paddingTop: 24,
+        paddingLeft: 8,
+        paddingRight: 8,
+        paddingBottom: 8,
+    },
+    mainImg: {
+        width: width/3, 
+        height: width/3, 
+        zIndex: 0,
+    },
+    viewInfo: {
+        flex: 1,
+        backgroundColor: 'white',
+        paddingTop: 18,
+    }
 });
 export default connect (
     state => ({
