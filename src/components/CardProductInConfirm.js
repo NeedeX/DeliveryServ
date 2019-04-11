@@ -53,7 +53,7 @@ class CardProductInConfirm extends Component {
        
         return (
             <View>
-                <View  style={{ flexDirection: 'row', flex: 1,}}>
+                <View  style={{ flexDirection: 'row', flex: 1, minHeight: 100,}}>
                     <View style={{ padding: 10, }}>
                         <Image
                         style={{width: 80, height: 80, zIndex: 0}}

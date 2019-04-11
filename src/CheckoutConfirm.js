@@ -250,7 +250,6 @@ class CheckoutConfirm extends React.Component {
                                 <Text style={styles.textTitleStyle}> 3. Товары </Text>
                         {
                             this.props.cart.map((item, index) => (
-                        
                             <Card
                             key={index}
                             id={item.id}

@@ -491,6 +491,11 @@ class Checkout extends React.Component {
                         label={'Имя'}
                         autoFocus
                         value={this.state.chFIO}
+                        labelStyle={ styles.labelStyle }
+                        style={{
+                            color: '#ccc',
+                            backgroundColor: 'red'
+                        }}
                         // active border height
                         borderHeight={2}
                         // TextInput props
@@ -515,6 +520,7 @@ class Checkout extends React.Component {
                             style={styles.textInputStyleNew}
                             value={this.state.chPhone}
                             keyboardType={'phone-pad'}
+                            labelStyle={ styles.labelStyle }
                             // TextInput props
                             autoCapitalize={'none'}
                             autoCorrect={false}
@@ -552,6 +558,7 @@ class Checkout extends React.Component {
                                 value={this.state.chCity}
                                 autoCorrect={false}
                                 blurOnSubmit={ false }
+                                labelStyle={ styles.labelStyle }
                                 onSubmitEditing={() => { this.focusNextField('Улица'); }}
                                 ref={ input => { this.inputs['Город'] = input; }}
                                 onChangeText={ (chCity) => {
@@ -567,6 +574,7 @@ class Checkout extends React.Component {
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 blurOnSubmit={ false }
+                                labelStyle={ styles.labelStyle }
                                 onSubmitEditing={() => { this.focusNextField('Дом'); }}
                                 ref={ input => { this.inputs['Улица'] = input; }}
                                 onChangeText={ (chStreet) => 
@@ -584,6 +592,7 @@ class Checkout extends React.Component {
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 blurOnSubmit={ false }
+                                labelStyle={ styles.labelStyle }
                                 onSubmitEditing={() => { this.focusNextField('Корпус'); }}
                                 ref={ input => { this.inputs['Дом'] = input; }}
                                 onChangeText={ (chNumHome) => 
@@ -600,6 +609,7 @@ class Checkout extends React.Component {
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 blurOnSubmit={ false }
+                                labelStyle={ styles.labelStyle }
                                 onSubmitEditing={() => { this.focusNextField('Подъезд'); }}
                                 ref={ input => { this.inputs['Корпус'] = input; }}
                                 onChangeText={ (chHousing) => 
@@ -616,6 +626,7 @@ class Checkout extends React.Component {
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 blurOnSubmit={ false }
+                                labelStyle={ styles.labelStyle }
                                 onSubmitEditing={() => { this.focusNextField('Этаж'); }}
                                 ref={ input => { this.inputs['Подъезд'] = input; }}
                                 onChangeText={ (chEntrance) => 
@@ -632,6 +643,7 @@ class Checkout extends React.Component {
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 blurOnSubmit={ false }
+                                labelStyle={ styles.labelStyle }
                                 onSubmitEditing={() => { this.focusNextField('Квартира'); }}
                                 //ref={ input => { this.inputs['Этаж'] = input; }}
                                 onChangeText={ (chFloor) => 
@@ -648,6 +660,7 @@ class Checkout extends React.Component {
                                 autoCapitalize={'none'}
                                 autoCorrect={false}
                                 blurOnSubmit={ false }
+                                labelStyle={ styles.labelStyle }
                                 onChangeText={ (chApartment) =>  
                                 {
                                     this.setState({chApartment: chApartment});
@@ -823,7 +836,10 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         color: "#828282",
     },
-
+    labelStyle: {
+        marginBottom: 4,
+        
+    },
     textInputStyle: {
         height: 45, 
         borderWidth: 0, 
