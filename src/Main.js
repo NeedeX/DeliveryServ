@@ -6,8 +6,8 @@ import ButtomCategoryNew from './components/ButtomCategoryNew';
 import Header from './components/Header';
 const { width } = Dimensions.get('window');
 import LinearGradient from 'react-native-linear-gradient';
-//import firebase from 'react-native-firebase';
-//import NotifService from './NotifService';
+import firebase from 'react-native-firebase';
+import NotifService from './NotifService';
 import appConfig from '../app.json';
 YellowBox.ignoreWarnings(['Require cycle:']);
 class Main extends Component {
@@ -19,14 +19,14 @@ class Main extends Component {
       senderId: appConfig.senderID,
       countClosesLocation: 0, /// кол-во открытых заведений в данный момент
     };
-    //this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
-    /*
+    this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
+    
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        //this.userDB(user);
+        this.userDB(user);
       }
     })
-    */
+    
   }
   componentWillMount(){
     //this.getWork();
@@ -117,7 +117,6 @@ class Main extends Component {
         //console.log("userEmail = ", this.state.userEmail);
         //console.log("userUid = ", this.state.userUid);
         //console.log("this.props.user = ", this.props.user);
-
         //// для авторизации по емаил
         if(this.props.user._user.phoneNumber === undefined)
         {
@@ -147,7 +146,7 @@ class Main extends Component {
       }
     })
     */
-   /*
+   
     firebase.messaging().getToken()
     .then(fcmToken => {
       if (fcmToken) {
@@ -159,7 +158,7 @@ class Main extends Component {
         //console.log("user doesn't have a device token yet");
       } 
     });
-    */
+    
   }
   static navigationOptions = ({ navigation  }) => {
     return {
@@ -336,25 +335,21 @@ class Main extends Component {
         <TextInput style={styles.textField} value={this.state.senderId} onChangeText={(e) => {this.setState({ senderId: e })}} placeholder="GCM ID" />
         <TouchableOpacity style={styles.button} onPress={() => { this.notif.configure(this.onRegister.bind(this), this.onNotif.bind(this), this.state.senderId) }}><Text>Configure Sender ID</Text></TouchableOpacity>
         {this.state.gcmRegistered && <Text>GCM Configured !</Text>}
-
         <View style={styles.spacer}></View>
         
         <Text style={styles.title}>Example app react-native-push-notification</Text>
         <View style={styles.spacer}></View>
         <TextInput style={styles.textField} value={this.state.registerToken} placeholder="Register token" />
         <View style={styles.spacer}></View>
-
         <TouchableOpacity style={styles.button} onPress={() => { this.notif.localNotif() }}><Text>Local Notification (now)</Text></TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => { this.notif.scheduleNotif() }}><Text>Schedule Notification in 30s</Text></TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => { this.notif.cancelNotif() }}><Text>Cancel last notification (if any)</Text></TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => { this.notif.cancelAll() }}><Text>Cancel all notifications</Text></TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => { this.notif.checkPermission(this.handlePerm.bind(this)) }}><Text>Check Permission</Text></TouchableOpacity>
-
         <View style={styles.spacer}></View>
         <TextInput style={styles.textField} value={this.state.senderId} onChangeText={(e) => {this.setState({ senderId: e })}} placeholder="GCM ID" />
         <TouchableOpacity style={styles.button} onPress={() => { this.notif.configure(this.onRegister.bind(this), this.onNotif.bind(this), this.state.senderId) }}><Text>Configure Sender ID</Text></TouchableOpacity>
         {this.state.gcmRegistered && <Text>GCM Configured !</Text>}
-
         <View style={styles.spacer}></View>
       */}
       </View>

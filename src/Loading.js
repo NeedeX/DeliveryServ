@@ -37,7 +37,7 @@ class Loading extends Component {
 
   }
   componentDidMount() {
-    //this.props.loadOptions();
+    this.props.loadOptions();
     //console.log("this.props.options = ", this.props.options);
     
     // загрузка общих данных

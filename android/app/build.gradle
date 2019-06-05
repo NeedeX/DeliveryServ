@@ -110,12 +110,10 @@ android {
     }
 	signingConfigs {
         release {
-			if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
-				keyAlias 'otecvit'
-				keyPassword 'gfynthf1986'
-				storeFile file('D:/key')
-				storePassword 'gfynthf1986'
-			}
+			storeFile file(MYAPP_RELEASE_STORE_FILE)
+			storePassword MYAPP_RELEASE_STORE_PASSWORD
+			keyAlias MYAPP_RELEASE_KEY_ALIAS
+			keyPassword MYAPP_RELEASE_KEY_PASSWORD
         }
 		config {
 			if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
@@ -138,6 +136,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+			signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
@@ -166,7 +165,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 	
 	implementation 'com.google.firebase:firebase-core:16.0.8'
-	implementation 'com.google.firebase:firebase-auth:16.2.0'
+	implementation 'com.google.firebase:firebase-auth:17.0.0'
 	implementation 'com.google.firebase:firebase-messaging:17.4.0'
 	
 	implementation 'com.google.android.gms:play-services-base:16.0.1'

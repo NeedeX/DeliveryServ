@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "555843709453",
-    "firebase_url": "https://deliveryserv-a2425.firebaseio.com",
-    "project_id": "deliveryserv-a2425",
-    "storage_bucket": "deliveryserv-a2425.appspot.com"
+    "project_number": "615759133560",
+    "firebase_url": "https://deliveryserv-9e4df.firebaseio.com",
+    "project_id": "deliveryserv-9e4df",
+    "storage_bucket": "deliveryserv-9e4df.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:555843709453:android:74150abf13397e62",
+        "mobilesdk_app_id": "1:615759133560:android:74150abf13397e62",
         "android_client_info": {
           "package_name": "com.deliveryserv"
         }
       },
       "oauth_client": [
         {
-          "client_id": "555843709453-97a6n5q2abcesun5pounk0vq73d46k1o.apps.googleusercontent.com",
+          "client_id": "615759133560-7c5tknb93650g1l7gn76n5utclsuhjh8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.deliveryserv",
@@ -23,38 +23,31 @@
           }
         },
         {
-          "client_id": "555843709453-uqeemmlmi80tr89qh89mhdbp8sase7ua.apps.googleusercontent.com",
+          "client_id": "615759133560-mhd7h3t45vbim34j895pn8dk8b78q8fp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.deliveryserv",
-            "certificate_hash": "d038785c661c2bbf0dd5883d722678aae4bf624e"
+            "certificate_hash": "ecd57cdcfd81014456f3a4ac550b8b2ef36ff337"
           }
         },
         {
-          "client_id": "555843709453-opuped8cgevugkl1v03t28hj423s24aa.apps.googleusercontent.com",
+          "client_id": "615759133560-2p1fu727cnnrna44kecdcs3k030a3hpl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB9cjdJrggBZqtOwU4avEH1AHtstXXRVRA"
+          "current_key": "AIzaSyBWhU1klhOzKYAyBw6GLxWEiky61Lvk_5g"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "555843709453-opuped8cgevugkl1v03t28hj423s24aa.apps.googleusercontent.com",
+              "client_id": "615759133560-2p1fu727cnnrna44kecdcs3k030a3hpl.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }
